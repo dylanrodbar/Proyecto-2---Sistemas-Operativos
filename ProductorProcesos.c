@@ -1,12 +1,222 @@
 /* Este programa estará encargado de pedir la memoria compartida
    incluyendo las páginas que requerirá para los procesos */
 
-#include <sys/types.h>
-#include <sys/ipc.h> 
-#include <sys/shm.h>
+
+#include <sys/types.h> /*Manejo de memoria compartida*/
+#include <sys/ipc.h>   /*Manejo de memoria compartida*/
+#include <sys/shm.h>   /*Manejo de memoria compartida*/
 #include <stdio.h> 
+#include <pthread.h>   /*Para el manejo de  hilos*/
+#include <time.h>
+#include <stdlib.h>    /*Para el uso de rand()*/
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+
 
 #define tamanioPasoArchivo 100 /*Tamaño máximo para pasar el contenido del txt a una variable*/
+
+int semaforo;
+
+
+typedef struct ProcesoPaginacion{
+
+	int cantidadPaginas;
+	int tiempo;
+
+} ProcesoPaginacion;
+
+
+
+/*Esto es solo para probar si los semáforos sirven*/
+
+/* ********************************************************  */
+
+/*Función que libera el semáforo*/
+void doSignal(int semid, int numSem) {
+    struct sembuf sops; //Signal
+    sops.sem_num = numSem;
+    sops.sem_op = 1;
+    sops.sem_flg = 0;
+ 
+    if (semop(semid, &sops, 1) == -1) {
+        perror(NULL);
+        error("Error al hacer Signal");
+    }
+}
+
+/*Función que utiliza el semáforo*/ 
+void doWait(int semid, int numSem) {
+    struct sembuf sops;
+    sops.sem_num = numSem; /* Sobre el primero, ... */
+    sops.sem_op = -1; /* ... un wait (resto 1) */
+    sops.sem_flg = 0;
+ 
+    if (semop(semid, &sops, 1) == -1) {
+        perror(NULL);
+        error("Error al hacer el Wait");
+    }
+}
+ 
+/*Función que inicializa el semáforo*/
+void initSem(int semid, int numSem, int valor) { //iniciar un semaforo
+  
+    if (semctl(semid, numSem, SETVAL, valor) < 0) {        
+    perror(NULL);
+        error("Error iniciando semaforo");
+    }
+}
+
+/* ********************************************************  */
+
+
+/* Función encargada de solicitar espacio en la memoria compartida para el proceso */
+void solicitarMemoriaPaginacion(int numeroPaginas){
+
+
+
+}
+
+/* Función encargada de devolver el espacio en la memoria compartida para el proceso */
+void liberarMemoriaPaginacion(){
+
+}
+
+void solicitarMemoriaSegmentacion(){
+
+}
+
+void liberarMemoriaSegmentacion(){
+	
+}
+
+/*Funcuón encargada de ejecutar el proceso en el modelo de paginación, tiene como parámetro el proceso, con las páginas que ocupa y el tiempo que se ejecutará*/
+int *ejecucionProcesoPaginacion(void *proceso){
+	/*FALTA ESCRIBIR EN LA BITÁCORA*/	
+
+	ProcesoPaginacion procesoP;
+
+	procesoP = *(ProcesoPaginacion*) proceso; /*Cast*/
+	
+	printf("\n\n\n");
+	printf("********************************\n");
+	printf("Entra al hilo\n");
+	printf("Páginas para el proceso: %i\n", procesoP.cantidadPaginas);
+    printf("Segundos para el proceso: %i\n", procesoP.tiempo);	
+	printf("********************************\n");
+	printf("\n\n\n");
+	
+	printf("Esperando para usar el semáforo \n");
+	
+	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
+	/*Pedir memoria - si no hay suficiente - return -1*/
+	printf("Empieza a usar el semáforo\n");
+	/*Devolver semáforo*/
+	sleep(5);  
+	/*Pedir semáforo - devolver memoria*/
+	doSignal(semaforo,0); /*Libera el semáforo*/
+
+
+	printf("Terminó\n");
+	return 1;
+	/*Aparentemente no se necesita ninguna línea de código para liberar al hilo, jejeps*/
+
+}
+
+
+void crearHiloPaginacion(ProcesoPaginacion proceso){
+
+	int ret;
+	int idCreacionHilo;
+	pthread_attr_t tattr;
+	pthread_t sniffer_thread;
+
+	
+	/*Se inicializan los valores del hilo*/
+	ret = pthread_attr_init(&tattr);
+	//cambia el detachstate para liberar recursos cuando termine el hilo
+	ret = pthread_attr_setdetachstate(&tattr,PTHREAD_CREATE_DETACHED);
+							
+	idCreacionHilo = pthread_create( &sniffer_thread , &tattr ,  &ejecucionProcesoPaginacion ,  &proceso);	
+							 
+	if( idCreacionHilo < 0)
+	{
+		perror("No se pudo crear el hilo correctamente");
+		
+	}
+
+}
+
+/*Función encargada de */
+void mecanismoPaginacion(){
+	
+	semaforo=semget(IPC_PRIVATE,1,IPC_CREAT | 0700);
+	
+	if(semaforo < 0){
+
+		printf("Error con el semáforo");
+		return -1;
+
+	}
+	
+	initSem(semaforo,0,1);
+
+	int hora; /*Para la función srand*/
+	int cantidadPaginas; 
+	int cantidadSegundos; 
+	int cantidadSegundosPorProceso;  
+	int numeroProcesos;
+	ProcesoPaginacion proceso;
+
+  
+	hora = time(NULL);  
+    // Semilla de rand();
+    srand(hora);
+
+    
+   
+    numeroProcesos = 0;
+
+    /*La idea, por ahora, es crear 5 procesos que pidan memoria en la compartida*/
+    while(numeroProcesos < 5){
+    	//31 + 30
+    	cantidadSegundosPorProceso = rand()% 3 + 1;  /*Random entre 30 y 60*/ 
+    	cantidadPaginas = rand()% 10 + 1;   /*Random entre 1 y 10*/
+    	cantidadSegundos = rand()% 41 + 20; /*Random entre 20 y 60*/
+
+    	printf("*********************************\n");
+    	printf("Proceso: %i\n", numeroProcesos);
+    	printf("Páginas para el proceso: %i\n", cantidadPaginas);
+    	printf("Segundos para el proceso: %i\n", cantidadSegundos);	
+    	printf("*********************************\n");
+
+    	proceso.cantidadPaginas = cantidadPaginas;
+    	proceso.tiempo = cantidadSegundos;
+
+    	numeroProcesos++;
+
+    	printf("Tiempo hasta el próximo proceso: %i\n", cantidadSegundosPorProceso);
+    	crearHiloPaginacion(proceso);
+    	//sleep(cantidadSegundosPorProceso);
+    	sleep(3);
+
+
+
+
+
+    }
+
+	
+	  
+	
+
+}
+
+void mecanismoSegmentacion(){
+	
+
+}
 
 
 
@@ -91,11 +301,53 @@ int leerMemoria(int idMemoriaCompartida){
 }
 
 
+
+
+
 /* Desde esta función se llamará a las funciones requeridas para cumplir con la funcionalidad de este programa */
 void main(){
 	
-	int idMemoriaCompartida;
-	idMemoriaCompartida = leerIdMemoriaCompartida();
-	leerMemoria(idMemoriaCompartida);
+	//int idMemoriaCompartida;
+	//idMemoriaCompartida = leerIdMemoriaCompartida();
+	//leerMemoria(idMemoriaCompartida);
+
+	char *opcion; /*Aquí se almacenará el valor de entrada de la consola*/
+	int opcionN;  /*Aquí se almacenará el valor entero de la entrada a la consola, para el switch*/
+
+	opcion = (char*)malloc(sizeof(char*));
+
+	printf("Bienvenido(a), este es el programa que se encargará de producir procesos (Threads) por favor, seleccione un modelo:\n");
+	printf("****************************\n");
+	printf("***    1-Paginación      ***\n");
+	printf("***    2-Segmentación    ***\n");
+	printf("****************************\n");
+	scanf("%s", opcion);
+
+	
+	opcionN = atoi(opcion); /*Conversión a tipo entero de la entrada en consola*/
+
+	/*Control principal de las opciones, por este medio se llamará al modelo de paginación o segmentación*/
+	switch(opcionN){
+
+		case 1:
+			printf("** Ha seleccionado el mecanismo de paginación **\n");
+			mecanismoPaginacion();
+			break;
+
+		case 2:
+			printf("** Ha seleccionado el mecanismo de segmentación **\n");
+			mecanismoSegmentacion();
+			break;
+
+		default:
+			printf("No ha digitado una opción válida\n");	
+
+
+	}
+
+	
+	
+
+
 
 }

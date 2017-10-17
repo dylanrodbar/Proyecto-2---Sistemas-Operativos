@@ -45,7 +45,7 @@ int solicitarMemoria(){
 	int tamanioMemoriaCompartida;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
 	char *memoriaCompartida; /*Con esta variable se puede acceder al contenido de la memoria compartida*/
 	
-	key = 6898;
+	key = 6789;
 	tamanioMemoriaCompartida = 32;
 	banderaMemoriaCompartida = IPC_CREAT;
 	idMemoriaCompartida = shmget(key, tamanioMemoriaCompartida, banderaMemoriaCompartida | 0666);
@@ -73,6 +73,7 @@ int solicitarMemoria(){
 		return -1;
 
 	}
+
 	strncpy(memoriaCompartida, "nuevocontenido", tamanioMemoriaCompartida);
 
 	guardarIdMemoriaCompartida(idMemoriaCompartida);
@@ -100,7 +101,6 @@ void main(){
 	sleep(1);
 
 
-	pid_t idProceso;
 	idMemoriaCompartida = solicitarMemoria();
 	if(idMemoriaCompartida > -1){
 		printf("****************************************************************************\n");
@@ -108,11 +108,4 @@ void main(){
 		printf("****************************************************************************\n");
 	
 	}
-	kill(idProceso, SIGTERM);
-
-	
-	
-
-
-
 }
