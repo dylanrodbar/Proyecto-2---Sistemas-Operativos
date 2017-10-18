@@ -7,7 +7,10 @@
 #include <stdio.h>
 #include <signal.h> /*Necesaria para matar un proceso*/
 #include <unistd.h> /*Necesaria para la función sleep*/
+#include "Pagina.h"
+#include "Configuraciones.h"
 
+Pagina *paginas;
 
 /*Función encargada de guardar en un txt el Id de la memoria compartida que se obtiene*/
 int guardarIdMemoriaCompartida(int idMemoriaCompartida){
@@ -44,9 +47,10 @@ int solicitarMemoria(){
 	int idMemoriaCompartida;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
 	int tamanioMemoriaCompartida;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
 	char *memoriaCompartida; /*Con esta variable se puede acceder al contenido de la memoria compartida*/
-	
-	key = 6789;
-	tamanioMemoriaCompartida = 32;
+
+	key = 6655;
+	tamanioMemoriaCompartida = tamanio * sizeof(struct Pagina);
+	printf("Tamaño total: %i\n", tamanioMemoriaCompartida);
 	banderaMemoriaCompartida = IPC_CREAT;
 	idMemoriaCompartida = shmget(key, tamanioMemoriaCompartida, banderaMemoriaCompartida | 0666);
 
@@ -63,19 +67,29 @@ int solicitarMemoria(){
 	printf("*** Id generado para la memoria compartida: %i ***\n", idMemoriaCompartida);
 
 	
-	memoriaCompartida = shmat(idMemoriaCompartida, NULL, 0); /*Tener acceso a la memoria compartida*/
+	//memoriaCompartida = shmat(idMemoriaCompartida, NULL, 0); /*Tener acceso a la memoria compartida*/
 
+	paginas = (Pagina *) shmat(idMemoriaCompartida, NULL, 0); /*Cast*/
 
-	/*Se valida si se obtuvo acceso a la memoria compartida correctamente*/
-	if(memoriaCompartida == (char *) -1){
+	
+	if(paginas == (Pagina *) -1){
 
-		printf("Error, no se obtuvo un acceso correcto a la memoria compartida");
+		printf("Hubo un error mientras se intentaba accesar a la memoria compartida");
 		return -1;
+	
+	}
+
+
+
+	for(int i = 0; i<tamanio; i++){
+
+		paginas[i].disponible = 1;
+		paginas[i].procesoOcupado = -1; /*Para indicar que no tiene ningún proceso encima*/
 
 	}
 
-	strncpy(memoriaCompartida, "nuevocontenido", tamanioMemoriaCompartida);
 
+	
 	guardarIdMemoriaCompartida(idMemoriaCompartida);
 
 	return idMemoriaCompartida;
@@ -92,13 +106,13 @@ void main(){
 	printf("Bienvenido(a), a continuación se le solicitará al sistema operativo memoria compartida, se le dará a conocer un Id para el mismo\n");
 	printf("****************************************************************************\n");
 	
-	sleep(1);
+	//sleep(1);
 	printf(".\n");
-	sleep(1);
+	//sleep(1);
 	printf("..\n");
-	sleep(1);
+	//sleep(1);
 	printf("...\n");
-	sleep(1);
+	//sleep(1);
 
 
 	idMemoriaCompartida = solicitarMemoria();

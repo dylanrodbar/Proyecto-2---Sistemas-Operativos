@@ -13,21 +13,25 @@
 #include <sys/stat.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
+#include "Pagina.h"
+#include "Configuraciones.h"
 
 
 #define tamanioPasoArchivo 100 /*Tamaño máximo para pasar el contenido del txt a una variable*/
 
-int semaforo;
 
 
 typedef struct ProcesoPaginacion{
 
+	int idProceso;
 	int cantidadPaginas;
 	int tiempo;
 
 } ProcesoPaginacion;
 
 
+int semaforo;
+Pagina *paginas;
 
 /*Esto es solo para probar si los semáforos sirven*/
 
@@ -72,14 +76,73 @@ void initSem(int semid, int numSem, int valor) { //iniciar un semaforo
 
 
 /* Función encargada de solicitar espacio en la memoria compartida para el proceso */
-void solicitarMemoriaPaginacion(int numeroPaginas){
+int solicitarMemoriaPaginacion(int numeroPaginas){
+	
+	int contador;
 
+	
+	contador = 0;
+	printf("*************************************************\n");
+	printf("Los que tienen -1 y 1, son espacios libres\n");
+
+	for(int i = 0; i<tamanio; i++){
+		
+		printf("ES: %i PROCESO: %i\n", paginas[i].disponible, paginas[i].procesoOcupado);
+		
+		/*Se pregunta si hay espacio disponible, en caso de que sí, se suma el contador para saber cuántas páginas hay*/
+		if(paginas[i].disponible == 1) contador++;
+
+	}
+
+	printf("DISPONIBLE: %i\n", contador);
+	printf("*************************************************\n");
+	if(contador >= numeroPaginas) return 1;
+	else return 0;
 
 
 }
 
+void tomarMemoriaPaginacion(int numeroPaginas, int idProceso){
+
+	int contador;
+	contador = 0;
+
+	for(int i = 0; i<tamanio; i++){
+
+		/*Pregunto si hay espacios disponibles*/
+		if(paginas[i].disponible == 1){
+
+			 paginas[i].procesoOcupado = idProceso;
+			 paginas[i].disponible = 0;
+
+			 /*Se lleva un contador para saber cuándo parar con la asignación de páginas*/
+			 contador++;
+
+		}
+		
+		/*Si el contador llega al número de páginas, entonces se habrá asignado lo necesario*/
+		if(contador == numeroPaginas) break;
+
+	}	
+
+} 
+
 /* Función encargada de devolver el espacio en la memoria compartida para el proceso */
-void liberarMemoriaPaginacion(){
+void liberarMemoriaPaginacion(int idProceso){
+
+	for(int i = 0; i<tamanio; i++){
+
+		/*Pregunta si un campo ocupado coincide con el id que se desea sacar*/
+		if(paginas[i].procesoOcupado == idProceso && paginas[i].disponible == 0){ 
+
+			paginas[i].procesoOcupado = -1; //No le queda ningún proceso asignado
+			paginas[i].disponible = 1; //Vuelve a estar disponible
+
+
+		}
+
+	}
+
 
 }
 
@@ -95,27 +158,49 @@ void liberarMemoriaSegmentacion(){
 int *ejecucionProcesoPaginacion(void *proceso){
 	/*FALTA ESCRIBIR EN LA BITÁCORA*/	
 
+	int aceptaSolicitudMemoria;
+
 	ProcesoPaginacion procesoP;
 
 	procesoP = *(ProcesoPaginacion*) proceso; /*Cast*/
-	
-	printf("\n\n\n");
-	printf("********************************\n");
-	printf("Entra al hilo\n");
-	printf("Páginas para el proceso: %i\n", procesoP.cantidadPaginas);
-    printf("Segundos para el proceso: %i\n", procesoP.tiempo);	
-	printf("********************************\n");
-	printf("\n\n\n");
+
 	
 	printf("Esperando para usar el semáforo \n");
 	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
-	/*Pedir memoria - si no hay suficiente - return -1*/
-	printf("Empieza a usar el semáforo\n");
-	/*Devolver semáforo*/
+	
+	printf("Entra al semaforo\n");
+
+	aceptaSolicitudMemoria = solicitarMemoriaPaginacion(procesoP.cantidadPaginas);
+	
+	if(aceptaSolicitudMemoria == 0){
+
+		printf("Matando al proceso\n");
+		doSignal(semaforo,0); /*Libera el semáforo*/
+
+		return -1;	
+	}
+
+
+	tomarMemoriaPaginacion(procesoP.cantidadPaginas, procesoP.idProceso);
+
+	doSignal(semaforo,0);
+	
+	/*Escribir en bitácora*/
+
 	sleep(5);  
-	/*Pedir semáforo - devolver memoria*/
+	//sleep(procesoP.tiempo);
+
+	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
+	
+	liberarMemoriaPaginacion(procesoP.idProceso);	
+
 	doSignal(semaforo,0); /*Libera el semáforo*/
+
+	//printf("Empieza a usar el semáforo\n");
+	/*Devolver semáforo*/
+	/*Pedir semáforo - devolver memoria*/
+	//doSignal(semaforo,0); /*Libera el semáforo*/
 
 
 	printf("Terminó\n");
@@ -131,6 +216,7 @@ void crearHiloPaginacion(ProcesoPaginacion proceso){
 	int idCreacionHilo;
 	pthread_attr_t tattr;
 	pthread_t sniffer_thread;
+
 
 	
 	/*Se inicializan los valores del hilo*/
@@ -178,8 +264,8 @@ void mecanismoPaginacion(){
    
     numeroProcesos = 0;
 
-    /*La idea, por ahora, es crear 5 procesos que pidan memoria en la compartida*/
-    while(numeroProcesos < 5){
+    /*La idea, por ahora, es crear 1000 procesos que pidan memoria en la compartida*/
+    while(numeroProcesos < 1000){
     	//31 + 30
     	cantidadSegundosPorProceso = rand()% 3 + 1;  /*Random entre 30 y 60*/ 
     	cantidadPaginas = rand()% 10 + 1;   /*Random entre 1 y 10*/
@@ -191,8 +277,10 @@ void mecanismoPaginacion(){
     	printf("Segundos para el proceso: %i\n", cantidadSegundos);	
     	printf("*********************************\n");
 
+    	proceso.idProceso = numeroProcesos;
     	proceso.cantidadPaginas = cantidadPaginas;
     	proceso.tiempo = cantidadSegundos;
+
 
     	numeroProcesos++;
 
@@ -266,7 +354,7 @@ int leerMemoria(int idMemoriaCompartida){
 	int banderaMemoriaCompartida; /*Necesaria para saber bajo qué "modalidad" se crea la memoria compartida*/
 	int tamanioMemoriaCompartida;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
 	char *memoriaCompartida; /*Con esta variable se puede acceder al contenido de la memoria compartida*/
-
+	
 	key = 5678;
 	
 	
@@ -278,8 +366,8 @@ int leerMemoria(int idMemoriaCompartida){
 
 	}
 
-	
-	memoriaCompartida = shmat(idMemoriaCompartida, NULL, 0); /*Se accede a la memoria compartida*/
+	paginas = shmat(idMemoriaCompartida, NULL, 0); /*Revisar*/
+	//memoriaCompartida = shmat(idMemoriaCompartida, NULL, 0); /*Se accede a la memoria compartida*/
 
 
 	/*Se valida si se obtuvo acceso a la memoria compartida correctamente*/
@@ -289,9 +377,14 @@ int leerMemoria(int idMemoriaCompartida){
 		return -1;
 
 	}
-	
-	printf("*** Contenido de la memoria: %s ***\n", memoriaCompartida);
+	    
+	/*Hacerlo dinámico*/
+	//for(int i = 0; i<15; i++){
 
+	//	printf("Disponibilidad: %i\n", paginas[i].disponible);
+	//	printf("Proceso ocupado: %i\n", paginas[i].procesoOcupado);
+
+	//}
 	
 	
 	return 1;
@@ -305,13 +398,16 @@ int leerMemoria(int idMemoriaCompartida){
 
 
 /* Desde esta función se llamará a las funciones requeridas para cumplir con la funcionalidad de este programa */
-void main(){
+int main(){
 	
-	//int idMemoriaCompartida;
-	//idMemoriaCompartida = leerIdMemoriaCompartida();
-	//leerMemoria(idMemoriaCompartida);
+	int idMemoriaCompartida;
+	idMemoriaCompartida = leerIdMemoriaCompartida();
+	leerMemoria(idMemoriaCompartida);
 
 	char *opcion; /*Aquí se almacenará el valor de entrada de la consola*/
+	
+	//return 0;
+
 	int opcionN;  /*Aquí se almacenará el valor entero de la entrada a la consola, para el switch*/
 
 	opcion = (char*)malloc(sizeof(char*));
