@@ -176,9 +176,9 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	int aceptaSolicitudMemoria;
 
-	ProcesoPaginacion procesoP;
+	ProcesoPaginacion *procesoP;
 
-	procesoP = *(ProcesoPaginacion*) proceso; /*Cast*/
+	procesoP = (ProcesoPaginacion*) proceso; /*Cast*/
 
 		
 	
@@ -188,7 +188,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	
 	printf("Entra al semaforo\n");
 
-	aceptaSolicitudMemoria = solicitarMemoriaPaginacion(procesoP.cantidadPaginas);
+	aceptaSolicitudMemoria = solicitarMemoriaPaginacion(procesoP->cantidadPaginas);
 	
 	if(aceptaSolicitudMemoria == 0){
 
@@ -198,19 +198,22 @@ int *ejecucionProcesoPaginacion(void *proceso){
 		return -1;	
 	}
 
+	printf("SALIO\n");
 
-	tomarMemoriaPaginacion(procesoP.cantidadPaginas, procesoP.idProceso);
+	printf("CP: %i\n", procesoP->cantidadPaginas);
+
+	tomarMemoriaPaginacion(procesoP->cantidadPaginas, procesoP->idProceso);
 
 	doSignal(semaforo,0);
 	
 	/*Escribir en bitácora*/
 
-	sleep(10);  
+	sleep(15);  
 	//sleep(procesoP.tiempo);
 
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
 	
-	liberarMemoriaPaginacion(procesoP.idProceso);	
+	liberarMemoriaPaginacion(procesoP->idProceso);	
 
 	doSignal(semaforo,0); /*Libera el semáforo*/
 
@@ -280,7 +283,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 
 }
 
-void crearHiloPaginacion(ProcesoPaginacion proceso){
+void crearHiloPaginacion(ProcesoPaginacion *proceso){
 
 	int ret;
 	int idCreacionHilo;
@@ -294,7 +297,7 @@ void crearHiloPaginacion(ProcesoPaginacion proceso){
 	//cambia el detachstate para liberar recursos cuando termine el hilo
 	ret = pthread_attr_setdetachstate(&tattr,PTHREAD_CREATE_DETACHED);
 							
-	idCreacionHilo = pthread_create( &sniffer_thread , &tattr ,  &ejecucionProcesoPaginacion ,  &proceso);	
+	idCreacionHilo = pthread_create( &sniffer_thread , &tattr ,  &ejecucionProcesoPaginacion ,  proceso);	
 							 
 	if( idCreacionHilo < 0)
 	{
@@ -352,7 +355,7 @@ void mecanismoPaginacion(){
 	int cantidadSegundos;  /*Segundos que durará ejecutándose el proceso*/
 	int cantidadSegundosPorProceso;  /*Cada cuanto se hará un proceso*/
 	int numeroProcesos;
-	ProcesoPaginacion proceso;
+	ProcesoPaginacion *proceso;
 
   
 	hora = time(NULL);  
@@ -376,9 +379,9 @@ void mecanismoPaginacion(){
     	printf("Segundos para el proceso: %i\n", cantidadSegundos);	
     	printf("*********************************\n");
 
-    	proceso.idProceso = numeroProcesos;
-    	proceso.cantidadPaginas = cantidadPaginas;
-    	proceso.tiempo = cantidadSegundos;
+    	proceso->idProceso = numeroProcesos;
+    	proceso->cantidadPaginas = cantidadPaginas;
+    	proceso->tiempo = cantidadSegundos;
 
 
     	numeroProcesos++;

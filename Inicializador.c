@@ -48,7 +48,7 @@ int solicitarMemoria(){
 	int tamanioMemoriaCompartida;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
 	char *memoriaCompartida; /*Con esta variable se puede acceder al contenido de la memoria compartida*/
 
-	key = 6699;
+	key = 6619;
 	tamanioMemoriaCompartida = tamanio * sizeof(struct Pagina);
 	printf("Tamaño total: %i\n", tamanioMemoriaCompartida);
 	banderaMemoriaCompartida = IPC_CREAT;
