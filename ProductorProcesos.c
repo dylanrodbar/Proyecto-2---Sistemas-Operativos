@@ -15,19 +15,21 @@
 #include <sys/sem.h>
 #include "Pagina.h"
 #include "Configuraciones.h"
+#include "ProcesoPaginacion.h"
+#include "ProcesoSegmentacion.h"
 
 
 #define tamanioPasoArchivo 100 /*Tamaño máximo para pasar el contenido del txt a una variable*/
 
 
 
-typedef struct ProcesoPaginacion{
+/*typedef struct ProcesoPaginacion{
 
 	int idProceso;
 	int cantidadPaginas;
 	int tiempo;
 
-} ProcesoPaginacion;
+} ProcesoPaginacion;*/
 
 
 int semaforo;
@@ -87,14 +89,14 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 
 	for(int i = 0; i<tamanio; i++){
 		
-		printf("ES: %i PROCESO: %i\n", paginas[i].disponible, paginas[i].procesoOcupado);
+		printf("Página %i: Disponible: %i Número de proceso: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado);
 		
 		/*Se pregunta si hay espacio disponible, en caso de que sí, se suma el contador para saber cuántas páginas hay*/
 		if(paginas[i].disponible == 1) contador++;
 
 	}
 
-	printf("DISPONIBLE: %i\n", contador);
+	printf("Páginas disponibles: %i\n", contador);
 	printf("*************************************************\n");
 	if(contador >= numeroPaginas) return 1;
 	else return 0;
@@ -146,7 +148,21 @@ void liberarMemoriaPaginacion(int idProceso){
 
 }
 
-void solicitarMemoriaSegmentacion(){
+int calcularTotalPaginasProceso(ProcesoSegmentacion proceso){
+
+	int tamanioSegmentos = sizeof(proceso.segmentos);
+	int tamanioSegmento = sizeof(proceso.segmentos[0]);
+	int numeroSegmentos = tamanioSegmentos / tamanioSegmento;
+
+	printf("NumeroSegmentos: %i\n", proceso.numeroSegmentos);
+	return 0;
+
+}
+
+int solicitarMemoriaSegmentacion(ProcesoSegmentacion proceso){
+
+	//calcularTotalPaginasProceso(proceso);
+	return 0;
 
 }
 
@@ -164,6 +180,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	procesoP = *(ProcesoPaginacion*) proceso; /*Cast*/
 
+		
 	
 	printf("Esperando para usar el semáforo \n");
 	
@@ -188,7 +205,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	
 	/*Escribir en bitácora*/
 
-	sleep(5);  
+	sleep(10);  
 	//sleep(procesoP.tiempo);
 
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
@@ -197,18 +214,71 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	doSignal(semaforo,0); /*Libera el semáforo*/
 
-	//printf("Empieza a usar el semáforo\n");
-	/*Devolver semáforo*/
-	/*Pedir semáforo - devolver memoria*/
-	//doSignal(semaforo,0); /*Libera el semáforo*/
+	
 
-
-	printf("Terminó\n");
+	printf("Terminó la ejecución de este proceso\n");
 	return 1;
 	/*Aparentemente no se necesita ninguna línea de código para liberar al hilo, jejeps*/
 
 }
 
+int *ejecucionProcesoSegmentacion(void *proceso){
+
+	/*FALTA ESCRIBIR EN LA BITÁCORA*/	
+
+	int aceptaSolicitudMemoria;
+
+	ProcesoSegmentacion *procesoS;
+
+	procesoS =  (ProcesoSegmentacion *) proceso; /*Cast*/
+
+	printf("EMTRA\n");
+	printf("*********************************\n");
+    printf("Proceso: %i\n", procesoS->idProceso);
+    printf("Tiempo: %i\n", procesoS->tiempo);
+    	
+
+	
+	printf("Esperando para usar el semáforo \n");
+	
+	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
+	
+	printf("Entra al semaforo\n");
+
+	//aceptaSolicitudMemoria = solicitarMemoriaSegmentacion(procesoS);
+	
+	if(aceptaSolicitudMemoria == 0){
+
+		printf("Matando al proceso\n");
+		doSignal(semaforo,0); /*Libera el semáforo*/
+
+		return -1;	
+	}
+
+
+	//tomarMemoriaPaginacion(procesoP.cantidadPaginas, procesoP.idProceso);
+
+	//doSignal(semaforo,0);
+	
+	/*Escribir en bitácora*/
+
+	//sleep(10);  
+	//sleep(procesoP.tiempo);
+
+	//doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
+	
+	//liberarMemoriaPaginacion(procesoP.idProceso);	
+
+	//doSignal(semaforo,0); /*Libera el semáforo*/
+
+	
+
+	printf("Terminó la ejecución de este proceso\n");
+	return 1;
+	/*Aparentemente no se necesita ninguna línea de código para liberar al hilo, jejeps*/
+
+
+}
 
 void crearHiloPaginacion(ProcesoPaginacion proceso){
 
@@ -234,6 +304,35 @@ void crearHiloPaginacion(ProcesoPaginacion proceso){
 
 }
 
+
+void crearHiloSegmentacion(ProcesoSegmentacion *proceso){
+
+	int ret;
+	int idCreacionHilo;
+	pthread_attr_t tattr;
+	pthread_t sniffer_thread;
+
+	printf("*********************************\n");
+    printf("Proceso: %i\n", proceso->idProceso);
+    printf("Tiempo: %i\n", proceso->tiempo);
+    
+	
+	/*Se inicializan los valores del hilo*/
+	ret = pthread_attr_init(&tattr);
+	//cambia el detachstate para liberar recursos cuando termine el hilo
+	ret = pthread_attr_setdetachstate(&tattr,PTHREAD_CREATE_DETACHED);
+							
+	idCreacionHilo = pthread_create( &sniffer_thread , &tattr ,  &ejecucionProcesoSegmentacion , proceso);	
+							 
+	if( idCreacionHilo < 0)
+	{
+		perror("No se pudo crear el hilo correctamente");
+		
+	}
+
+
+}
+
 /*Función encargada de */
 void mecanismoPaginacion(){
 	
@@ -250,8 +349,8 @@ void mecanismoPaginacion(){
 
 	int hora; /*Para la función srand*/
 	int cantidadPaginas; 
-	int cantidadSegundos; 
-	int cantidadSegundosPorProceso;  
+	int cantidadSegundos;  /*Segundos que durará ejecutándose el proceso*/
+	int cantidadSegundosPorProceso;  /*Cada cuanto se hará un proceso*/
 	int numeroProcesos;
 	ProcesoPaginacion proceso;
 
@@ -267,9 +366,9 @@ void mecanismoPaginacion(){
     /*La idea, por ahora, es crear 1000 procesos que pidan memoria en la compartida*/
     while(numeroProcesos < 1000){
     	//31 + 30
-    	cantidadSegundosPorProceso = rand()% 3 + 1;  /*Random entre 30 y 60*/ 
+    	cantidadSegundosPorProceso = rand()% 30 + 30;  /*Random entre 30 y 60*/ 
     	cantidadPaginas = rand()% 10 + 1;   /*Random entre 1 y 10*/
-    	cantidadSegundos = rand()% 41 + 20; /*Random entre 20 y 60*/
+    	cantidadSegundos = rand()% 40 + 20; /*Random entre 20 y 60*/
 
     	printf("*********************************\n");
     	printf("Proceso: %i\n", numeroProcesos);
@@ -287,7 +386,7 @@ void mecanismoPaginacion(){
     	printf("Tiempo hasta el próximo proceso: %i\n", cantidadSegundosPorProceso);
     	crearHiloPaginacion(proceso);
     	//sleep(cantidadSegundosPorProceso);
-    	sleep(3);
+    	sleep(2);
 
 
 
@@ -303,6 +402,95 @@ void mecanismoPaginacion(){
 
 void mecanismoSegmentacion(){
 	
+	semaforo=semget(IPC_PRIVATE,1,IPC_CREAT | 0700);
+	
+	if(semaforo < 0){
+
+		printf("Error con el semáforo");
+		return -1;
+
+	}
+	
+	initSem(semaforo,0,1);
+
+	int hora; /*Para la función srand*/
+	int cantidadSegmentos; /*Segmentos que tendrá el proceso*/
+	int cantidadPaginasPorSegmento; /*Páginas que ocupará cada proceso*/
+	int cantidadSegundos;  /*Cantidad de segundos que durará el proceso*/
+	int cantidadSegundosPorProceso;  /*Cada cuántos segundos se hará un proceso*/
+	int numeroProcesos;
+	ProcesoSegmentacion *proceso;
+
+  
+	hora = time(NULL);  
+    // Semilla de rand();
+    srand(hora);
+
+    
+   
+    numeroProcesos = 0;
+
+    /*La idea, por ahora, es crear 1000 procesos que pidan memoria en la compartida*/
+    while(numeroProcesos < 1000){
+    	//31 + 30
+    	cantidadSegundosPorProceso = rand()% 30 + 30;  /*Random entre 30 y 60*/ 
+    	cantidadSegmentos = rand()% 5 + 1;   /*Random entre 1 y 5*/
+    	cantidadSegundos = rand()% 40 + 20; /*Random entre 20 y 60*/
+
+
+    	//printf("Cantidad segmentos por asignar: %i\n", cantidadSegmentos);
+    	//printf("Cantidad de segundos por asignar: %i\n", cantidadSegundos);
+
+    	proceso->idProceso = numeroProcesos;
+    	proceso->tiempo = cantidadSegundos;
+    	proceso->numeroSegmentos = cantidadSegmentos;
+
+    	printf("SEGMENTITOS: %i\n", proceso->numeroSegmentos);
+
+    	for(int i  = 0; i<cantidadSegmentos; i++){
+
+    		cantidadPaginasPorSegmento = rand()% 5 + 1; /*Random entre 1 y 3*/
+
+    		printf("Cantidad de páginas por asignar para el segmento: %i\n", cantidadPaginasPorSegmento);
+
+    		
+    		proceso->segmentos[i].numeroSegmento = i;
+    		proceso->segmentos[i].numeroPaginas = cantidadPaginasPorSegmento;
+
+    		
+    	}
+
+    	
+    	
+    	printf("*********************************\n");
+    	printf("Proceso: %i\n", proceso->idProceso);
+    	printf("Tiempo: %i\n", proceso->tiempo);
+    	printf("Segmentos: \n");
+    	for (int i = 0; i<cantidadSegmentos; i++){
+
+    		printf("***********\n");
+    		printf("Segmento: %i\n", proceso->segmentos[i].numeroSegmento);
+    		printf("Páginas para el segmento: %i\n", proceso->segmentos[i].numeroPaginas);
+    		printf("***********\n");
+    		
+
+    	}
+    	printf("*********************************\n");
+
+    	
+
+    	numeroProcesos++;
+
+    	printf("Tiempo hasta el próximo proceso: %i\n", cantidadSegundosPorProceso);
+    	crearHiloSegmentacion(proceso);
+    	//sleep(cantidadSegundosPorProceso);
+    	sleep(2);
+
+
+
+
+
+    }
 
 }
 
