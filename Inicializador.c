@@ -12,7 +12,9 @@
 
 Pagina *paginas;
 
-/*Función encargada de guardar en un txt el Id de la memoria compartida que se obtiene*/
+
+
+/*---Función encargada de guardar en un txt el Id de la memoria compartida que se obtiene---*/
 int guardarIdMemoriaCompartida(int idMemoriaCompartida){
 	
 	FILE *archivo;
@@ -48,9 +50,8 @@ int solicitarMemoria(){
 	int tamanioMemoriaCompartida;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
 	char *memoriaCompartida; /*Con esta variable se puede acceder al contenido de la memoria compartida*/
 
-	key = 5519;
+	key = 5559;
 	tamanioMemoriaCompartida = tamanio * sizeof(struct Pagina);
-	printf("Tamaño total: %i\n", tamanioMemoriaCompartida);
 	banderaMemoriaCompartida = IPC_CREAT;
 	idMemoriaCompartida = shmget(key, tamanioMemoriaCompartida, banderaMemoriaCompartida | 0666);
 
@@ -64,14 +65,9 @@ int solicitarMemoria(){
 
 	}
 
-	printf("*** Id generado para la memoria compartida: %i ***\n", idMemoriaCompartida);
-
-	
-	//memoriaCompartida = shmat(idMemoriaCompartida, NULL, 0); /*Tener acceso a la memoria compartida*/
-
 	paginas = (Pagina *) shmat(idMemoriaCompartida, NULL, 0); /*Cast*/
-
 	
+	/*Valida el correcto acceso a la memoria compartida*/
 	if(paginas == (Pagina *) -1){
 
 		printf("Hubo un error mientras se intentaba accesar a la memoria compartida");
@@ -79,18 +75,14 @@ int solicitarMemoria(){
 	
 	}
 
-
-
 	for(int i = 0; i<tamanio; i++){
 
 		paginas[i].numeroPagina = i;
 		paginas[i].disponible = 1;
 		paginas[i].procesoOcupado = -1; /*Para indicar que no tiene ningún proceso encima*/
-		paginas[i].numeroSegmento = -1;
+		paginas[i].numeroSegmento = -1; /*Para indicar que en el momento, no está siendo utilizado por ningún segmentos*/
 
 	}
-
-
 	
 	guardarIdMemoriaCompartida(idMemoriaCompartida);
 
@@ -104,24 +96,19 @@ int solicitarMemoria(){
 void main(){
 
 	int idMemoriaCompartida;
-	printf("****************************************************************************\n");
+	printf("-------------------------------------------------------------------------------\n");
 	printf("Bienvenido(a), a continuación se le solicitará al sistema operativo memoria compartida, se le dará a conocer un Id para el mismo\n");
-	printf("****************************************************************************\n");
+	printf("-------------------------------------------------------------------------------\n");
 	
-	//sleep(1);
 	printf(".\n");
-	//sleep(1);
 	printf("..\n");
-	//sleep(1);
 	printf("...\n");
-	//sleep(1);
-
-
+	
 	idMemoriaCompartida = solicitarMemoria();
 	if(idMemoriaCompartida > -1){
-		printf("****************************************************************************\n");
-		printf("El proceso se ha realizado correctamente, el Id para la memoria compartida es %i, también puede consultarlo en el archivo 'idMemoriaCompartida.txt' ", idMemoriaCompartida);
-		printf("****************************************************************************\n");
+		printf("-------------------------------------------------------------------------------\n");
+		printf("El proceso se ha realizado correctamente, el Id para la memoria compartida es %i, también puede consultarlo en el archivo 'idMemoriaCompartida.txt'\n", idMemoriaCompartida);
+		printf("-------------------------------------------------------------------------------\n");
 	
 	}
 }
