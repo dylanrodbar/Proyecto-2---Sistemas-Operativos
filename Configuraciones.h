@@ -1,1 +1,1 @@
-#define tamanio 30
+#define tamanio 60

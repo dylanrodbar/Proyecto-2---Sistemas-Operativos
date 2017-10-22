@@ -23,13 +23,6 @@
 
 
 
-/*typedef struct ProcesoPaginacion{
-
-	int idProceso;
-	int cantidadPaginas;
-	int tiempo;
-
-} ProcesoPaginacion;*/
 
 
 int semaforo;
@@ -77,13 +70,14 @@ void initSem(int semid, int numSem, int valor) { //iniciar un semaforo
 /* ********************************************************  */
 
 
-/* Función encargada de solicitar espacio en la memoria compartida para el proceso */
+/* Función encargada de solicitar espacio en la memoria compartida para el proceso en el mecanismo de paginación */
 int solicitarMemoriaPaginacion(int numeroPaginas){
 	
-	int contador;
+	int contador; /*Para saber cuántos espacios libres hay*/
 
 	
 	contador = 0;
+
 	printf("*************************************************\n");
 	printf("Los que tienen -1 y 1, son espacios libres\n");
 
@@ -98,15 +92,19 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 
 	printf("Páginas disponibles: %i\n", contador);
 	printf("*************************************************\n");
-	if(contador >= numeroPaginas) return 1;
-	else return 0;
+	
+	if(contador >= numeroPaginas) return 1; /*Hay suficientes páginas*/
+	
+	else return 0; /*No hay suficientes páginas*/
 
 
 }
 
+/*Función encargada de ocupar las páginas con procesos, en el mecanismo de paginación*/
 void tomarMemoriaPaginacion(int numeroPaginas, int idProceso){
 
-	int contador;
+	int contador; /*Para delimitar cuando se ocupen las páginas que se requieren*/
+
 	contador = 0;
 
 	for(int i = 0; i<tamanio; i++){
@@ -129,7 +127,7 @@ void tomarMemoriaPaginacion(int numeroPaginas, int idProceso){
 
 } 
 
-/* Función encargada de devolver el espacio en la memoria compartida para el proceso */
+/* Función encargada de devolver el espacio en la memoria compartida para el proceso en el mecanismo de paginación */
 void liberarMemoriaPaginacion(int idProceso){
 
 	for(int i = 0; i<tamanio; i++){
@@ -148,33 +146,86 @@ void liberarMemoriaPaginacion(int idProceso){
 
 }
 
-int calcularTotalPaginasProceso(ProcesoSegmentacion proceso){
 
-	int tamanioSegmentos = sizeof(proceso.segmentos);
-	int tamanioSegmento = sizeof(proceso.segmentos[0]);
-	int numeroSegmentos = tamanioSegmentos / tamanioSegmento;
+/*Función encargada de calcular el número de páginas totales requeridas para un proceso en el mecanismo de segmentación*/
+int calcularTotalPaginasProceso(ProcesoSegmentacion *proceso){
 
-	printf("NumeroSegmentos: %i\n", proceso.numeroSegmentos);
-	return 0;
+	int numeroSegmentos = proceso->numeroSegmentos;
+	int paginasTotalesProceso;
+
+	paginasTotalesProceso = 0;
+
+	printf("NumeroSegmentos: %i\n", proceso->numeroSegmentos);
+
+	for(int i = 0; i<numeroSegmentos; i++){
+
+		paginasTotalesProceso+=proceso->segmentos[i].numeroPaginas;
+
+
+	}
+
+	printf("Total de páginas para el proceso: %i\n", paginasTotalesProceso);
+	
+	return paginasTotalesProceso;
 
 }
 
-int solicitarMemoriaSegmentacion(ProcesoSegmentacion proceso){
 
-	//calcularTotalPaginasProceso(proceso);
-	return 0;
+/* Función encargada de solicitar espacio en la memoria compartida para el proceso en el mecanismo de segmentación */
+int solicitarMemoriaSegmentacion(ProcesoSegmentacion *proceso){
+
+	int paginasTotalesProceso;
+	paginasTotalesProceso = calcularTotalPaginasProceso(proceso);
+
+	int contador; /*Para saber cuántos espacios libres hay*/
+
+	
+	contador = 0;
+
+	//printf("*************************************************\n");
+	//printf("Los que tienen -1 y 1, son espacios libres\n");
+
+	for(int i = 0; i<tamanio; i++){
+		
+		//printf("Página %i: Disponible: %i Número de proceso: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado);
+		
+		/*Se pregunta si hay espacio disponible, en caso de que sí, se suma el contador para saber cuántas páginas hay*/
+		if(paginas[i].disponible == 1) contador++;
+
+	}
+
+	printf("Páginas disponibles: %i\n", contador);
+	//printf("*************************************************\n");
+	
+	if(contador >= paginasTotalesProceso) return 1; /*Hay suficientes páginas*/
+	
+	else return 0; /*No hay suficientes páginas*/
 
 }
 
-void liberarMemoriaSegmentacion(){
+/* Función encargada de devolver el espacio en la memoria compartida para el proceso en el mecanismo de segmentación */
+void liberarMemoriaSegmentacion(int idProceso){
+
+	for(int i = 0; i<tamanio; i++){
+
+		/*Pregunta si un campo ocupado coincide con el id que se desea sacar*/
+		if(paginas[i].procesoOcupado == idProceso && paginas[i].disponible == 0){ 
+
+			paginas[i].procesoOcupado = -1; //No le queda ningún proceso asignado
+			paginas[i].disponible = 1; //Vuelve a estar disponible
+
+
+		}
+
+	}
 	
 }
 
-/*Funcuón encargada de ejecutar el proceso en el modelo de paginación, tiene como parámetro el proceso, con las páginas que ocupa y el tiempo que se ejecutará*/
+/*Función encargada de ejecutar el proceso en el modelo de paginación, tiene como parámetro el proceso, con las páginas que ocupa y el tiempo que se ejecutará*/
 int *ejecucionProcesoPaginacion(void *proceso){
 	/*FALTA ESCRIBIR EN LA BITÁCORA*/	
 
-	int aceptaSolicitudMemoria;
+	int aceptaSolicitudMemoria; /*Para saber si hay espacio suficiente en memoria*/
 
 	ProcesoPaginacion *procesoP;
 
@@ -190,6 +241,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	aceptaSolicitudMemoria = solicitarMemoriaPaginacion(procesoP->cantidadPaginas);
 	
+	/*Si no hay suficiente espacio, se mata el proceso y se devuelve el semáforo*/
 	if(aceptaSolicitudMemoria == 0){
 
 		printf("Matando al proceso\n");
@@ -198,13 +250,10 @@ int *ejecucionProcesoPaginacion(void *proceso){
 		return -1;	
 	}
 
-	printf("SALIO\n");
-
-	printf("CP: %i\n", procesoP->cantidadPaginas);
-
+	/*Se ocupan los campos en memoria*/
 	tomarMemoriaPaginacion(procesoP->cantidadPaginas, procesoP->idProceso);
 
-	doSignal(semaforo,0);
+	doSignal(semaforo,0); /*Libera semáforo*/
 	
 	/*Escribir en bitácora*/
 
@@ -225,15 +274,104 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 }
 
+int apartarPaginasContiguas(int numeroPaginas){
+
+
+	int contador; /*Para saber cuántos espacios libres hay*/
+
+	int marca; /*Para saber dónde empieza una serie de bloque contiguos*/
+	
+	contador = 0;
+	marca = 0;
+
+	
+	for(int i = 0; i<tamanio; i++){
+		
+		/*Se pregunta si hay espacio disponible, en caso de que sí, se suma el contador para saber cuántas páginas hay*/
+		if(paginas[i].disponible == 1){ 
+			contador++;
+		}
+
+		else{
+			
+			if(contador >= numeroPaginas){
+
+				return marca; /*Retorna el índice de la página donde empiezan contiguas*/
+
+			}
+
+			else{
+				marca = i+1;
+				contador = 0;	
+			} 
+		
+		}
+
+	}
+
+
+	if(contador >= numeroPaginas){
+
+		return marca; /*Retorna el índice de la página donde empiezan contiguas*/
+
+	}
+
+	else{
+		return -1;	
+	} 
+
+
+}
+
+void asignarContiguas(int idProceso, int cantidadPaginas, int marca, int numeroSegmento){
+
+	
+	int marcaAux;
+	marcaAux = marca;
+	
+	for(int i = 0; i<cantidadPaginas; i++){
+		
+		paginas[marcaAux].procesoOcupado = idProceso;
+		paginas[marcaAux].disponible = 0;
+		paginas[marcaAux].numeroSegmento = numeroSegmento;
+		//paginas[marcaAux].numeroSegmento = numeroSegmento;
+		marcaAux++;
+
+	}
+
+	for(int i = 0; i<tamanio; i++){
+		printf("Página %i: Disponible: %i Número de proceso: %i Segmento: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado, paginas[i].numeroSegmento);
+	}
+
+
+	
+
+
+}
+
+/*Función encargada de ejecutar el proceso en el modelo de segmentación*/
 int *ejecucionProcesoSegmentacion(void *proceso){
 
 	/*FALTA ESCRIBIR EN LA BITÁCORA*/	
 
 	int aceptaSolicitudMemoria;
+	int numeroSegmentos;
+	int idProceso;
 
 	ProcesoSegmentacion *procesoS;
 
 	procesoS =  (ProcesoSegmentacion *) proceso; /*Cast*/
+	numeroSegmentos = procesoS->numeroSegmentos;
+	idProceso = procesoS->idProceso;
+
+	printf("-----------------------------------\n");
+
+	for (int i = 0; i<procesoS->numeroSegmentos; i++){
+
+    	printf("SEGMENTO: %i PAGINAS: %i\n", i, procesoS->segmentos[i].numeroPaginas);
+    }
+
+    //sleep(1010291092);
 
 	printf("EMTRA\n");
 	printf("*********************************\n");
@@ -248,7 +386,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	
 	printf("Entra al semaforo\n");
 
-	//aceptaSolicitudMemoria = solicitarMemoriaSegmentacion(procesoS);
+	aceptaSolicitudMemoria = solicitarMemoriaSegmentacion(procesoS);
 	
 	if(aceptaSolicitudMemoria == 0){
 
@@ -259,9 +397,41 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	}
 
 
+	for(int i = 0; i<procesoS->numeroSegmentos; i++){
+
+		int numeroPaginas;
+		int marca;
+		int numeroSegmento;
+
+		printf("PAGINITAS: %i\n", procesoS->segmentos[i].numeroPaginas);
+
+		numeroPaginas = procesoS->segmentos[i].numeroPaginas;
+		numeroSegmento = procesoS->segmentos[i].numeroSegmento;
+
+		marca = apartarPaginasContiguas(numeroPaginas);
+
+		if(marca == -1){
+			
+			printf("Matando al proceso\n");
+			liberarMemoriaSegmentacion(idProceso);
+			doSignal(semaforo,0); /*Libera el semáforo*/
+
+			return -1;
+		}
+
+		else asignarContiguas(idProceso, numeroPaginas, marca, numeroSegmento);
+		//sleep(2);
+		
+		//printf("AHASHAHSA: %i", n);
+
+
+	}
+	doSignal(semaforo,0);
+	
+
+	sleep(5);
 	//tomarMemoriaPaginacion(procesoP.cantidadPaginas, procesoP.idProceso);
 
-	//doSignal(semaforo,0);
 	
 	/*Escribir en bitácora*/
 
@@ -274,7 +444,8 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 
 	//doSignal(semaforo,0); /*Libera el semáforo*/
 
-	
+	liberarMemoriaSegmentacion(idProceso);
+			
 
 	printf("Terminó la ejecución de este proceso\n");
 	return 1;
@@ -283,6 +454,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 
 }
 
+/*Función encargada de crear procesos para el mecanismo de paginación*/
 void crearHiloPaginacion(ProcesoPaginacion *proceso){
 
 	int ret;
@@ -297,9 +469,13 @@ void crearHiloPaginacion(ProcesoPaginacion *proceso){
 	//cambia el detachstate para liberar recursos cuando termine el hilo
 	ret = pthread_attr_setdetachstate(&tattr,PTHREAD_CREATE_DETACHED);
 							
+	
+	//proceso->idProceso = pthread_create( &sniffer_thread , &tattr ,  &ejecucionProcesoPaginacion ,  proceso); 
 	idCreacionHilo = pthread_create( &sniffer_thread , &tattr ,  &ejecucionProcesoPaginacion ,  proceso);	
-							 
-	if( idCreacionHilo < 0)
+	
+
+	printf("SE CREO HILO: %i\n", idCreacionHilo);						 
+	if( proceso->idProceso < 0)
 	{
 		perror("No se pudo crear el hilo correctamente");
 		
@@ -307,7 +483,7 @@ void crearHiloPaginacion(ProcesoPaginacion *proceso){
 
 }
 
-
+/*Función encargada de crear procesos para el mecanismo de segmentación*/
 void crearHiloSegmentacion(ProcesoSegmentacion *proceso){
 
 	int ret;
@@ -319,6 +495,12 @@ void crearHiloSegmentacion(ProcesoSegmentacion *proceso){
     printf("Proceso: %i\n", proceso->idProceso);
     printf("Tiempo: %i\n", proceso->tiempo);
     
+    for (int i = 0; i<proceso->numeroSegmentos; i++){
+
+    	printf("SEGMENTO: %i PAGINAS: %i\n", i, proceso->segmentos[i].numeroPaginas);
+    }
+
+
 	
 	/*Se inicializan los valores del hilo*/
 	ret = pthread_attr_init(&tattr);
@@ -334,9 +516,11 @@ void crearHiloSegmentacion(ProcesoSegmentacion *proceso){
 	}
 
 
+
+
 }
 
-/*Función encargada de */
+/*Función encargada de actuar como el mecanismo de paginación*/
 void mecanismoPaginacion(){
 	
 	semaforo=semget(IPC_PRIVATE,1,IPC_CREAT | 0700);
@@ -403,6 +587,7 @@ void mecanismoPaginacion(){
 
 }
 
+/*Función encargada de actuar como el mecanismo de segmentación*/
 void mecanismoSegmentacion(){
 	
 	semaforo=semget(IPC_PRIVATE,1,IPC_CREAT | 0700);
