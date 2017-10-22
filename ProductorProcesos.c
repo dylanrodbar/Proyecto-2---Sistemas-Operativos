@@ -203,12 +203,14 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	int aceptaSolicitudMemoria; /*Para saber si hay espacio suficiente en memoria*/
 	int idProceso;
 	int cantidadPaginas;
+	int tiempo;
 
 	ProcesoPaginacion *procesoP;
 
 	procesoP = (ProcesoPaginacion*) proceso; /*Cast*/
 	idProceso = procesoP->idProceso;
 	cantidadPaginas = procesoP->cantidadPaginas;
+	tiempo = procesoP->tiempo;
 
 	printf("--------------------- Proceso: %i --------------------- \n", procesoP->idProceso);
 
@@ -245,13 +247,14 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
 	
 
-	sleep(6);
+	sleep(5);
+	//sleep(tiempo);
 
 	printf("----- Termina el sleep del proceso: %i -----\n", idProceso);
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
 	
 
-	//sleep(procesoP->tiempo);
+	
 
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
 	
