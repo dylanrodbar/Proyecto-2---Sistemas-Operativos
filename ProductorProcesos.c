@@ -6,6 +6,7 @@
 #include <sys/ipc.h>   /*Manejo de memoria compartida*/
 #include <sys/shm.h>   /*Manejo de memoria compartida*/
 #include <stdio.h> 
+#include <string.h>
 #include <pthread.h>   /*Para el manejo de  hilos*/
 #include <time.h>
 #include <stdlib.h>    /*Para el uso de rand()*/
@@ -27,6 +28,9 @@
 
 int semaforo;
 Pagina *paginas;
+char *contenidoBitacora;
+char *contenidoEspia;
+
 
 /*--------------------------------------  Semáforos binarios  --------------------------------------*/
 
@@ -72,6 +76,20 @@ void initSem(int semid, int numSem, int valor) { //iniciar un semaforo
     }
 }
 
+
+void escribirEnBitacora(char *contenido){
+
+	strcat(contenidoBitacora, contenido);
+
+}
+
+void escribirEnEspia(char *contenido){
+
+	strcat(contenidoEspia, contenido);
+
+}
+
+
 /* ------------------------------------------------------------------------------------------------ */
 /* ------------------------------------------------------------------------------------------------ */
 /* ------------------------------------------------------------------------------------------------ */
@@ -99,6 +117,7 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 
 	printf("-----------------------------------------------------------------------\n");
 	printf("Los que tienen -1 y 1, son espacios libres\n");
+	printf("\n\n");
 
 	for(int i = 0; i<tamanio; i++){
 		
@@ -108,13 +127,15 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 		if(paginas[i].disponible == 1) contador++;
 
 	}
-
+	printf("\n");
 	printf("--- Páginas disponibles: %i ---\n", contador);
 	
 	if(contador >= numeroPaginas){
 
 		printf("--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- \n");
+		printf("\n\n");
 		printf("-----------------------------------------------------------------------\n");
+		printf("\n\n");
 		
 		return 1; /*Hay suficientes páginas*/
 
@@ -123,7 +144,9 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 	else{
 
 		printf("--- ¡No hay suficientes páginas para ejecutar este proceso! :( --- \n");
+		printf("\n\n");
 		printf("-----------------------------------------------------------------------\n");
+		printf("\n\n");
 		return 0; /*No hay suficientes páginas*/
 		
 	} 
@@ -156,8 +179,9 @@ void tomarMemoriaPaginacion(int numeroPaginas, int idProceso){
 
 	}	
 
-	printf("--- Se asignaron las páginas para el proceso: %i ---\n", idProceso);
-	printf("--- Así se ve la memoria ahora: ---");
+	printf("--- Se asignaron las páginas para el proceso: %i ---\n", idProceso); /*Asignación*/
+	printf("--- Así se ve la memoria ahora: ---\n");
+	printf("\n\n");
 
 	printf("-----------------------------------------------------------------------\n");
 	printf("Los que tienen -1 y 1, son espacios libres\n");
@@ -169,6 +193,7 @@ void tomarMemoriaPaginacion(int numeroPaginas, int idProceso){
 	}
 
 	printf("-----------------------------------------------------------------------\n");
+	printf("\n\n");
 
 
 } 
@@ -176,7 +201,7 @@ void tomarMemoriaPaginacion(int numeroPaginas, int idProceso){
 /* Función encargada de devolver el espacio en la memoria compartida para el proceso en el mecanismo de paginación */
 void liberarMemoriaPaginacion(int idProceso){
 
-	printf("--- Se liberarán las páginas para el proceso: %i ---\n", idProceso);
+	printf("--- Se liberarán las páginas para el proceso: %i ---\n", idProceso); /*Desasignación*/
 	
 
 	for(int i = 0; i<tamanio; i++){
@@ -215,7 +240,11 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	printf("--------------------- Proceso: %i --------------------- \n", procesoP->idProceso);
 
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
+	printf("----------------------------------------------------------------------------------------------------------------------\n");
+	printf("----------------------------------------------------------------------------------------------------------------------\n");
 	
+	printf("\n\n");
+
 	printf("------------ Esperando para usar el semáforo ------------ \n");
 	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
@@ -223,6 +252,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	printf("------------ Entra al semaforo               ------------\n");
 
 	printf("------------ Páginas requeridas: %i          ------------\n", cantidadPaginas);
+	printf("\n\n");
 
 
 	aceptaSolicitudMemoria = solicitarMemoriaPaginacion(procesoP->cantidadPaginas);
@@ -230,8 +260,11 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	/*Si no hay suficiente espacio, se mata el proceso y se devuelve el semáforo*/
 	if(aceptaSolicitudMemoria == 0){
 
-		printf("Matando al proceso\n");
+		printf("Matando al proceso: %i\n", idProceso);
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
+		printf("----------------------------------------------------------------------------------------------------------------------\n");
+		printf("----------------------------------------------------------------------------------------------------------------------\n");
+		printf("\n\n");
 		doSignal(semaforo,0); /*Libera el semáforo*/
 
 		return -1;	
@@ -245,14 +278,16 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	/*Escribir en bitácora*/
 	printf("----- Comienza el sleep del proceso: %i -----\n", idProceso);
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
-	
+	printf("----------------------------------------------------------------------------------------------------------------------\n");
+	printf("\n\n");
 
 	sleep(5);
 	//sleep(tiempo);
 
 	printf("----- Termina el sleep del proceso: %i -----\n", idProceso);
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
-	
+	printf("----------------------------------------------------------------------------------------------------------------------\n");
+	printf("\n\n");
 
 	
 
@@ -264,7 +299,9 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	
 
-	printf("--- Terminó la ejecución de este proceso ---\n");
+	printf("--- Terminó la ejecución de este proceso: %i ---\n", idProceso);
+	printf("\n\n");
+
 	return 1;
 }
 
@@ -299,6 +336,8 @@ void crearHiloPaginacion(ProcesoPaginacion *proceso){
 /*Función encargada de actuar como el mecanismo de paginación*/
 void mecanismoPaginacion(){
 	
+	char *mensaje;
+	
 	semaforo=semget(IPC_PRIVATE,1,IPC_CREAT | 0700);
 	
 	if(semaforo < 0){
@@ -323,8 +362,8 @@ void mecanismoPaginacion(){
     srand(hora);
 
     
-   
-    numeroProcesos = 0;
+   	mensaje = (char*)malloc(sizeof(char*));
+   	numeroProcesos = 0;
 
     /*La idea, por ahora, es crear 1000 procesos que pidan memoria en la compartida*/
     while(numeroProcesos < 1000){
@@ -352,6 +391,20 @@ void mecanismoPaginacion(){
 
     	printf("Tiempo hasta el próximo proceso: %i\n", cantidadSegundosPorProceso);
     	printf("-------------------------------------------------\n");
+    	printf("\n\n");
+
+    	
+    	
+
+    	//escribirEnBitacora("--- ¡Se va a generar un nuevo proceso! ---\n");
+    	//escribirEnBitacora("-------------------------------------------------\n");
+    	//escribirEnBitacora("-------------------------------------------------\n");
+    	//escribirEnBitacora();
+    	//escribirEnBitacora();
+    	//escribirEnBitacora();
+    	//escribirEnBitacora();
+    	//escribirEnBitacora();
+    	//escribirEnBitacora();
     	
     	crearHiloPaginacion(proceso);
     	//sleep(cantidadSegundosPorProceso);
@@ -419,6 +472,7 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 	printf("-----------------------------------------------------------------------------------------\n");
 	printf("--- Así se ve la memoria ahora ---\n");
 	printf("-----------------------------------------------------------------------\n");
+	printf("\n\n");
 	printf("Los que tienen -1 y 1, son espacios libres\n");
 
 	for(int i = 0; i<tamanio; i++){
@@ -426,6 +480,7 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 		printf("Página %i: Disponible: %i Número de proceso: %i Segmento: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado, paginas[i].numeroSegmento);
 		
 	}
+	printf("\n\n");
 	printf("-----------------------------------------------------------------------\n");
 	
 	
@@ -443,6 +498,7 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 			if(contador >= numeroPaginas){
 				printf("--- ¡Se logró encontrar un espacio con páginas contiguas de tamaño: %i para el segmento: %i comienza en la celda: %i! :) ---\n", numeroPaginas, segmento, marca);
 				printf("-----------------------------------------------------------------------------------------\n");
+				printf("\n\n");
 	
 				return marca; /*Retorna el índice de la página donde empiezan contiguas*/
 
@@ -462,6 +518,8 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 	if(contador >= numeroPaginas){
 		printf("--- ¡Se logró encontrar un espacio con páginas contiguas de tamaño: %i para el segmento: %i comienza en la celda: %i! :) ---\n", numeroPaginas, segmento, marca);
 		printf("-----------------------------------------------------------------------------------------\n");
+		printf("\n\n");
+	
 	
 		return marca; /*Retorna el índice de la página donde empiezan contiguas*/
 
@@ -471,6 +529,8 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 
 		printf("--- ¡No se logró encontrar un espacio con páginas contiguas de tamaño: %i para el segmento: %i :(! ---\n", numeroPaginas, segmento);
 		printf("-----------------------------------------------------------------------------------------\n");
+		printf("\n\n");
+	
 		return -1;	
 	
 	} 
@@ -484,7 +544,7 @@ int asignarContiguas(int idProceso, int cantidadPaginas, int marca, int numeroSe
 	int marcaAux;
 	marcaAux = marca;
 	
-	printf("--- Buscando espacios contiguos para el proceso: %i segmento: %i páginas requeridas: %i ---\n", idProceso, numeroSegmento, cantidadPaginas);
+	printf("--- Asignando espacios contiguos para el proceso: %i segmento: %i páginas requeridas: %i ---\n", idProceso, numeroSegmento, cantidadPaginas);
 	
 	printf("--------------------------------------------------------------------------------------------------------\n");
 	for(int i = 0; i<cantidadPaginas; i++){
@@ -497,13 +557,15 @@ int asignarContiguas(int idProceso, int cantidadPaginas, int marca, int numeroSe
 
 	}
 
-	printf("--- Así se ve la memoria después de la asignación ---\n");
+	printf("--- Así se vería la memoria si se lograra la asignación, faltan los demás segmentos ---\n");
 	printf("-----------------------------------------------------------------------\n");
 	printf("Los que tienen -1 y 1, son espacios libres\n");
+	printf("\n\n");
 
 	for(int i = 0; i<tamanio; i++){
 		printf("Página %i: Disponible: %i Número de proceso: %i Segmento: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado, paginas[i].numeroSegmento);
 	}
+	printf("\n\n");
 	printf("-----------------------------------------------------------------------\n");
 	printf("--------------------------------------------------------------------------------------------------------\n");
 	
@@ -525,10 +587,11 @@ int solicitarMemoriaSegmentacion(ProcesoSegmentacion *proceso){
 	contador = 0;
 
 	printf("------------ Páginas requeridas: %i          ------------\n", paginasTotalesProceso);
-	
+	printf("\n");
 
 	printf("-----------------------------------------------------------------------\n");
 	printf("Los que tienen -1 y 1, son espacios libres\n");
+	printf("\n\n");
 
 	for(int i = 0; i<tamanio; i++){
 		
@@ -543,13 +606,17 @@ int solicitarMemoriaSegmentacion(ProcesoSegmentacion *proceso){
 	if(contador >= paginasTotalesProceso){
 
 		printf("--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- \n");
+		printf("\n\n");
 		printf("-----------------------------------------------------------------------\n"); 
+		printf("\n\n");
 		return 1; /*Hay suficientes páginas*/
 	}
 	
 	else{
 		printf("--- ¡No hay suficientes páginas para ejecutar este proceso! :( --- \n");
+		printf("\n\n");
 		printf("-----------------------------------------------------------------------\n"); 
+		printf("\n\n");
 		return 0; /*No hay suficientes páginas*/
 	}
 
@@ -557,6 +624,8 @@ int solicitarMemoriaSegmentacion(ProcesoSegmentacion *proceso){
 
 /* Función encargada de devolver el espacio en la memoria compartida para el proceso en el mecanismo de segmentación */
 void liberarMemoriaSegmentacion(int idProceso){
+
+	printf("--- Liberando segmentos para el proceso: %i ---\n", idProceso);
 
 	for(int i = 0; i<tamanio; i++){
 
@@ -600,7 +669,10 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	printf("--------------------- Proceso: %i --------------------- \n", idProceso);
 
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
+	printf("----------------------------------------------------------------------------------------------------------------------\n");
+	printf("----------------------------------------------------------------------------------------------------------------------\n");
 	
+	printf("\n\n");
 	printf("------------ Esperando para usar el semáforo ------------ \n");
 	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
@@ -612,8 +684,11 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	
 	if(aceptaSolicitudMemoria == 0){
 
-		printf("--- Matando al proceso ---\n");
+		printf("--- Matando al proceso: %i ---\n", idProceso);
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
+		printf("----------------------------------------------------------------------------------------------------------------------\n");
+		printf("----------------------------------------------------------------------------------------------------------------------\n");
+		printf("\n\n");
 		doSignal(semaforo,0); /*Libera el semáforo*/
 
 		return -1;	
@@ -633,10 +708,13 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 
 		if(marca == -1){
 			
-			printf("--- Matando al proceso ---\n");
+			printf("--- Matando al proceso: %i ---\n", idProceso);
 
 			liberarMemoriaSegmentacion(idProceso);
 			printf("----------------------------------------------------------------------------------------------------------------------\n");
+			printf("----------------------------------------------------------------------------------------------------------------------\n");
+			printf("----------------------------------------------------------------------------------------------------------------------\n");
+			printf("\n\n");
 			doSignal(semaforo,0); /*Libera el semáforo*/
 
 			return -1;
@@ -675,7 +753,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	doSignal(semaforo,0); /*Libera el semáforo*/
 			
 
-	printf("Terminó la ejecución de este proceso\n");
+	printf("--- Terminó la ejecución del proceso: %i ---\n", idProceso);
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
 	
 	return 1;
@@ -777,6 +855,7 @@ void mecanismoSegmentacion(){
     	printf("Segundos para el proceso: %i\n", cantidadSegundos);	
     	printf("Segmentos: \n");
     	printf("-----------------\n");
+    	printf("\n");
     	for (int i = 0; i<cantidadSegmentos; i++){
 
     		printf("--------\n");
@@ -787,9 +866,11 @@ void mecanismoSegmentacion(){
 
     	}
     	printf("-----------------\n");
+    	printf("\n");
     	printf("Cantidad de páginas total: %i\n", cantidadTotalPaginas);	
     	printf("Tiempo hasta el próximo proceso: %i\n", cantidadSegundosPorProceso);
     	printf("-------------------------------------------------\n");
+    	printf("\n\n");
     	
     	
 
@@ -816,7 +897,7 @@ void mecanismoSegmentacion(){
 
 
 /*Función encargada de leer el txt que contiene el Id de la memoria compartida que se desea usar*/
-int leerIdMemoriaCompartida(){
+int leerIdMemoriaCompartida(char *nombreArchivo){
 
 	char *contenidoArchivo;
 	size_t nread; 
@@ -825,7 +906,7 @@ int leerIdMemoriaCompartida(){
 	int tamanioTotalPasoArchivo;
 
 	contenidoArchivo= (char*)malloc(sizeof(char*));
-	archivo = fopen("idMemoriaCompartida.txt", "r");
+	archivo = fopen(nombreArchivo, "r");
 
 	if (archivo == NULL) {
    
@@ -855,44 +936,44 @@ int leerIdMemoriaCompartida(){
 }
 
 /* Función encargada de solicitar memoria compartida al sistema operativo */
-int leerMemoria(int idMemoriaCompartida){
+int leerMemoria(int idMemoriaCompartida, int idMemoriaCompartidaBitacora, int idMemoriaCompartidaEspia){
 
 	key_t key; /*Clave que se pasa al shmget*/
 	int banderaMemoriaCompartida; /*Necesaria para saber bajo qué "modalidad" se crea la memoria compartida*/
 	int tamanioMemoriaCompartida;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
 	char *memoriaCompartida; /*Con esta variable se puede acceder al contenido de la memoria compartida*/
 	
-	key = 5678;
+	//key = 5678;
 	
 	
 	/*Se valida si se logra o no compartir la memoria*/
-	if(idMemoriaCompartida < 0){
+	//if(idMemoriaCompartida < 0){
 		
-		printf("** Error, no se pudo asignar la memoria compartida **\n");
-		return -1;
-
-	}
-
-	paginas = shmat(idMemoriaCompartida, NULL, 0); /*Revisar*/
-	//memoriaCompartida = shmat(idMemoriaCompartida, NULL, 0); /*Se accede a la memoria compartida*/
-
-
-	/*Se valida si se obtuvo acceso a la memoria compartida correctamente*/
-	if(memoriaCompartida == (char *) -1){
-
-		printf("Error");
-		return -1;
-
-	}
-	    
-	/*Hacerlo dinámico*/
-	//for(int i = 0; i<15; i++){
-
-	//	printf("Disponibilidad: %i\n", paginas[i].disponible);
-	//	printf("Proceso ocupado: %i\n", paginas[i].procesoOcupado);
+	//	printf("** Error, no se pudo asignar la memoria compartida **\n");
+	//	return -1;
 
 	//}
-	
+
+	paginas = shmat(idMemoriaCompartida, NULL, 0); /*Revisar*/
+	contenidoBitacora = shmat(idMemoriaCompartidaBitacora, NULL, 0);
+	contenidoEspia = shmat(idMemoriaCompartidaEspia, NULL, 0);
+
+	/*Se valida si se obtuvo acceso a la memoria compartida correctamente*/
+	if(contenidoBitacora == (char *) -1){
+
+		printf("-- Error al conectarse con la bitácora --");
+		return -1;
+
+	}
+
+	/*Se valida si se obtuvo acceso a la memoria compartida correctamente*/
+	if(contenidoEspia == (char *) -1){
+
+		printf("-- Error al conectarse al espía --");
+		return -1;
+
+	}
+	    	
 	
 	return 1;
 
@@ -909,8 +990,19 @@ int leerMemoria(int idMemoriaCompartida){
 int main(){
 	
 	int idMemoriaCompartida;
-	idMemoriaCompartida = leerIdMemoriaCompartida();
-	leerMemoria(idMemoriaCompartida);
+	int idMemoriaCompartidaBitacora;
+	int idMemoriaCompartidaEspia;
+
+	idMemoriaCompartida = leerIdMemoriaCompartida("idMemoriaCompartida.txt");
+	idMemoriaCompartidaBitacora = leerIdMemoriaCompartida("idMemoriaCompartidaBitacora.txt");
+	idMemoriaCompartidaEspia = leerIdMemoriaCompartida("idMemoriaCompartidaEspia.txt");
+	
+	printf("MEMORIA COMPARTIDA: %i\n", idMemoriaCompartida);
+	printf("MEMORIA BITACORA: %i\n", idMemoriaCompartidaBitacora);
+	printf("MEMORIA ESPIA: %i\n", idMemoriaCompartidaEspia);
+
+
+	leerMemoria(idMemoriaCompartida, idMemoriaCompartidaBitacora, idMemoriaCompartidaEspia);
 
 	char *opcion; /*Aquí se almacenará el valor de entrada de la consola*/
 	
@@ -919,6 +1011,9 @@ int main(){
 	int opcionN;  /*Aquí se almacenará el valor entero de la entrada a la consola, para el switch*/
 
 	opcion = (char*)malloc(sizeof(char*));
+	//contenidoBitacora =  (char*)malloc(sizeof(char*));
+	//contenidoEspia =  (char*)malloc(sizeof(char*));
+
 
 	printf("Bienvenido(a), este es el programa que se encargará de producir procesos (Threads) por favor, seleccione un modelo:\n");
 	printf("****************************\n");

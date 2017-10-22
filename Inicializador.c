@@ -15,14 +15,14 @@ Pagina *paginas;
 
 
 /*---Función encargada de guardar en un txt el Id de la memoria compartida que se obtiene---*/
-int guardarIdMemoriaCompartida(int idMemoriaCompartida){
+int guardarIdMemoriaCompartida(int idMemoriaCompartida, char* nombreArchivo){
 	
 	FILE *archivo;
 	char *contenidoArchivo;
 
 	
 	contenidoArchivo = (char*)malloc(sizeof(char*));
-	archivo = fopen("idMemoriaCompartida.txt", "w");
+	archivo = fopen(nombreArchivo, "w");
 
 	if(archivo == NULL){
 
@@ -44,17 +44,46 @@ int guardarIdMemoriaCompartida(int idMemoriaCompartida){
 /* Función encargada de solicitar memoria compartida al sistema operativo */
 int solicitarMemoria(){
 	
+	/*----------------------------------------------------------------------------------------------------*/
 	key_t key; /*Clave que se pasa al shmget*/
 	int banderaMemoriaCompartida; /*Necesaria para saber bajo qué "modalidad" se crea la memoria compartida*/
 	int idMemoriaCompartida;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
 	int tamanioMemoriaCompartida;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
 	char *memoriaCompartida; /*Con esta variable se puede acceder al contenido de la memoria compartida*/
-
+	/*----------------------------------------------------------------------------------------------------*/
+	
+	/*----------------------------------------------------------------------------------------------------*/
+	key_t keyBitacora; /*Clave que se pasa al shmget*/
+	int idMemoriaCompartidaBitacora;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
+	int tamanioMemoriaCompartidaBitacora;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
+	/*----------------------------------------------------------------------------------------------------*/
+	
+	/*----------------------------------------------------------------------------------------------------*/
+	key_t keyEspia; /*Clave que se pasa al shmget*/
+	int idMemoriaCompartidaEspia;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
+	int tamanioMemoriaCompartidaEspia;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
+	/*----------------------------------------------------------------------------------------------------*/
+	
+	/*----------------------------------------------------------------------------------------------------*/
 	key = 5559;
 	tamanioMemoriaCompartida = tamanio * sizeof(struct Pagina);
 	banderaMemoriaCompartida = IPC_CREAT;
 	idMemoriaCompartida = shmget(key, tamanioMemoriaCompartida, banderaMemoriaCompartida | 0666);
+	/*----------------------------------------------------------------------------------------------------*/
+	
+	/*----------------------------------------------------------------------------------------------------*/
+	keyBitacora = 5555;
+	tamanioMemoriaCompartidaBitacora = tamanioBitacora;
+	idMemoriaCompartidaBitacora = shmget(keyBitacora, tamanioMemoriaCompartidaBitacora, banderaMemoriaCompartida | 0666);
+	/*----------------------------------------------------------------------------------------------------*/
+	
 
+	/*----------------------------------------------------------------------------------------------------*/
+	keyEspia = 5556;
+	tamanioMemoriaCompartidaEspia = tamanioEspia;
+	idMemoriaCompartidaEspia = shmget(keyEspia, tamanioMemoriaCompartidaEspia, banderaMemoriaCompartida | 0666);
+	/*----------------------------------------------------------------------------------------------------*/
+	
 
 	
 	/*Se valida si se logra o no compartir la memoria*/
@@ -84,7 +113,10 @@ int solicitarMemoria(){
 
 	}
 	
-	guardarIdMemoriaCompartida(idMemoriaCompartida);
+	guardarIdMemoriaCompartida(idMemoriaCompartida, "idMemoriaCompartida.txt");
+	guardarIdMemoriaCompartida(idMemoriaCompartidaBitacora, "idMemoriaCompartidaBitacora.txt");
+	guardarIdMemoriaCompartida(idMemoriaCompartidaEspia, "idMemoriaCompartidaEspia.txt");
+
 
 	return idMemoriaCompartida;
 
