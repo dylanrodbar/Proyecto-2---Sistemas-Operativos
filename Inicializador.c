@@ -133,7 +133,7 @@ int solicitarMemoria(){
 	
 
 	/*----------------------------------------------------------------------------------------------------*/
-	keyEspiaProcesosMemoria = 5111;
+	keyEspiaProcesosMemoria = 5112;
 	tamanioMemoriaCompartidaEspiaProcesosMemoria = tamanioEspiaProcesosMemoria *sizeof(struct ProcesoGeneral);
 
 	idMemoriaCompartidaEspiaProcesosMemoria = shmget(keyEspiaProcesosMemoria, tamanioMemoriaCompartidaEspiaProcesosMemoria, banderaMemoriaCompartida | 0666);
@@ -151,7 +151,7 @@ int solicitarMemoria(){
 	/*----------------------------------------------------------------------------------------------------*/
 
 	/*----------------------------------------------------------------------------------------------------*/
-	keyEspiaProcesoPideMemoria = 5222;
+	keyEspiaProcesoPideMemoria = 5333;
 	tamanioMemoriaCompartidaEspiaProcesoPideMemoria = tamanioEspiaProcesoPideMemoria *sizeof(struct ProcesoGeneral);
 	idMemoriaCompartidaEspiaProcesoPideMemoria = shmget(keyEspiaProcesoPideMemoria, tamanioMemoriaCompartidaEspiaProcesoPideMemoria, banderaMemoriaCompartida | 0666);
 	
@@ -168,7 +168,7 @@ int solicitarMemoria(){
 	/*----------------------------------------------------------------------------------------------------*/
 
 	/*----------------------------------------------------------------------------------------------------*/
-	keyEspiaProcesosBloqueados = 5333;
+	keyEspiaProcesosBloqueados = 5144;
 	tamanioMemoriaCompartidaEspiaProcesosBloqueados = tamanioEspiaProcesosBloqueados *sizeof(struct ProcesoGeneral);
 
 	idMemoriaCompartidaEspiaProcesosBloqueados = shmget(keyEspiaProcesosBloqueados, tamanioMemoriaCompartidaEspiaProcesosBloqueados, banderaMemoriaCompartida | 0666);
@@ -186,7 +186,7 @@ int solicitarMemoria(){
 	/*----------------------------------------------------------------------------------------------------*/
 
 	/*----------------------------------------------------------------------------------------------------*/
-	keyEspiaProcesosMuertos = 5444;
+	keyEspiaProcesosMuertos = 5452;
 	tamanioMemoriaCompartidaEspiaProcesosMuertos = tamanioEspiaProcesosMuertos *sizeof(struct ProcesoGeneral);
 
 	idMemoriaCompartidaEspiaProcesosMuertos = shmget(keyEspiaProcesosMuertos, tamanioMemoriaCompartidaEspiaProcesosMuertos, banderaMemoriaCompartida | 0666);
@@ -204,7 +204,7 @@ int solicitarMemoria(){
 	/*----------------------------------------------------------------------------------------------------*/
 
 	/*----------------------------------------------------------------------------------------------------*/
-	keyEspiaProcesosTerminados = 5696;
+	keyEspiaProcesosTerminados = 5234;
 	tamanioMemoriaCompartidaEspiaProcesosTerminados = tamanioEspiaProcesosTerminados *sizeof(struct ProcesoGeneral);
 
 	idMemoriaCompartidaEspiaProcesosTerminados = shmget(keyEspiaProcesosTerminados, tamanioMemoriaCompartidaEspiaProcesosTerminados, banderaMemoriaCompartida | 0666);
@@ -254,24 +254,29 @@ int solicitarMemoria(){
 	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
 		procesosEnMemoria[i].idProceso = -1;
 		strcpy(procesosEnMemoria[i].tipoMecanismo, "n");
+		procesosEnMemoria[i].idThread = -1;
 	}
 
 	procesoPideMemoria[0].idProceso = -1;
 	strcpy(procesoPideMemoria[0].tipoMecanismo,"n");
+	procesoPideMemoria[0].idThread = -1;
 
 	for(int i = 0; i<tamanioEspiaProcesosBloqueados; i++){
 		procesosBloqueados[i].idProceso = -1;
 		strcpy(procesosBloqueados[i].tipoMecanismo,"n");
+		procesosBloqueados[i].idThread  = -1;
 	}
 
 	for(int i = 0; i<tamanioEspiaProcesosMuertos; i++){
 		procesosMuertos[i].idProceso = -1;
 		strcpy(procesosMuertos[i].tipoMecanismo,"n");
+		procesosMuertos[i].idThread = -1;
 	}
 
 	for(int i = 0; i<tamanioEspiaProcesosTerminados; i++){
 		procesosTerminados[i].idProceso = -1;
 		strcpy(procesosTerminados[i].tipoMecanismo,"n");
+		procesosTerminados[i].idThread = -1;
 	}
 
 

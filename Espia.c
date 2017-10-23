@@ -115,6 +115,7 @@ void verProcesosEnMemoria(){
 			
 			printf("Proceso: %i\n", procesosEnMemoria[i].idProceso);
 			printf("Tipo de mecanismo: %s\n", procesosEnMemoria[i].tipoMecanismo);
+			printf("Thread: %lu\n", procesosEnMemoria[i].idThread);
 			contador++;
 
 
@@ -152,6 +153,7 @@ void verProcesoPideMemoria(){
 		
 		printf("Proceso: %i\n", procesoPideMemoria[0].idProceso);
 		printf("Mecanismo: %s\n", procesoPideMemoria[0].tipoMecanismo);
+		printf("Thread: %lu\n", procesoPideMemoria[0].idThread);
 	
 	}
 
@@ -192,6 +194,7 @@ void verProcesosBloqueados(){
 			
 			printf("Proceso: %i\n", procesosBloqueados[i].idProceso);
 			printf("Tipo de mecanismo: %s\n", procesosBloqueados[i].tipoMecanismo);
+			printf("Thread: %lu\n", procesosBloqueados[i].idThread);
 			contador++;
 
 
@@ -234,6 +237,7 @@ void verProcesosMuertos(){
 			
 			printf("Proceso: %i\n", procesosMuertos[i].idProceso);
 			printf("Tipo de mecanismo: %s\n", procesosMuertos[i].tipoMecanismo);
+			printf("Thread: %lu\n", procesosMuertos[i].idThread);
 			contador++;
 
 
@@ -279,6 +283,7 @@ void verProcesosTerminados(){
 			
 			printf("Proceso: %i\n", procesosTerminados[i].idProceso);
 			printf("Tipo de mecanismo: %s\n", procesosTerminados[i].tipoMecanismo);
+			printf("Thread: %lu\n", procesosTerminados[i].idThread);
 			contador++;
 
 

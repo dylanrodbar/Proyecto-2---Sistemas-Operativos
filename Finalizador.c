@@ -14,6 +14,7 @@
 #include <sys/stat.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
+#include <signal.h> 
 #include "Pagina.h"
 #include "Configuraciones.h"
 #include "ProcesoGeneral.h"
@@ -21,7 +22,10 @@
 
 #define tamanioPasoArchivo 100
 
+//kill -9 1317
+
 char *bitacora;
+ProcesoGeneral *procesosEnMemoria;
 
 /*Función encargada de leer el txt que contiene el Id de la memoria compartida que se desea usar*/
 int leerIdMemoriaCompartida(char *nombreArchivo){
@@ -59,6 +63,31 @@ int leerIdMemoriaCompartida(char *nombreArchivo){
 	return idMemoriaCompartida;
 
 
+
+}
+
+void liberarHilos(){
+
+	int idProcesosEnMemoria;
+	idProcesosEnMemoria = leerIdMemoriaCompartida("procesosMemoria.txt");
+
+
+	procesosEnMemoria = shmat(idProcesosEnMemoria, NULL, 0);
+
+	int n;
+	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
+
+		if(procesosEnMemoria[i].idProceso != -1){
+			printf("Voy a matar a: %lu", procesosEnMemoria[i].idThread);
+			//n = pthread_kill(procesosEnMemoria[i].idThread,SIGUSR1);
+			//if(n<0){
+			//	printf("--- No se  pudo eliminar el hilo ---\n");
+			//}
+		}
+
+	}
+
+	printf("--- Se ha liberado la memoria compartida de los procesos en memoria ---\n");
 
 }
 
@@ -163,6 +192,8 @@ int main(){
 
 	printf("--- Bienvenido, este programa se encargará de finalizar todos los procesos, devolver la memoria compartida y guardar la bitácora ---\n");
 	
+	liberarHilos();
+	return 1;
 	liberarMemoriaCompartida();
 	liberarProcesosEnMemoria();
 	liberarProcesoPideMemoria();

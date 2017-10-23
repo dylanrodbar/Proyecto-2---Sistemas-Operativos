@@ -14,6 +14,7 @@
 #include <sys/stat.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
+#include <signal.h> 
 #include "Pagina.h"
 #include "Configuraciones.h"
 #include "ProcesoPaginacion.h"
@@ -112,13 +113,14 @@ void escribirEnEspia(char *contenido){
 /* ------------------------------------------------------------------------------------------------ */
 /* ------------------------------------------------------------------------------------------------ */
 
-void escribirProcesoEnMemoria(int idProceso, char tipo[12]){
+void escribirProcesoEnMemoria(int idProceso, char tipo[12], unsigned long idThread){
 
 	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
 
 		if(procesosEnMemoria[i].idProceso == -1){
 			procesosEnMemoria[i].idProceso = idProceso;
 			strcpy(procesosEnMemoria[i].tipoMecanismo,tipo);
+			procesosEnMemoria[i].idThread = idThread;
 			break;
 		}
 
@@ -133,6 +135,7 @@ void liberarProcesoEnMemoria(int idProceso){
 		if(procesosEnMemoria[i].idProceso == idProceso){
 			procesosEnMemoria[i].idProceso = -1;
 			strcpy(procesosEnMemoria[i].tipoMecanismo, "n");
+			procesosEnMemoria[i].idThread = -1;
 
 		}
 	}
@@ -143,24 +146,26 @@ void liberarProcesoPideMemoria(){
 
 	procesoPideMemoria[0].idProceso = -1;
 	strcpy(procesoPideMemoria[0].tipoMecanismo, "n");
+	procesoPideMemoria[0].idThread = -1;
 
 }
 
-void escribirProcesoPideMemoria(int idProceso, char tipo[12]){
+void escribirProcesoPideMemoria(int idProceso, char tipo[12], unsigned long idThread){
 
-	printf("ENTRA A ESCRIBIR PROCESO\n");
 	procesoPideMemoria[0].idProceso = idProceso;
 	strcpy(procesoPideMemoria[0].tipoMecanismo, tipo);
+	procesoPideMemoria[0].idThread = idThread;
 	
 }
 
-void escribirProcesoBloquedo(int idProceso, char tipo[12]){
+void escribirProcesoBloquedo(int idProceso, char tipo[12], unsigned long idThread){
 
 	for(int i = 0; i<tamanioEspiaProcesosBloqueados; i++){
 
 		if(procesosBloqueados[i].idProceso == -1){
 			procesosBloqueados[i].idProceso = idProceso;
-			strcpy(procesosBloqueados[i].tipoMecanismo,tipo);	
+			strcpy(procesosBloqueados[i].tipoMecanismo,tipo);
+			procesosBloqueados[i].idThread = idThread;	
 			break;
 		}
 	
@@ -176,6 +181,7 @@ void liberarProcesoBloqueado(int idProceso){
 			
 			procesosBloqueados[i].idProceso = -1;
 			strcpy(procesosBloqueados[i].tipoMecanismo, "n");
+			procesosBloqueados[i].idThread = -1;
 
 		}
 
@@ -183,13 +189,14 @@ void liberarProcesoBloqueado(int idProceso){
 
 }
 
-void escribirProcesoMuerto(int idProceso, char tipo[12]){
+void escribirProcesoMuerto(int idProceso, char tipo[12], unsigned long idThread){
 
 	for(int i = 0; i<tamanioEspiaProcesosMuertos; i++){
 
 		if(procesosMuertos[i].idProceso == -1){
 			procesosMuertos[i].idProceso = idProceso;
 			strcpy(procesosMuertos[i].tipoMecanismo,tipo);
+			procesosMuertos[i].idThread = idThread;
 			break;
 		}
 
@@ -197,13 +204,14 @@ void escribirProcesoMuerto(int idProceso, char tipo[12]){
 
 }
 
-void escribirProcesoTerminado(int idProceso, char tipo[12]){
+void escribirProcesoTerminado(int idProceso, char tipo[12], unsigned long idThread){
 
 	for(int i = 0; i<tamanioEspiaProcesosTerminados; i++){
 
 		if(procesosTerminados[i].idProceso == -1){
 			procesosTerminados[i].idProceso = idProceso;
 			strcpy(procesosTerminados[i].tipoMecanismo,tipo);
+			procesosTerminados[i].idThread = idThread;
 			break;
 		}
 
@@ -352,13 +360,19 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	int idProceso;
 	int cantidadPaginas;
 	int tiempo;
+	unsigned long idThread;
 
 	ProcesoPaginacion *procesoP;
 
 	procesoP = (ProcesoPaginacion*) proceso; /*Cast*/
+	
+	procesoP->idThread = pthread_self();
+	idThread = pthread_self();
+	
 	idProceso = procesoP->idProceso;
 	cantidadPaginas = procesoP->cantidadPaginas;
 	tiempo = procesoP->tiempo;
+
 
 	printf("--------------------- Proceso: %i --------------------- \n", procesoP->idProceso);
 
@@ -370,7 +384,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	printf("------------ Esperando para usar el semáforo ------------ \n");
 	
-	escribirProcesoBloquedo(idProceso, "Paginacion"); /*Espía*/
+	escribirProcesoBloquedo(idProceso, "Paginacion", idThread); /*Espía*/
 	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
 	
@@ -384,7 +398,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	printf("\n\n");
 
 
-	escribirProcesoPideMemoria(idProceso, "Paginacion");/*Espía*/
+	escribirProcesoPideMemoria(idProceso, "Paginacion", idThread);/*Espía*/
 	
 	aceptaSolicitudMemoria = solicitarMemoriaPaginacion(procesoP->cantidadPaginas);
 	
@@ -397,7 +411,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("\n\n");
 
-		escribirProcesoMuerto(idProceso, "Paginacion");
+		escribirProcesoMuerto(idProceso, "Paginacion", idThread);
 		doSignal(semaforo,0); /*Libera el semáforo*/
 
 		return -1;	
@@ -407,7 +421,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	/*Se ocupan los campos en memoria*/
 	tomarMemoriaPaginacion(procesoP->cantidadPaginas, procesoP->idProceso);
 
-	escribirProcesoEnMemoria(idProceso, "Paginacion"); /*Espía*/
+	escribirProcesoEnMemoria(idProceso, "Paginacion", idThread); /*Espía*/
 
 	liberarProcesoPideMemoria();
 	
@@ -421,7 +435,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
 	printf("\n\n");
 
-	sleep(5);
+	sleep(20);
 	//sleep(tiempo);
 
 	printf("----- Termina el sleep del proceso: %i -----\n", idProceso);
@@ -437,7 +451,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	liberarProcesoEnMemoria(idProceso); /*Espía*/
 
-	escribirProcesoTerminado(idProceso, "Paginacion");
+	escribirProcesoTerminado(idProceso, "Paginacion", idThread);
 	
 	doSignal(semaforo,0); /*Libera el semáforo*/
 
@@ -801,10 +815,16 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	int tiempo;
 	int numeroSegmentos;
 	int cantidadPaginas;
+	unsigned long idThread;
 
 	ProcesoSegmentacion *procesoS;
 
+
 	procesoS =  (ProcesoSegmentacion *) proceso; /*Cast*/
+	
+	procesoS->idThread = pthread_self();
+	idThread = pthread_self();
+	
 	idProceso = procesoS->idProceso;
 	tiempo = procesoS->tiempo;
 	numeroSegmentos = procesoS->numeroSegmentos;  
@@ -820,7 +840,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	printf("------------ Esperando para usar el semáforo ------------ \n");
 	
 	
-	escribirProcesoBloquedo(idProceso, "Segmentacion"); /*Espía*/
+	escribirProcesoBloquedo(idProceso, "Segmentacion", idThread); /*Espía*/
 	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
 	
@@ -828,7 +848,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	
 	printf("------------ Entra al semaforo               ------------\n");
 
-	escribirProcesoPideMemoria(idProceso, "Segmentacion"); /*Espía*/
+	escribirProcesoPideMemoria(idProceso, "Segmentacion", idThread); /*Espía*/
 
 	aceptaSolicitudMemoria = solicitarMemoriaSegmentacion(procesoS);
 	
@@ -839,7 +859,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("\n\n");
-		escribirProcesoMuerto(idProceso, "Segmentacion"); /*Espía*/
+		escribirProcesoMuerto(idProceso, "Segmentacion", idThread); /*Espía*/
 		doSignal(semaforo,0); /*Libera el semáforo*/
 
 		return -1;	
@@ -866,7 +886,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 			printf("----------------------------------------------------------------------------------------------------------------------\n");
 			printf("----------------------------------------------------------------------------------------------------------------------\n");
 			printf("\n\n");
-			escribirProcesoMuerto(idProceso, "Segmentacion"); /*Espía*/
+			escribirProcesoMuerto(idProceso, "Segmentacion", idThread); /*Espía*/
 			doSignal(semaforo,0); /*Libera el semáforo*/
 
 			return -1;
@@ -877,7 +897,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	}
 
 	//ESCRIBIR EN BITÁCORA
-	escribirProcesoEnMemoria(idProceso, "Segmentacion"); /*Espía*/
+	escribirProcesoEnMemoria(idProceso, "Segmentacion", idThread); /*Espía*/
 	
 	liberarProcesoPideMemoria(); /*Espía*/
 
@@ -905,7 +925,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 
 	//ESCRIBIR EN BITÁCORA
 	
-	escribirProcesoTerminado(idProceso, "Segmentacion"); /*Espía*/
+	escribirProcesoTerminado(idProceso, "Segmentacion", idThread); /*Espía*/
 
 	doSignal(semaforo,0); /*Libera el semáforo*/
 			
