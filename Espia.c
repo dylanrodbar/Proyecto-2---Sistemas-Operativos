@@ -67,23 +67,32 @@ int leerIdMemoriaCompartida(char *nombreArchivo){
 
 }
 
+/*Función encargada de mostrar la memoria principal, junto con sus páginas*/
 void verEstadoMemoria(){
 
 	int idMemoriaCompartida;
 	idMemoriaCompartida = leerIdMemoriaCompartida("idMemoriaCompartida.txt");
 	paginas = shmat(idMemoriaCompartida, NULL, 0); /*Revisar*/
 	
+	printf("--- Viendo el estado de la memoria actual ---\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	printf("-----------------------------------------------------------------\n");
 
+	printf("\n\n");
+
+	/*Se recorren las páginas*/
 	for(int i = 0; i<tamanio; i++){
 		
 		printf("Página %i: Disponible: %i Número de proceso: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado);
 		
 	}
-
-
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
 	
 }
 
+/*Función encargada de mostrar los procesos actuales en memoria*/
 void verProcesosEnMemoria(){
 
 	int contador;
@@ -92,6 +101,14 @@ void verProcesosEnMemoria(){
 	procesosEnMemoria = shmat(idProcesosEnMemoria, NULL, 0);
 
 	contador = 0;
+
+	printf("--- Viendo los procesos en memoria en el momento ---\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	
+	/*Se recorren los procesos en memoria*/
 	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
 
 		if(procesosEnMemoria[i].idProceso != -1){
@@ -104,21 +121,33 @@ void verProcesosEnMemoria(){
 		}
 
 	}
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	
 
 	if(contador == 0){
 
 		printf("--- No hay procesos en memoria por el momento ---\n");
+		printf("-----------------------------------------------------------------\n");
+		printf("\n\n");
+	
 	}
 	
 	
 }
 
+/*Función encargada de mostrar el proceso que está pidiendo memoria en el momento*/
 void verProcesoPideMemoria(){
 
 	int idProcesoPideMemoria;
 	idProcesoPideMemoria = leerIdMemoriaCompartida("procesoPideMemoria.txt");
 	procesoPideMemoria = shmat(idProcesoPideMemoria, NULL, 0);
 
+
+	printf("--- Viendo el proceso que está pidiendo memoria en el momento ---\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	
 	if(procesoPideMemoria[0].idProceso != -1){
 		
 		printf("Proceso: %i\n", procesoPideMemoria[0].idProceso);
@@ -126,10 +155,20 @@ void verProcesoPideMemoria(){
 	
 	}
 
+	else{
+		printf("--- No hay ningún proceso pidiendo memoria por el momento ---\n");
+		printf("-----------------------------------------------------------------\n");
+		printf("\n\n");
+	}
+
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	
 	
 
 }
 
+/*Función encargada de mostrar los procesos bloqueados en el momento*/
 void verProcesosBloqueados(){
 
 	int idProcesosBloqueados;
@@ -139,6 +178,14 @@ void verProcesosBloqueados(){
 	
 
 	contador = 0;
+
+	printf("--- Viendo los procesos bloqueados en el momento ---\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	
+	/*Se recorren los procesos bloqueados*/
 	for(int i = 0; i<tamanioEspiaProcesosBloqueados; i++){
 
 		if(procesosBloqueados[i].idProceso != -1){
@@ -152,11 +199,20 @@ void verProcesosBloqueados(){
 
 	}
 
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	
+
 	if(contador == 0){
+
 		printf("--- No hay ningún proceso bloqueado por el momento ---\n");
+		printf("-----------------------------------------------------------------\n");
+		printf("\n\n");
+	
 	}
 }
 
+/*Función encargada de mostrar los procesos muertos en el momento*/
 void verProcesosMuertos(){
 
 	int contador;
@@ -165,6 +221,13 @@ void verProcesosMuertos(){
 	procesosMuertos = shmat(idProcesosMuertos, NULL, 0);
 	contador = 0;
 
+	printf("--- Viendo los procesos muertos en el momento ---\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+
+	/*Se recorren los procesos muertos*/
 	for(int i = 0; i<tamanioEspiaProcesosMuertos; i++){
 
 		if(procesosMuertos[i].idProceso != -1){
@@ -178,14 +241,22 @@ void verProcesosMuertos(){
 
 	}
 
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	
+
 	if(contador == 0){
 
 		printf("--- No hay ningún proceso muerto por el momento ---\n");
+		printf("-----------------------------------------------------------------\n");
+		printf("\n\n");
+	
 	}
 	
 
 }
 
+/*Función encargada de mostrar los procesos terminados en el momento*/
 void verProcesosTerminados(){
 
 	int contador;
@@ -194,6 +265,14 @@ void verProcesosTerminados(){
 	procesosTerminados = shmat(idProcesosTerminados, NULL, 0);
 	contador = 0;
 
+	printf("--- Viendo los procesos terminados en el momento ---\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+
+
+	/*Se recorren los procesos terminados*/
 	for(int i = 0; i<tamanioEspiaProcesosTerminados; i++){
 
 		if(procesosTerminados[i].idProceso != -1){
@@ -207,13 +286,27 @@ void verProcesosTerminados(){
 
 	}
 
+	printf("-----------------------------------------------------------------\n");
+	printf("\n\n");
+	
+
 	if(contador == 0){
 		printf("--- No hay procesos terminados por el momento ---\n");
+		printf("-----------------------------------------------------------------\n");
+		printf("\n\n");
+	
 	}
 
 }
 
 void verTodo(){
+
+	verEstadoMemoria();
+	verProcesosEnMemoria();
+	verProcesoPideMemoria();
+	verProcesosBloqueados();
+	verProcesosMuertos();
+	verProcesosTerminados();
 
 }
 
