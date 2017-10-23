@@ -18,7 +18,7 @@ ProcesoGeneral *procesoPideMemoria;
 ProcesoGeneral *procesosBloqueados;
 ProcesoGeneral *procesosMuertos;
 ProcesoGeneral *procesosTerminados;
-Char *bitacora;
+char *bitacora;
 
 
 
@@ -249,7 +249,7 @@ int solicitarMemoria(){
 	procesosBloqueados = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosBloqueados, NULL, 0); /*Cast*/
 	procesosMuertos = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosMuertos, NULL, 0); /*Cast*/
 	procesosTerminados = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosTerminados, NULL, 0); /*Cast*/
-	bitacora = (Char *) shmat(idMemoriaCompartidaBitacora, NULL, 0);
+	bitacora = (char *) shmat(idMemoriaCompartidaBitacora, NULL, 0);
 	
 	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
 		procesosEnMemoria[i].idProceso = -1;
