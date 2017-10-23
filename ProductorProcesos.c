@@ -18,6 +18,8 @@
 #include "Configuraciones.h"
 #include "ProcesoPaginacion.h"
 #include "ProcesoSegmentacion.h"
+#include "ProcesoGeneral.h"
+
 
 
 #define tamanioPasoArchivo 100 /*Tamaño máximo para pasar el contenido del txt a una variable*/
@@ -28,6 +30,11 @@
 
 int semaforo;
 Pagina *paginas;
+ProcesoGeneral *procesosEnMemoria;
+ProcesoGeneral *procesoPideMemoria;
+ProcesoGeneral *procesosBloqueados;
+ProcesoGeneral *procesosMuertos;
+ProcesoGeneral *procesosTerminados;
 char *contenidoBitacora;
 char *contenidoEspia;
 
@@ -88,6 +95,122 @@ void escribirEnEspia(char *contenido){
 	strcat(contenidoEspia, contenido);
 
 }
+
+
+/* ------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------ */
+
+
+/*--------------------------------------  Escritura en memoria compartida para el espía   --------------------------------------*/
+
+/* ------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------ */
+
+void escribirProcesoEnMemoria(int idProceso, char tipo[12]){
+
+	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
+
+		if(procesosEnMemoria[i].idProceso == -1){
+			procesosEnMemoria[i].idProceso = idProceso;
+			strcpy(procesosEnMemoria[i].tipoMecanismo,tipo);
+			break;
+		}
+
+	}
+
+}
+
+void liberarProcesoEnMemoria(int idProceso){
+
+	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
+
+		if(procesosEnMemoria[i].idProceso == idProceso){
+			procesosEnMemoria[i].idProceso = -1;
+			strcpy(procesosEnMemoria[i].tipoMecanismo, "n");
+
+		}
+	}
+
+}
+
+void liberarProcesoPideMemoria(){
+
+	procesoPideMemoria[0].idProceso = -1;
+	strcpy(procesoPideMemoria[0].tipoMecanismo, "n");
+
+}
+
+void escribirProcesoPideMemoria(int idProceso, char tipo[12]){
+
+	printf("ENTRA A ESCRIBIR PROCESO\n");
+	procesoPideMemoria[0].idProceso = idProceso;
+	strcpy(procesoPideMemoria[0].tipoMecanismo, tipo);
+	
+}
+
+void escribirProcesoBloquedo(int idProceso, char tipo[12]){
+
+	for(int i = 0; i<tamanioEspiaProcesosBloqueados; i++){
+
+		if(procesosBloqueados[i].idProceso == -1){
+			procesosBloqueados[i].idProceso = idProceso;
+			strcpy(procesosBloqueados[i].tipoMecanismo,tipo);	
+			break;
+		}
+	
+	}
+
+}
+
+void liberarProcesoBloqueado(int idProceso){
+
+	for(int i = 0; i<tamanioEspiaProcesosBloqueados; i++){
+
+		if(procesosBloqueados[i].idProceso == idProceso){
+			
+			procesosBloqueados[i].idProceso = -1;
+			strcpy(procesosBloqueados[i].tipoMecanismo, "n");
+
+		}
+
+	}
+
+}
+
+void escribirProcesoMuerto(int idProceso, char tipo[12]){
+
+	for(int i = 0; i<tamanioEspiaProcesosMuertos; i++){
+
+		if(procesosMuertos[i].idProceso == -1){
+			procesosMuertos[i].idProceso = idProceso;
+			strcpy(procesosMuertos[i].tipoMecanismo,tipo);
+			break;
+		}
+
+	}
+
+}
+
+void escribirProcesoTerminado(int idProceso, char tipo[12]){
+
+	for(int i = 0; i<tamanioEspiaProcesosTerminados; i++){
+
+		if(procesosTerminados[i].idProceso == -1){
+			procesosTerminados[i].idProceso = idProceso;
+			strcpy(procesosTerminados[i].tipoMecanismo,tipo);
+			break;
+		}
+
+	}
+
+}
+
 
 
 /* ------------------------------------------------------------------------------------------------ */
@@ -247,14 +370,22 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	printf("------------ Esperando para usar el semáforo ------------ \n");
 	
+	escribirProcesoBloquedo(idProceso, "Paginacion"); /*Espía*/
+	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
 	
+	liberarProcesoBloqueado(idProceso); /*Espía*/
+
 	printf("------------ Entra al semaforo               ------------\n");
+
+	
 
 	printf("------------ Páginas requeridas: %i          ------------\n", cantidadPaginas);
 	printf("\n\n");
 
 
+	escribirProcesoPideMemoria(idProceso, "Paginacion");/*Espía*/
+	
 	aceptaSolicitudMemoria = solicitarMemoriaPaginacion(procesoP->cantidadPaginas);
 	
 	/*Si no hay suficiente espacio, se mata el proceso y se devuelve el semáforo*/
@@ -265,15 +396,24 @@ int *ejecucionProcesoPaginacion(void *proceso){
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("\n\n");
+
+		escribirProcesoMuerto(idProceso, "Paginacion");
 		doSignal(semaforo,0); /*Libera el semáforo*/
 
 		return -1;	
 	}
 
+
 	/*Se ocupan los campos en memoria*/
 	tomarMemoriaPaginacion(procesoP->cantidadPaginas, procesoP->idProceso);
 
+	escribirProcesoEnMemoria(idProceso, "Paginacion"); /*Espía*/
+
+	liberarProcesoPideMemoria();
+	
 	doSignal(semaforo,0); /*Libera semáforo*/
+
+
 	
 	/*Escribir en bitácora*/
 	printf("----- Comienza el sleep del proceso: %i -----\n", idProceso);
@@ -295,6 +435,10 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	
 	liberarMemoriaPaginacion(idProceso);	
 
+	liberarProcesoEnMemoria(idProceso); /*Espía*/
+
+	escribirProcesoTerminado(idProceso, "Paginacion");
+	
 	doSignal(semaforo,0); /*Libera el semáforo*/
 
 	
@@ -675,11 +819,17 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	printf("\n\n");
 	printf("------------ Esperando para usar el semáforo ------------ \n");
 	
+	
+	escribirProcesoBloquedo(idProceso, "Segmentacion"); /*Espía*/
+	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
+	
+	liberarProcesoBloqueado(idProceso); /*Espía*/
 	
 	printf("------------ Entra al semaforo               ------------\n");
 
-	
+	escribirProcesoPideMemoria(idProceso, "Segmentacion"); /*Espía*/
+
 	aceptaSolicitudMemoria = solicitarMemoriaSegmentacion(procesoS);
 	
 	if(aceptaSolicitudMemoria == 0){
@@ -689,6 +839,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("\n\n");
+		escribirProcesoMuerto(idProceso, "Segmentacion"); /*Espía*/
 		doSignal(semaforo,0); /*Libera el semáforo*/
 
 		return -1;	
@@ -715,6 +866,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 			printf("----------------------------------------------------------------------------------------------------------------------\n");
 			printf("----------------------------------------------------------------------------------------------------------------------\n");
 			printf("\n\n");
+			escribirProcesoMuerto(idProceso, "Segmentacion"); /*Espía*/
 			doSignal(semaforo,0); /*Libera el semáforo*/
 
 			return -1;
@@ -725,8 +877,9 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	}
 
 	//ESCRIBIR EN BITÁCORA
-
-
+	escribirProcesoEnMemoria(idProceso, "Segmentacion"); /*Espía*/
+	
+	liberarProcesoPideMemoria(); /*Espía*/
 
 	doSignal(semaforo,0);
 	
@@ -748,8 +901,12 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	
 	liberarMemoriaSegmentacion(idProceso);
 
+	liberarProcesoEnMemoria(idProceso); /*Espía*/
+
 	//ESCRIBIR EN BITÁCORA
 	
+	escribirProcesoTerminado(idProceso, "Segmentacion"); /*Espía*/
+
 	doSignal(semaforo,0); /*Libera el semáforo*/
 			
 
@@ -910,7 +1067,7 @@ int leerIdMemoriaCompartida(char *nombreArchivo){
 
 	if (archivo == NULL) {
    
-		printf("** No se pudo abrir el archivo correctamente **\n");
+		printf("** No se pudo abrir el a<<rchivo correctamente **\n");
 
 	}
 
@@ -936,7 +1093,7 @@ int leerIdMemoriaCompartida(char *nombreArchivo){
 }
 
 /* Función encargada de solicitar memoria compartida al sistema operativo */
-int leerMemoria(int idMemoriaCompartida, int idMemoriaCompartidaBitacora, int idMemoriaCompartidaEspia){
+int leerMemoria(int idMemoriaCompartida, int idMemoriaCompartidaBitacora, int memoria, int pide, int bloqueado, int muerto, int terminado){
 
 	key_t key; /*Clave que se pasa al shmget*/
 	int banderaMemoriaCompartida; /*Necesaria para saber bajo qué "modalidad" se crea la memoria compartida*/
@@ -956,7 +1113,12 @@ int leerMemoria(int idMemoriaCompartida, int idMemoriaCompartidaBitacora, int id
 
 	paginas = shmat(idMemoriaCompartida, NULL, 0); /*Revisar*/
 	contenidoBitacora = shmat(idMemoriaCompartidaBitacora, NULL, 0);
-	contenidoEspia = shmat(idMemoriaCompartidaEspia, NULL, 0);
+	procesosEnMemoria = shmat(memoria, NULL, 0);
+	procesoPideMemoria = shmat(pide, NULL, 0);
+	procesosBloqueados = shmat(bloqueado, NULL, 0);
+	procesosMuertos = shmat(muerto, NULL, 0);
+	procesosTerminados = shmat(terminado, NULL, 0);
+
 
 	/*Se valida si se obtuvo acceso a la memoria compartida correctamente*/
 	if(contenidoBitacora == (char *) -1){
@@ -966,13 +1128,7 @@ int leerMemoria(int idMemoriaCompartida, int idMemoriaCompartidaBitacora, int id
 
 	}
 
-	/*Se valida si se obtuvo acceso a la memoria compartida correctamente*/
-	if(contenidoEspia == (char *) -1){
-
-		printf("-- Error al conectarse al espía --");
-		return -1;
-
-	}
+	
 	    	
 	
 	return 1;
@@ -991,18 +1147,31 @@ int main(){
 	
 	int idMemoriaCompartida;
 	int idMemoriaCompartidaBitacora;
-	int idMemoriaCompartidaEspia;
+	int memoria;
+	int pide;
+	int bloqueado;
+	int muerto;
+	int terminado;
 
 	idMemoriaCompartida = leerIdMemoriaCompartida("idMemoriaCompartida.txt");
 	idMemoriaCompartidaBitacora = leerIdMemoriaCompartida("idMemoriaCompartidaBitacora.txt");
-	idMemoriaCompartidaEspia = leerIdMemoriaCompartida("idMemoriaCompartidaEspia.txt");
+	memoria = leerIdMemoriaCompartida("procesosMemoria.txt");
+	pide = leerIdMemoriaCompartida("procesoPideMemoria.txt");
+	bloqueado = leerIdMemoriaCompartida("procesosBloqueados.txt");
+	muerto = leerIdMemoriaCompartida("procesosMuertos.txt");
+	terminado = leerIdMemoriaCompartida("procesosTerminados.txt");
 	
 	printf("MEMORIA COMPARTIDA: %i\n", idMemoriaCompartida);
 	printf("MEMORIA BITACORA: %i\n", idMemoriaCompartidaBitacora);
-	printf("MEMORIA ESPIA: %i\n", idMemoriaCompartidaEspia);
+	printf("MEMORIA memoria: %i\n", memoria);
+	printf("MEMORIA pide: %i\n", pide);
+	printf("MEMORIA bloqueado: %i\n", bloqueado);
+	printf("MEMORIA muerto: %i\n", muerto);
+	printf("MEMORIA terminado: %i\n", terminado);
 
 
-	leerMemoria(idMemoriaCompartida, idMemoriaCompartidaBitacora, idMemoriaCompartidaEspia);
+
+	leerMemoria(idMemoriaCompartida, idMemoriaCompartidaBitacora, memoria, pide, bloqueado, muerto, terminado);
 
 	char *opcion; /*Aquí se almacenará el valor de entrada de la consola*/
 	

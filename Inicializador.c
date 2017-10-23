@@ -5,12 +5,19 @@
 #include <sys/ipc.h> 
 #include <sys/shm.h>
 #include <stdio.h>
+#include <string.h>
 #include <signal.h> /*Necesaria para matar un proceso*/
 #include <unistd.h> /*Necesaria para la función sleep*/
 #include "Pagina.h"
 #include "Configuraciones.h"
+#include "ProcesoGeneral.h"
 
 Pagina *paginas;
+ProcesoGeneral *procesosEnMemoria;
+ProcesoGeneral *procesoPideMemoria;
+ProcesoGeneral *procesosBloqueados;
+ProcesoGeneral *procesosMuertos;
+ProcesoGeneral *procesosTerminados;
 
 
 
@@ -59,33 +66,43 @@ int solicitarMemoria(){
 	/*----------------------------------------------------------------------------------------------------*/
 	
 	/*----------------------------------------------------------------------------------------------------*/
-	key_t keyEspia; /*Clave que se pasa al shmget*/
-	int idMemoriaCompartidaEspia;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
-	int tamanioMemoriaCompartidaEspia;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
+	key_t keyEspiaProcesosMemoria; /*Clave que se pasa al shmget*/
+	int idMemoriaCompartidaEspiaProcesosMemoria;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
+	int tamanioMemoriaCompartidaEspiaProcesosMemoria;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
 	/*----------------------------------------------------------------------------------------------------*/
+
+	/*----------------------------------------------------------------------------------------------------*/
+	key_t keyEspiaProcesoPideMemoria; /*Clave que se pasa al shmget*/
+	int idMemoriaCompartidaEspiaProcesoPideMemoria;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
+	int tamanioMemoriaCompartidaEspiaProcesoPideMemoria;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
+	/*----------------------------------------------------------------------------------------------------*/
+	
+
+	/*----------------------------------------------------------------------------------------------------*/
+	key_t keyEspiaProcesosBloqueados; /*Clave que se pasa al shmget*/
+	int idMemoriaCompartidaEspiaProcesosBloqueados;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
+	int tamanioMemoriaCompartidaEspiaProcesosBloqueados;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
+	/*----------------------------------------------------------------------------------------------------*/
+	
+	/*----------------------------------------------------------------------------------------------------*/
+	key_t keyEspiaProcesosMuertos; /*Clave que se pasa al shmget*/
+	int idMemoriaCompartidaEspiaProcesosMuertos;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
+	int tamanioMemoriaCompartidaEspiaProcesosMuertos;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
+	/*----------------------------------------------------------------------------------------------------*/
+	
+	/*----------------------------------------------------------------------------------------------------*/
+	key_t keyEspiaProcesosTerminados; /*Clave que se pasa al shmget*/
+	int idMemoriaCompartidaEspiaProcesosTerminados;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
+	int tamanioMemoriaCompartidaEspiaProcesosTerminados;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
+	/*----------------------------------------------------------------------------------------------------*/
+	
 	
 	/*----------------------------------------------------------------------------------------------------*/
 	key = 5559;
 	tamanioMemoriaCompartida = tamanio * sizeof(struct Pagina);
 	banderaMemoriaCompartida = IPC_CREAT;
 	idMemoriaCompartida = shmget(key, tamanioMemoriaCompartida, banderaMemoriaCompartida | 0666);
-	/*----------------------------------------------------------------------------------------------------*/
-	
-	/*----------------------------------------------------------------------------------------------------*/
-	keyBitacora = 5555;
-	tamanioMemoriaCompartidaBitacora = tamanioBitacora;
-	idMemoriaCompartidaBitacora = shmget(keyBitacora, tamanioMemoriaCompartidaBitacora, banderaMemoriaCompartida | 0666);
-	/*----------------------------------------------------------------------------------------------------*/
-	
 
-	/*----------------------------------------------------------------------------------------------------*/
-	keyEspia = 5556;
-	tamanioMemoriaCompartidaEspia = tamanioEspia;
-	idMemoriaCompartidaEspia = shmget(keyEspia, tamanioMemoriaCompartidaEspia, banderaMemoriaCompartida | 0666);
-	/*----------------------------------------------------------------------------------------------------*/
-	
-
-	
 	/*Se valida si se logra o no compartir la memoria*/
 	if(idMemoriaCompartida < 0){
 		
@@ -93,6 +110,119 @@ int solicitarMemoria(){
 		return -1;
 
 	}
+
+	printf("--- ID para memoria compartida: %i ---\n", idMemoriaCompartida);
+	/*----------------------------------------------------------------------------------------------------*/
+	
+	/*----------------------------------------------------------------------------------------------------*/
+	keyBitacora = 5555;
+	tamanioMemoriaCompartidaBitacora = tamanioBitacora;
+	idMemoriaCompartidaBitacora = shmget(keyBitacora, tamanioMemoriaCompartidaBitacora, banderaMemoriaCompartida | 0666);
+	
+	/*Se valida si se logra o no compartir la memoria*/
+	if(idMemoriaCompartidaBitacora < 0){
+		
+		printf("** Error, no se pudo asignar la memoria compartida para bitácora **\n");
+		return -1;
+
+	}
+	printf("--- ID para memoria compartida bitácora: %i ---\n", idMemoriaCompartidaBitacora);
+	
+	/*----------------------------------------------------------------------------------------------------*/
+	
+
+	/*----------------------------------------------------------------------------------------------------*/
+	keyEspiaProcesosMemoria = 5111;
+	tamanioMemoriaCompartidaEspiaProcesosMemoria = tamanioEspiaProcesosMemoria *sizeof(struct ProcesoGeneral);
+
+	idMemoriaCompartidaEspiaProcesosMemoria = shmget(keyEspiaProcesosMemoria, tamanioMemoriaCompartidaEspiaProcesosMemoria, banderaMemoriaCompartida | 0666);
+	
+	/*Se valida si se logra o no compartir la memoria*/
+	if(idMemoriaCompartidaEspiaProcesosMemoria < 0){
+		
+		printf("** Error, no se pudo asignar la memoria compartida para procesos en memoria **\n");
+		return -1;
+
+	}
+
+	printf("--- ID para memoria compartida procesos en memoria: %i ---\n", idMemoriaCompartidaEspiaProcesosMemoria);
+	
+	/*----------------------------------------------------------------------------------------------------*/
+
+	/*----------------------------------------------------------------------------------------------------*/
+	keyEspiaProcesoPideMemoria = 5222;
+	tamanioMemoriaCompartidaEspiaProcesoPideMemoria = tamanioEspiaProcesoPideMemoria *sizeof(struct ProcesoGeneral);
+	idMemoriaCompartidaEspiaProcesoPideMemoria = shmget(keyEspiaProcesoPideMemoria, tamanioMemoriaCompartidaEspiaProcesoPideMemoria, banderaMemoriaCompartida | 0666);
+	
+	/*Se valida si se logra o no compartir la memoria*/
+	if(idMemoriaCompartidaEspiaProcesoPideMemoria < 0){
+		
+		printf("** Error, no se pudo asignar la memoria compartida para proceso pide memoria **\n");
+		return -1;
+
+	}
+
+	printf("--- ID para memoria compartida proceso pide memoria: %i ---\n", idMemoriaCompartidaEspiaProcesoPideMemoria);
+	
+	/*----------------------------------------------------------------------------------------------------*/
+
+	/*----------------------------------------------------------------------------------------------------*/
+	keyEspiaProcesosBloqueados = 5333;
+	tamanioMemoriaCompartidaEspiaProcesosBloqueados = tamanioEspiaProcesosBloqueados *sizeof(struct ProcesoGeneral);
+
+	idMemoriaCompartidaEspiaProcesosBloqueados = shmget(keyEspiaProcesosBloqueados, tamanioMemoriaCompartidaEspiaProcesosBloqueados, banderaMemoriaCompartida | 0666);
+	
+	/*Se valida si se logra o no compartir la memoria*/
+	if(idMemoriaCompartidaEspiaProcesosBloqueados < 0){
+		
+		printf("** Error, no se pudo asignar la memoria compartida para procesos bloqueados **\n");
+		return -1;
+
+	}
+
+	printf("--- ID para memoria compartida procesos bloqueados: %i ---\n", idMemoriaCompartidaEspiaProcesosBloqueados);
+	
+	/*----------------------------------------------------------------------------------------------------*/
+
+	/*----------------------------------------------------------------------------------------------------*/
+	keyEspiaProcesosMuertos = 5444;
+	tamanioMemoriaCompartidaEspiaProcesosMuertos = tamanioEspiaProcesosMuertos *sizeof(struct ProcesoGeneral);
+
+	idMemoriaCompartidaEspiaProcesosMuertos = shmget(keyEspiaProcesosMuertos, tamanioMemoriaCompartidaEspiaProcesosMuertos, banderaMemoriaCompartida | 0666);
+	
+	/*Se valida si se logra o no compartir la memoria*/
+	if(idMemoriaCompartidaEspiaProcesosMuertos < 0){
+		
+		printf("** Error, no se pudo asignar la memoria compartida para procesosMuertos **\n");
+		return -1;
+
+	}
+
+	printf("--- ID para memoria compartida procesos muertos: %i ---\n", idMemoriaCompartidaEspiaProcesosMuertos);
+	
+	/*----------------------------------------------------------------------------------------------------*/
+
+	/*----------------------------------------------------------------------------------------------------*/
+	keyEspiaProcesosTerminados = 5696;
+	tamanioMemoriaCompartidaEspiaProcesosTerminados = tamanioEspiaProcesosTerminados *sizeof(struct ProcesoGeneral);
+
+	idMemoriaCompartidaEspiaProcesosTerminados = shmget(keyEspiaProcesosTerminados, tamanioMemoriaCompartidaEspiaProcesosTerminados, banderaMemoriaCompartida | 0666);
+	
+	/*Se valida si se logra o no compartir la memoria*/
+	if(idMemoriaCompartidaEspiaProcesosTerminados < 0){
+		
+		printf("** Error, no se pudo asignar la memoria compartida para procesos terminados **\n");
+		return -1;
+
+	}
+
+	printf("--- ID para memoria compartida procesos terminados: %i ---\n", idMemoriaCompartidaEspiaProcesosTerminados);
+	
+	/*----------------------------------------------------------------------------------------------------*/
+	
+
+	
+	
 
 	paginas = (Pagina *) shmat(idMemoriaCompartida, NULL, 0); /*Cast*/
 	
@@ -112,10 +242,46 @@ int solicitarMemoria(){
 		paginas[i].numeroSegmento = -1; /*Para indicar que en el momento, no está siendo utilizado por ningún segmentos*/
 
 	}
+
+	procesosEnMemoria = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosMemoria, NULL, 0); /*Cast*/
+	procesoPideMemoria = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesoPideMemoria, NULL, 0); /*Cast*/
+	procesosBloqueados = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosBloqueados, NULL, 0); /*Cast*/
+	procesosMuertos = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosMuertos, NULL, 0); /*Cast*/
+	procesosTerminados = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosTerminados, NULL, 0); /*Cast*/
+	
+	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
+		procesosEnMemoria[i].idProceso = -1;
+		strcpy(procesosEnMemoria[i].tipoMecanismo, "n");
+	}
+
+	procesoPideMemoria[0].idProceso = -1;
+	strcpy(procesoPideMemoria[0].tipoMecanismo,"n");
+
+	for(int i = 0; i<tamanioEspiaProcesosBloqueados; i++){
+		procesosBloqueados[i].idProceso = -1;
+		strcpy(procesosBloqueados[i].tipoMecanismo,"n");
+	}
+
+	for(int i = 0; i<tamanioEspiaProcesosMuertos; i++){
+		procesosMuertos[i].idProceso = -1;
+		strcpy(procesosMuertos[i].tipoMecanismo,"n");
+	}
+
+	for(int i = 0; i<tamanioEspiaProcesosTerminados; i++){
+		procesosTerminados[i].idProceso = -1;
+		strcpy(procesosTerminados[i].tipoMecanismo,"n");
+	}
+
+
 	
 	guardarIdMemoriaCompartida(idMemoriaCompartida, "idMemoriaCompartida.txt");
 	guardarIdMemoriaCompartida(idMemoriaCompartidaBitacora, "idMemoriaCompartidaBitacora.txt");
-	guardarIdMemoriaCompartida(idMemoriaCompartidaEspia, "idMemoriaCompartidaEspia.txt");
+	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosMemoria, "procesosMemoria.txt");
+	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesoPideMemoria, "procesoPideMemoria.txt");
+	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosBloqueados, "procesosBloqueados.txt");
+	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosMuertos, "procesosMuertos.txt");
+	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosTerminados, "procesosTerminados.txt");
+
 
 
 	return idMemoriaCompartida;
