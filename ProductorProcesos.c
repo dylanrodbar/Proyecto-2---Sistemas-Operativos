@@ -517,6 +517,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 		sprintf(mensaje, "Matando al proceso: ");
 		sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+		sprintf(mensaje +strlen(mensaje), "\n");
 		sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
 		sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
 		sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
@@ -563,7 +564,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
 	printf("\n\n");
 
-	sleep(20);
+	sleep(10);
 	//sleep(tiempo);
 
 	printf("----- Termina el sleep del proceso: %i -----\n", idProceso);
@@ -591,6 +592,14 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	liberarProcesoEnMemoria(idProceso); /*Espía*/
 
 	escribirProcesoTerminado(idProceso, "Paginacion", idThread);
+
+	sprintf(mensaje, "--- Terminó la ejecución de este proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "---\n\n\n");
+
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
 	
 	doSignal(semaforo,0); /*Libera el semáforo*/
 
@@ -725,7 +734,7 @@ void mecanismoPaginacion(){
     	/*Después de esto, escribir en la bitácora*/
     	
     	
-    	printf("MSJ: %s\n", mensaje);
+    	//printf("MSJ: %s\n", mensaje);
     	
 
     	escribirEnBitacora(mensaje);
@@ -788,6 +797,11 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 	int contador; /*Para saber cuántos espacios libres hay*/
 
 	int marca; /*Para saber dónde empieza una serie de bloque contiguos*/
+
+	char *mensaje;
+
+	mensaje = (char*)malloc(sizeof(char*));
+	
 	
 	contador = 0;
 	marca = 0;
@@ -799,13 +813,43 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 	printf("\n\n");
 	printf("Los que tienen -1 y 1, son espacios libres\n");
 
+
+	sprintf(mensaje, "--- Buscando espacios contiguos para el proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), " segmento: ");
+	sprintf(mensaje +strlen(mensaje), "%d", segmento);
+	sprintf(mensaje +strlen(mensaje), " páginas requeridas: ");
+	sprintf(mensaje +strlen(mensaje), "%d", numeroPaginas);
+	sprintf(mensaje +strlen(mensaje), " ---\n");
+
+	sprintf(mensaje +strlen(mensaje), "--- Así se ve la memoria ahora ---\n");
+	sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n\n\n");
+	sprintf(mensaje +strlen(mensaje), "Los que tienen -1 y 1, son espacios libres\n\n\n");
+
+
+
+
 	for(int i = 0; i<tamanio; i++){
 		
 		printf("Página %i: Disponible: %i Número de proceso: %i Segmento: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado, paginas[i].numeroSegmento);
 		
+		sprintf(mensaje +strlen(mensaje), "Página ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].numeroPagina);
+		sprintf(mensaje +strlen(mensaje), " Disponible ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].disponible);
+		sprintf(mensaje +strlen(mensaje), " Número de proceso ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].procesoOcupado);
+		sprintf(mensaje +strlen(mensaje), " Segmento ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].numeroSegmento);
+		sprintf(mensaje +strlen(mensaje), "\n");
+
+
 	}
 	printf("\n\n");
 	printf("-----------------------------------------------------------------------\n");
+
+	sprintf(mensaje +strlen(mensaje), "\n\n");
+	sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n");
 	
 	
 	for(int i = 0; i<tamanio; i++){
@@ -823,6 +867,16 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 				printf("--- ¡Se logró encontrar un espacio con páginas contiguas de tamaño: %i para el segmento: %i comienza en la celda: %i! :) ---\n", numeroPaginas, segmento, marca);
 				printf("-----------------------------------------------------------------------------------------\n");
 				printf("\n\n");
+
+				sprintf(mensaje +strlen(mensaje), "--- ¡Se logró encontrar un espacio con páginas contiguas de tamaño: ");
+				sprintf(mensaje +strlen(mensaje), "%d", numeroPaginas);
+				sprintf(mensaje +strlen(mensaje), " para el segmento: ");
+				sprintf(mensaje +strlen(mensaje), "%d", segmento);
+				sprintf(mensaje +strlen(mensaje), " comienza en la zelda: ");
+				sprintf(mensaje +strlen(mensaje), "%d", marca);
+				sprintf(mensaje +strlen(mensaje), "! :) ---\n");
+				sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------------------------\n\n\n");
+				escribirEnBitacora(mensaje);
 	
 				return marca; /*Retorna el índice de la página donde empiezan contiguas*/
 
@@ -843,7 +897,16 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 		printf("--- ¡Se logró encontrar un espacio con páginas contiguas de tamaño: %i para el segmento: %i comienza en la celda: %i! :) ---\n", numeroPaginas, segmento, marca);
 		printf("-----------------------------------------------------------------------------------------\n");
 		printf("\n\n");
-	
+
+		sprintf(mensaje +strlen(mensaje), "--- ¡Se logró encontrar un espacio con páginas contiguas de tamaño: ");
+		sprintf(mensaje +strlen(mensaje), "%d", numeroPaginas);
+		sprintf(mensaje +strlen(mensaje), " para el segmento: ");
+		sprintf(mensaje +strlen(mensaje), "%d", segmento);
+		sprintf(mensaje +strlen(mensaje), " comienza en la zelda: ");
+		sprintf(mensaje +strlen(mensaje), "%d", marca);
+		sprintf(mensaje +strlen(mensaje), "! :) ---\n");
+		sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------------------------\n\n\n");
+		escribirEnBitacora(mensaje);
 	
 		return marca; /*Retorna el índice de la página donde empiezan contiguas*/
 
@@ -854,6 +917,16 @@ int apartarPaginasContiguas(int numeroPaginas, int idProceso, int segmento){
 		printf("--- ¡No se logró encontrar un espacio con páginas contiguas de tamaño: %i para el segmento: %i :(! ---\n", numeroPaginas, segmento);
 		printf("-----------------------------------------------------------------------------------------\n");
 		printf("\n\n");
+
+		sprintf(mensaje +strlen(mensaje), "--- ¡No se logró encontrar un espacio con páginas contiguas de tamaño: ");
+		sprintf(mensaje +strlen(mensaje), "%d", numeroPaginas);
+		sprintf(mensaje +strlen(mensaje), " para el segmento: ");
+		sprintf(mensaje +strlen(mensaje), "%d", segmento);
+		sprintf(mensaje +strlen(mensaje), " :(! ---\n");
+		sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------------------------\n\n\n");
+	
+		escribirEnBitacora(mensaje);
+		
 	
 		return -1;	
 	
@@ -866,11 +939,23 @@ int asignarContiguas(int idProceso, int cantidadPaginas, int marca, int numeroSe
 
 	
 	int marcaAux;
+	char *mensaje;
 	marcaAux = marca;
+	
+	mensaje = (char*)malloc(sizeof(char*));
 	
 	printf("--- Asignando espacios contiguos para el proceso: %i segmento: %i páginas requeridas: %i ---\n", idProceso, numeroSegmento, cantidadPaginas);
 	
 	printf("--------------------------------------------------------------------------------------------------------\n");
+	
+
+	sprintf(mensaje, "--- Asignando espacios contiguos para el proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), " segmento: ");
+	sprintf(mensaje +strlen(mensaje), "%d", numeroSegmento);
+	sprintf(mensaje +strlen(mensaje), " páginas requeridas: ");
+	sprintf(mensaje +strlen(mensaje), "%d", cantidadPaginas);
+	sprintf(mensaje +strlen(mensaje), " ---\n");
 	for(int i = 0; i<cantidadPaginas; i++){
 		
 		paginas[marcaAux].procesoOcupado = idProceso;
@@ -886,13 +971,34 @@ int asignarContiguas(int idProceso, int cantidadPaginas, int marca, int numeroSe
 	printf("Los que tienen -1 y 1, son espacios libres\n");
 	printf("\n\n");
 
+	sprintf(mensaje +strlen(mensaje), "--- Así se vería la memoria si se lograra la asignación, faltan los demás segmentos ---\n");
+	sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "Los que tienen -1 y 1, son espacios libres\n\n\n");
+
 	for(int i = 0; i<tamanio; i++){
 		printf("Página %i: Disponible: %i Número de proceso: %i Segmento: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado, paginas[i].numeroSegmento);
+	
+		sprintf(mensaje +strlen(mensaje), "Página ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].numeroPagina);
+		sprintf(mensaje +strlen(mensaje), " Disponible ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].disponible);
+		sprintf(mensaje +strlen(mensaje), " Número de proceso ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].procesoOcupado);
+		sprintf(mensaje +strlen(mensaje), " Segmento ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].numeroSegmento);
+		sprintf(mensaje +strlen(mensaje), "\n");
+
 	}
 	printf("\n\n");
 	printf("-----------------------------------------------------------------------\n");
 	printf("--------------------------------------------------------------------------------------------------------\n");
 	
+	sprintf(mensaje +strlen(mensaje), "\n\n");
+	sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "--------------------------------------------------------------------------------------------------------\n");
+
+
+	escribirEnBitacora(mensaje);
 	return 0;
 
 
@@ -907,6 +1013,9 @@ int solicitarMemoriaSegmentacion(ProcesoSegmentacion *proceso){
 
 	int contador; /*Para saber cuántos espacios libres hay*/
 
+	char *mensaje;
+
+	mensaje = (char*)malloc(sizeof(char*));
 	
 	contador = 0;
 
@@ -917,22 +1026,47 @@ int solicitarMemoriaSegmentacion(ProcesoSegmentacion *proceso){
 	printf("Los que tienen -1 y 1, son espacios libres\n");
 	printf("\n\n");
 
+	sprintf(mensaje, "------------ Páginas requeridas: ");
+	sprintf(mensaje +strlen(mensaje), "%d", paginasTotalesProceso);
+	sprintf(mensaje +strlen(mensaje), "------------\n\n");
+	sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "Los que tienen -1 y 1, son espacios libres\n\n\n");
+
 	for(int i = 0; i<tamanio; i++){
 		
 		printf("Página %i: Disponible: %i Número de proceso: %i Segmento: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado, paginas[i].numeroSegmento);
 		
+		sprintf(mensaje +strlen(mensaje), "Página ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].numeroPagina);
+		sprintf(mensaje +strlen(mensaje), " Disponible ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].disponible);
+		sprintf(mensaje +strlen(mensaje), " Número de proceso ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].procesoOcupado);
+		sprintf(mensaje +strlen(mensaje), " Segmento ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].numeroSegmento);
+		sprintf(mensaje +strlen(mensaje), "\n");
+		
+
 		/*Se pregunta si hay espacio disponible, en caso de que sí, se suma el contador para saber cuántas páginas hay*/
 		if(paginas[i].disponible == 1) contador++;
 
 	}
 
 	printf("--- Páginas disponibles: %i ---\n", contador);
+
+	sprintf(mensaje +strlen(mensaje), "--- Páginas disponibles: ");
+	sprintf(mensaje +strlen(mensaje), "%d", contador);
+	sprintf(mensaje +strlen(mensaje), "---\n");
 	if(contador >= paginasTotalesProceso){
 
 		printf("--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- \n");
 		printf("\n\n");
 		printf("-----------------------------------------------------------------------\n"); 
 		printf("\n\n");
+
+		sprintf(mensaje +strlen(mensaje), "--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- \n\n\n");
+		sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n\n\n");
+		escribirEnBitacora(mensaje);
 		return 1; /*Hay suficientes páginas*/
 	}
 	
@@ -941,6 +1075,10 @@ int solicitarMemoriaSegmentacion(ProcesoSegmentacion *proceso){
 		printf("\n\n");
 		printf("-----------------------------------------------------------------------\n"); 
 		printf("\n\n");
+
+		sprintf(mensaje +strlen(mensaje), "--- ¡No hay suficientes páginas para ejecutar este proceso! :( --- \n\n\n");
+		sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n\n\n");
+		escribirEnBitacora(mensaje);
 		return 0; /*No hay suficientes páginas*/
 	}
 
@@ -949,7 +1087,20 @@ int solicitarMemoriaSegmentacion(ProcesoSegmentacion *proceso){
 /* Función encargada de devolver el espacio en la memoria compartida para el proceso en el mecanismo de segmentación */
 void liberarMemoriaSegmentacion(int idProceso){
 
+	char *mensaje;
+
+	mensaje = (char*)malloc(sizeof(char*));
+	
+
 	printf("--- Liberando segmentos para el proceso: %i ---\n", idProceso);
+
+	sprintf(mensaje, "--- Liberando segmentos para el proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje, strlen(mensaje), "---\n");
+
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
 
 	for(int i = 0; i<tamanio; i++){
 
@@ -964,6 +1115,14 @@ void liberarMemoriaSegmentacion(int idProceso){
 		}
 
 	}
+
+	printf("--- Se han liberado los segmentos para el proceso: %i ---\n", idProceso);
+
+	sprintf(mensaje, "--- Se han liberado los segmentos para el proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje, strlen(mensaje), "---\n");
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
 	
 }
 
@@ -981,6 +1140,7 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	int tiempo;
 	int numeroSegmentos;
 	int cantidadPaginas;
+	char *mensaje;
 	unsigned long idThread;
 
 	ProcesoSegmentacion *procesoS;
@@ -995,6 +1155,8 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	tiempo = procesoS->tiempo;
 	numeroSegmentos = procesoS->numeroSegmentos;  
 
+	mensaje = (char*)malloc(sizeof(char*));
+	
 	
 	printf("--------------------- Proceso: %i --------------------- \n", idProceso);
 
@@ -1005,7 +1167,21 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	printf("\n\n");
 	printf("------------ Esperando para usar el semáforo ------------ \n");
 	
+	sprintf(mensaje, "--------------------- Proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "--------------------- \n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "\n\n");
+	sprintf(mensaje +strlen(mensaje), "------------ Esperando para usar el semáforo ------------ \n");
+
+	escribirEnBitacora(mensaje);
+
+	mensaje = (char*)malloc(sizeof(char*));
 	
+
+
 	escribirProcesoBloquedo(idProceso, "Segmentacion", idThread); /*Espía*/
 	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
@@ -1013,6 +1189,11 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	liberarProcesoBloqueado(idProceso); /*Espía*/
 	
 	printf("------------ Entra al semaforo               ------------\n");
+
+	sprintf(mensaje +strlen(mensaje), "------------ Entra al semaforo               ------------\n");
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
 
 	escribirProcesoPideMemoria(idProceso, "Segmentacion", idThread); /*Espía*/
 
@@ -1026,6 +1207,14 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("\n\n");
 		escribirProcesoMuerto(idProceso, "Segmentacion", idThread); /*Espía*/
+
+		sprintf(mensaje, "--- Matando al proceso: ");
+		sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+		sprintf(mensaje +strlen(mensaje), "---\n");
+		sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+		sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+		sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n\n\n");
+
 		doSignal(semaforo,0); /*Libera el semáforo*/
 
 		return -1;	
@@ -1053,6 +1242,14 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 			printf("----------------------------------------------------------------------------------------------------------------------\n");
 			printf("\n\n");
 			escribirProcesoMuerto(idProceso, "Segmentacion", idThread); /*Espía*/
+
+			sprintf(mensaje, "--- Matando al proceso: ");
+			sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+			sprintf(mensaje +strlen(mensaje), "---\n");
+			sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+			sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+			sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n\n\n");
+
 			doSignal(semaforo,0); /*Libera el semáforo*/
 
 			return -1;
@@ -1066,6 +1263,16 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	escribirProcesoEnMemoria(idProceso, "Segmentacion", idThread); /*Espía*/
 	
 	liberarProcesoPideMemoria(); /*Espía*/
+
+	sprintf(mensaje, "----- Comienza el sleep del proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "-----\n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
+
 
 	doSignal(semaforo,0);
 	
@@ -1085,6 +1292,16 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
 	
+	sprintf(mensaje, "----- Termina el sleep del proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "-----\n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
+
+
 	liberarMemoriaSegmentacion(idProceso);
 
 	liberarProcesoEnMemoria(idProceso); /*Espía*/
@@ -1093,12 +1310,24 @@ int *ejecucionProcesoSegmentacion(void *proceso){
 	
 	escribirProcesoTerminado(idProceso, "Segmentacion", idThread); /*Espía*/
 
+	sprintf(mensaje, "--- Terminó la ejecución del proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "---\n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+
+	escribirEnBitacora(mensaje);
+
+	mensaje = (char*)malloc(sizeof(char*));
+	
+
+
 	doSignal(semaforo,0); /*Libera el semáforo*/
 			
 
 	printf("--- Terminó la ejecución del proceso: %i ---\n", idProceso);
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
 	
+
 	return 1;
 	/*Aparentemente no se necesita ninguna línea de código para liberar al hilo, jejeps*/
 
@@ -1156,6 +1385,9 @@ void mecanismoSegmentacion(){
 	int cantidadSegundosPorProceso;  /*Cada cuántos segundos se hará un proceso*/
 	int numeroProcesos;
 	int cantidadTotalPaginas;
+	
+	char *mensaje;
+
 	ProcesoSegmentacion *proceso;
 
   
@@ -1171,12 +1403,20 @@ void mecanismoSegmentacion(){
     while(numeroProcesos < 1000){
     	//31 + 30
     	
+    	mensaje = (char*)malloc(sizeof(char*));
+
+
+
+	
     	cantidadSegundosPorProceso = rand()% 30 + 30;  /*Random entre 30 y 60*/ 
     	cantidadSegmentos = rand()% 5 + 1;   /*Random entre 1 y 5*/
     	cantidadSegundos = rand()% 40 + 20; /*Random entre 20 y 60*/    	
+    	printf("ENTRA \n");    	
+
     	proceso->idProceso = numeroProcesos;
     	proceso->tiempo = cantidadSegundos;
     	proceso->numeroSegmentos = cantidadSegmentos;
+
 
     	cantidadTotalPaginas = 0;
 
@@ -1191,6 +1431,7 @@ void mecanismoSegmentacion(){
     	}
 
     	
+	
     	
     	printf("--- ¡Se va a generar un nuevo proceso! ---\n");
 
@@ -1199,12 +1440,39 @@ void mecanismoSegmentacion(){
     	printf("Segmentos: \n");
     	printf("-----------------\n");
     	printf("\n");
+
+    	sprintf(mensaje, "--- ¡Se va a generar un nuevo proceso! ---\n");
+    	sprintf(mensaje +strlen(mensaje), "-------------------------------------------------\n");
+    	sprintf(mensaje +strlen(mensaje), "-------------------------------------------------\n");
+    	sprintf(mensaje +strlen(mensaje), "Segundos para el proceso: ");
+    	
+    	sprintf(mensaje +strlen(mensaje), "%d", cantidadSegundos);
+    	
+    	
+    	sprintf(mensaje +strlen(mensaje), "\n");
+    	sprintf(mensaje +strlen(mensaje), "Segmentos: \n");
+    	sprintf(mensaje +strlen(mensaje), "-----------------\n\n");
+
     	for (int i = 0; i<cantidadSegmentos; i++){
 
+    		int nSegmento; //Meterlo en enteros porque con punteros se cae D:
+    		int nPaginas;
+
+    		nSegmento = proceso->segmentos[i].numeroSegmento;
+    		nPaginas = proceso->segmentos[i].numeroPaginas;
     		printf("--------\n");
     		printf("Segmento: %i\n", proceso->segmentos[i].numeroSegmento);
     		printf("Páginas para el segmento: %i\n", proceso->segmentos[i].numeroPaginas);
     		printf("--------\n");
+
+    		sprintf(mensaje +strlen(mensaje), "--------\n");
+    		sprintf(mensaje +strlen(mensaje), "Segmento: ");
+    		sprintf(mensaje +strlen(mensaje), "%d", nSegmento);
+    		sprintf(mensaje +strlen(mensaje), "\n");
+    		sprintf(mensaje +strlen(mensaje), "Páginas para el segmento: ");
+    		sprintf(mensaje +strlen(mensaje), "%d", nPaginas);
+    		sprintf(mensaje +strlen(mensaje), "\n");
+    		sprintf(mensaje +strlen(mensaje), "--------\n");
     		
 
     	}
@@ -1214,14 +1482,27 @@ void mecanismoSegmentacion(){
     	printf("Tiempo hasta el próximo proceso: %i\n", cantidadSegundosPorProceso);
     	printf("-------------------------------------------------\n");
     	printf("\n\n");
+
+    	sprintf(mensaje +strlen(mensaje), "-----------------\n\n");
+    	sprintf(mensaje +strlen(mensaje), "Cantidad de páginas total: ");
+    	sprintf(mensaje +strlen(mensaje), "%d", cantidadTotalPaginas);
+    	sprintf(mensaje +strlen(mensaje), "\n");
+    	sprintf(mensaje +strlen(mensaje), "Tiempo hasta el próximo proceso: ");
+    	sprintf(mensaje +strlen(mensaje), "%d", cantidadSegundosPorProceso);
+    	sprintf(mensaje +strlen(mensaje), "\n");
+    	sprintf(mensaje +strlen(mensaje), "-------------------------------------------------\n\n\n");
+
     	
-    	
+    	printf("MENSAJOTEEEEEEE: %s\n", mensaje);
+    	escribirEnBitacora(mensaje);
 
     	numeroProcesos++;
 
     	crearHiloSegmentacion(proceso);
     	//sleep(cantidadSegundosPorProceso);
     	sleep(2);
+
+    	//
 
     }
 }
