@@ -494,9 +494,11 @@ void crearHiloPaginacion(ProcesoPaginacion *proceso){
 /*Función encargada de actuar como el mecanismo de paginación*/
 void mecanismoPaginacion(){
 	
-	char *mensaje;
+	//char temporal[10];
+		
 	
 	semaforo=semget(IPC_PRIVATE,1,IPC_CREAT | 0700);
+
 	
 	if(semaforo < 0){
 
@@ -520,11 +522,23 @@ void mecanismoPaginacion(){
     srand(hora);
 
     
-   	mensaje = (char*)malloc(sizeof(char*));
    	numeroProcesos = 0;
 
+   	
     /*La idea, por ahora, es crear 1000 procesos que pidan memoria en la compartida*/
     while(numeroProcesos < 1000){
+
+    	
+
+    	char *mensaje;
+		char *temporal;
+		
+		mensaje = (char*)malloc(sizeof(char*));
+		temporal = (char*)malloc(sizeof(char*));
+
+   	
+    	
+
     	//31 + 30
     	cantidadSegundosPorProceso = rand()% 30 + 30;  /*Random entre 30 y 60*/ 
     	cantidadPaginas = rand()% 10 + 1;   /*Random entre 1 y 10*/
@@ -552,17 +566,34 @@ void mecanismoPaginacion(){
     	printf("\n\n");
 
     	
+
+    	
+    	sprintf(mensaje, "--- ¡Se va a generar un nuevo proceso! ---\n");
+    	sprintf(mensaje +strlen(mensaje), "-------------------------------------------------\n");
+    	sprintf(mensaje +strlen(mensaje), "-------------------------------------------------\n");
+    	sprintf(mensaje +strlen(mensaje), "Páginas para el proceso: ");
+    	
+    	sprintf(mensaje +strlen(mensaje), "%d", cantidadPaginas);
+    	
+    	
+    	sprintf(mensaje +strlen(mensaje), "\n");
+    	sprintf(mensaje +strlen(mensaje), "Segundos para el proceso: ");
+    	sprintf(mensaje +strlen(mensaje), "%d", cantidadSegundos);
+    	sprintf(mensaje +strlen(mensaje), "\n");
+    	sprintf(mensaje +strlen(mensaje), "-------------------------------------------------\n");
+    	sprintf(mensaje +strlen(mensaje), "Tiempo hasta el próximo proceso: ");
+    	sprintf(mensaje +strlen(mensaje), "%d", cantidadSegundosPorProceso);
+    	sprintf(mensaje +strlen(mensaje), "\n");
+    	sprintf(mensaje +strlen(mensaje), "-------------------------------------------------\n\n\n");
+
+    	/*Después de esto, escribir en la bitácora*/
+    	
+    	printf("MENSAJE: %s\n", mensaje);
     	
 
-    	//escribirEnBitacora("--- ¡Se va a generar un nuevo proceso! ---\n");
-    	//escribirEnBitacora("-------------------------------------------------\n");
-    	//escribirEnBitacora("-------------------------------------------------\n");
-    	//escribirEnBitacora();
-    	//escribirEnBitacora();
-    	//escribirEnBitacora();
-    	//escribirEnBitacora();
-    	//escribirEnBitacora();
-    	//escribirEnBitacora();
+    	
+
+    	//escribirEnBitacora(mensaje);
     	
     	crearHiloPaginacion(proceso);
     	//sleep(cantidadSegundosPorProceso);
