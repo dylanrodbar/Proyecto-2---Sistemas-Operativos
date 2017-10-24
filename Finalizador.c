@@ -168,6 +168,8 @@ void guardarBitacora(){
 	idBitacora = leerIdMemoriaCompartida("idMemoriaCompartidaBitacora.txt");
 	bitacora = (char *)  shmat(idBitacora, NULL, 0);
 
+	printf("ContenidoBitacora: %s\n", bitacora);
+
 	//Guardar en un txt
 
 	printf("--- Se ha guardado el contenido de la bitácora en un archivo txt ---\n");
@@ -192,16 +194,16 @@ int main(){
 
 	printf("--- Bienvenido, este programa se encargará de finalizar todos los procesos, devolver la memoria compartida y guardar la bitácora ---\n");
 	
-	liberarHilos();
-	return 1;
-	liberarMemoriaCompartida();
-	liberarProcesosEnMemoria();
-	liberarProcesoPideMemoria();
-	liberarProcesosBloqueados();
-	liberarProcesosMuertos();
-	liberarProcesosTerminados();
+	//liberarHilos();
+	//return 1;
+	//liberarMemoriaCompartida();
+	//liberarProcesosEnMemoria();
+	//liberarProcesoPideMemoria();
+	//liberarProcesosBloqueados();
+	//liberarProcesosMuertos();
+	//liberarProcesosTerminados();
 	guardarBitacora();
-	liberarBitacora();
+	//liberarBitacora();
 
 
 	return 1;

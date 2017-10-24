@@ -243,6 +243,9 @@ void escribirProcesoTerminado(int idProceso, char tipo[12], unsigned long idThre
 int solicitarMemoriaPaginacion(int numeroPaginas){
 	
 	int contador; /*Para saber cuántos espacios libres hay*/
+	char *mensaje;
+
+	mensaje = (char*)malloc(sizeof(char*));
 	
 	contador = 0;
 
@@ -250,9 +253,20 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 	printf("Los que tienen -1 y 1, son espacios libres\n");
 	printf("\n\n");
 
+	sprintf(mensaje, "-----------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "Los que tienen -1 y 1, son espacios libres\n\n\n");
+
+
 	for(int i = 0; i<tamanio; i++){
 		
 		printf("Página %i: Disponible: %i Número de proceso: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado);
+		sprintf(mensaje +strlen(mensaje), "Página: ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].numeroPagina);
+		sprintf(mensaje +strlen(mensaje), " Disponible: ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].disponible);
+		sprintf(mensaje +strlen(mensaje), " Número de proceso: ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].procesoOcupado);
+		sprintf(mensaje +strlen(mensaje), "\n");
 		
 		/*Se pregunta si hay espacio disponible, en caso de que sí, se suma el contador para saber cuántas páginas hay*/
 		if(paginas[i].disponible == 1) contador++;
@@ -260,6 +274,10 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 	}
 	printf("\n");
 	printf("--- Páginas disponibles: %i ---\n", contador);
+
+	sprintf(mensaje +strlen(mensaje), "\n--- Páginas disponibles: ");
+	sprintf(mensaje +strlen(mensaje), "%d", contador);
+	sprintf(mensaje +strlen(mensaje), "---\n");
 	
 	if(contador >= numeroPaginas){
 
@@ -267,6 +285,16 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 		printf("\n\n");
 		printf("-----------------------------------------------------------------------\n");
 		printf("\n\n");
+
+		sprintf(mensaje +strlen(mensaje), "--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- \n");
+		sprintf(mensaje +strlen(mensaje), "\n\n");
+		sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n");
+		sprintf(mensaje +strlen(mensaje), "\n\n");
+
+		escribirEnBitacora(mensaje);
+		mensaje = (char*)malloc(sizeof(char*));
+	
+
 		
 		return 1; /*Hay suficientes páginas*/
 
@@ -278,6 +306,15 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 		printf("\n\n");
 		printf("-----------------------------------------------------------------------\n");
 		printf("\n\n");
+
+		sprintf(mensaje +strlen(mensaje), "--- ¡No hay suficientes páginas para ejecutar este proceso! :( --- \n");
+		sprintf(mensaje +strlen(mensaje), "\n\n");
+		sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n");
+		sprintf(mensaje +strlen(mensaje), "\n\n");
+
+		escribirEnBitacora(mensaje);
+		mensaje = (char*)malloc(sizeof(char*));
+
 		return 0; /*No hay suficientes páginas*/
 		
 	} 
@@ -289,6 +326,10 @@ int solicitarMemoriaPaginacion(int numeroPaginas){
 void tomarMemoriaPaginacion(int numeroPaginas, int idProceso){
 
 	int contador; /*Para delimitar cuando se ocupen las páginas que se requieren*/
+
+	char *mensaje;
+
+	mensaje = (char*)malloc(sizeof(char*));
 
 	contador = 0;
 
@@ -317,14 +358,35 @@ void tomarMemoriaPaginacion(int numeroPaginas, int idProceso){
 	printf("-----------------------------------------------------------------------\n");
 	printf("Los que tienen -1 y 1, son espacios libres\n");
 
+	sprintf(mensaje, "--- Se asignaron las páginas para el proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "---\n");
+	sprintf(mensaje +strlen(mensaje), "\n\n");
+	sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "Los que tienen -1 y 1, son espacios libres\n");
+
+
 	for(int i = 0; i<tamanio; i++){
 		
 		printf("Página %i: Disponible: %i Número de proceso: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado);
 		
+		sprintf(mensaje +strlen(mensaje), "Página: ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].numeroPagina);
+		sprintf(mensaje +strlen(mensaje), " Disponible: ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].disponible);
+		sprintf(mensaje +strlen(mensaje), " Número de proceso: ");
+		sprintf(mensaje +strlen(mensaje), "%d", paginas[i].procesoOcupado);
+		sprintf(mensaje +strlen(mensaje), "\n");
 	}
 
 	printf("-----------------------------------------------------------------------\n");
 	printf("\n\n");
+
+	sprintf(mensaje +strlen(mensaje), "-----------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "\n\n");
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+
 
 
 } 
@@ -332,7 +394,15 @@ void tomarMemoriaPaginacion(int numeroPaginas, int idProceso){
 /* Función encargada de devolver el espacio en la memoria compartida para el proceso en el mecanismo de paginación */
 void liberarMemoriaPaginacion(int idProceso){
 
+	char *mensaje;
+	mensaje = (char*)malloc(sizeof(char*));
+
 	printf("--- Se liberarán las páginas para el proceso: %i ---\n", idProceso); /*Desasignación*/
+
+	sprintf(mensaje, "--- Se liberarán las páginas para el proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "---\n");
+	
 	
 
 	for(int i = 0; i<tamanio; i++){
@@ -348,6 +418,14 @@ void liberarMemoriaPaginacion(int idProceso){
 	}
 
 	printf("--- Se han liberado las páginas para el proceso: %i ---\n", idProceso);
+
+	sprintf(mensaje, "--- Se han liberado las páginas para el proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "---\n");
+
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
 	
 
 }
@@ -361,6 +439,7 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	int cantidadPaginas;
 	int tiempo;
 	unsigned long idThread;
+	char *mensaje;
 
 	ProcesoPaginacion *procesoP;
 
@@ -372,9 +451,11 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	idProceso = procesoP->idProceso;
 	cantidadPaginas = procesoP->cantidadPaginas;
 	tiempo = procesoP->tiempo;
+	mensaje = (char*)malloc(sizeof(char*));
+		
 
 
-	printf("--------------------- Proceso: %i --------------------- \n", procesoP->idProceso);
+	printf("--------------------- Proceso: %i --------------------- \n", idProceso);
 
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
 	printf("----------------------------------------------------------------------------------------------------------------------\n");
@@ -384,6 +465,22 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	printf("------------ Esperando para usar el semáforo ------------ \n");
 	
+	sprintf(mensaje, "--------------------- Proceso: ");
+	sprintf(mensaje + strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje + strlen(mensaje), "--------------------- \n");
+	sprintf(mensaje + strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje + strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje + strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje + strlen(mensaje), "\n\n");
+	sprintf(mensaje + strlen(mensaje), "------------ Esperando para usar el semáforo ------------ \n");
+
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
+
+	//printf("MENSAJEEEEE: %s\n", mensaje);
+
+
 	escribirProcesoBloquedo(idProceso, "Paginacion", idThread); /*Espía*/
 	
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
@@ -397,7 +494,14 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	printf("------------ Páginas requeridas: %i          ------------\n", cantidadPaginas);
 	printf("\n\n");
 
+	sprintf(mensaje, "------------ Entra al semaforo               ------------\n");
+	sprintf(mensaje +strlen(mensaje), "------------ Páginas requeridas: ");
+	sprintf(mensaje +strlen(mensaje), "%d", cantidadPaginas);
+	sprintf(mensaje +strlen(mensaje), "------------\n\n\n");
 
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
 	escribirProcesoPideMemoria(idProceso, "Paginacion", idThread);/*Espía*/
 	
 	aceptaSolicitudMemoria = solicitarMemoriaPaginacion(procesoP->cantidadPaginas);
@@ -410,6 +514,19 @@ int *ejecucionProcesoPaginacion(void *proceso){
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("----------------------------------------------------------------------------------------------------------------------\n");
 		printf("\n\n");
+
+		sprintf(mensaje, "Matando al proceso: ");
+		sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+		sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+		sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+		sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+		sprintf(mensaje +strlen(mensaje), "\n\n");
+
+		escribirEnBitacora(mensaje);
+		mensaje = (char*)malloc(sizeof(char*));
+	
+
+
 
 		escribirProcesoMuerto(idProceso, "Paginacion", idThread);
 		doSignal(semaforo,0); /*Libera el semáforo*/
@@ -424,6 +541,17 @@ int *ejecucionProcesoPaginacion(void *proceso){
 	escribirProcesoEnMemoria(idProceso, "Paginacion", idThread); /*Espía*/
 
 	liberarProcesoPideMemoria();
+
+	sprintf(mensaje, "----- Comienza el sleep del proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "-----\n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "\n\n");
+
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
 	
 	doSignal(semaforo,0); /*Libera semáforo*/
 
@@ -447,6 +575,17 @@ int *ejecucionProcesoPaginacion(void *proceso){
 
 	doWait(semaforo,0); /*Solicita el semáforo, si está siendo utilizado, el proceso queda en espera*/
 	
+	sprintf(mensaje, "----- Termina el sleep del proceso: ");
+	sprintf(mensaje +strlen(mensaje), "%d", idProceso);
+	sprintf(mensaje +strlen(mensaje), "-----\n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "----------------------------------------------------------------------------------------------------------------------\n");
+	sprintf(mensaje +strlen(mensaje), "\n\n");
+
+	escribirEnBitacora(mensaje);
+	mensaje = (char*)malloc(sizeof(char*));
+	
+
 	liberarMemoriaPaginacion(idProceso);	
 
 	liberarProcesoEnMemoria(idProceso); /*Espía*/
@@ -496,7 +635,8 @@ void mecanismoPaginacion(){
 	
 	//char temporal[10];
 		
-	
+	char *mensaje;
+
 	semaforo=semget(IPC_PRIVATE,1,IPC_CREAT | 0700);
 
 	
@@ -530,14 +670,10 @@ void mecanismoPaginacion(){
 
     	
 
-    	char *mensaje;
-		char *temporal;
-		
-		mensaje = (char*)malloc(sizeof(char*));
-		temporal = (char*)malloc(sizeof(char*));
-
-   	
     	
+    	mensaje = (char*)malloc(sizeof(char*));
+	
+		
 
     	//31 + 30
     	cantidadSegundosPorProceso = rand()% 30 + 30;  /*Random entre 30 y 60*/ 
@@ -588,12 +724,11 @@ void mecanismoPaginacion(){
 
     	/*Después de esto, escribir en la bitácora*/
     	
-    	printf("MENSAJE: %s\n", mensaje);
+    	
+    	printf("MSJ: %s\n", mensaje);
     	
 
-    	
-
-    	//escribirEnBitacora(mensaje);
+    	escribirEnBitacora(mensaje);
     	
     	crearHiloPaginacion(proceso);
     	//sleep(cantidadSegundosPorProceso);
