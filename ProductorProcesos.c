@@ -1998,11 +1998,28 @@ int main(){
 		printf("MI ID: %i", getpid());
 
 
-		printf("Bienvenido(a), este es el programa que se encargará de producir procesos (Threads) por favor, seleccione un modelo:\n");
-		printf("****************************\n");
-		printf("***    1-Paginación      ***\n");
-		printf("***    2-Segmentación    ***\n");
-		printf("****************************\n");
+		//printf("Bienvenido(a), este es el programa que se encargará de producir procesos (Threads) por favor, seleccione un modelo:\n");
+		//printf("****************************\n");
+		//printf("***    1-Paginación      ***\n");
+		//printf("***    2-Segmentación    ***\n");
+		//printf("****************************\n");
+
+		printf("-------------------------------------------------------------------------------\n");
+		printf("    /||/\n");
+		printf("              (o o)\n");
+		printf(" ----------ooO-(_)-Ooo----------\n");
+		printf(" Bienvenido al programa encargado \n");
+		printf(" de producir procesos, seleccione \n");
+		printf(" un mecanismo de producción:");
+		printf("\n");
+		printf(" ---     1- Paginación       ---\n");
+		printf(" ---     2- Segmentación     ---\n");
+		printf("-------------------------------------------------------------------------------\n");
+	
+
+
+
+
 		scanf("%s", opcion);
 
 

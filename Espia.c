@@ -357,16 +357,28 @@ int main(){
 		//contenidoEspia =  (char*)malloc(sizeof(char*));
 
 
-		printf("Bienvenido(a), este es el programa que se encargará de brindar información acerca de los procesos:\n");
-		printf("****************************\n");
-		printf("***    1-Estado de la memoria                         ***\n");
-		printf("***    2-Procesos que estén en memoria                ***\n");
-		printf("***    3-Proceso que se encuentre pidiendo memoria    ***\n");
-		printf("***    4-Procesos bloqueados                          ***\n");
-		printf("***    5-Procesos que han muerto                      ***\n");
-		printf("***    6-Procesos que ya terminaron su ejecución      ***\n");
-		printf("***    7-Ver todo                                     ***\n");
-		printf("****************************\n");
+		
+		printf("-------------------------------------------------------------------------------\n");
+		printf("             ( ( (\n");
+		printf("              ) ) )\n");
+		printf("             ( ( ( \n");
+		printf("           '. ___ .'\n");
+		printf(          "          '  (> <) '\n");
+		printf("----------ooO-(_)-Ooo--------------\n");
+		printf(" Bienvenido al programa espía\n");
+		printf(" Seleccione una opción: \n");
+		printf(" 1-Estado de la memoria\n");
+		printf(" 2-Procesos que estén en memoria\n");
+		printf(" 3-Proceso pidiendo memoria\n");
+		printf(" 4-Procesos bloqueados\n");
+		printf(" 5-Procesos muertos\n");
+		printf(" 6-Procesos que terminaron\n");
+		printf(" 7-Ver todo\n");
+		printf("-------------------------------------------------------------------------------\n");
+	
+
+
+
 		scanf("%s", opcion);
 
 		

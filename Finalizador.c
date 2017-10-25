@@ -216,7 +216,7 @@ void guardarBitacora(){
 		printf("** No se pudo abrir el archivo correctamente **\n");
 
 	}
-	printf("Contenido bitácora: %s\n", bitacora);
+	
 	fprintf(archivo, "%s", bitacora);
 
 	
@@ -246,6 +246,20 @@ void liberarBitacora(){
 int main(){
 
 	printf("--- Bienvenido, este programa se encargará de finalizar todos los procesos, devolver la memoria compartida y guardar la bitácora ---\n");
+	
+	printf("-------------------------------------------------------------------------------\n");
+	printf("               ...... \n");
+	printf("            .:||||||||:.\n");
+	printf("           |            | \n");
+	printf("          (   o      o   )\n");
+	printf("--@@@@----------:  :----------@@@@--\n");
+	printf("Bienvenido, este programa se encargará:\n");
+	printf("De finalizar todos los procesos\n");
+	printf("Devolver la memoria compartida\n");
+	printf("Guardar la bitácora en un txt\n");
+
+
+	printf("-------------------------------------------------------------------------------\n");
 	
 
 	int idMemoriaCompartida;

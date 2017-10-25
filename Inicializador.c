@@ -386,10 +386,17 @@ int solicitarMemoria(){
 void main(){
 
 	int idMemoriaCompartida;
+	
 	printf("-------------------------------------------------------------------------------\n");
-	printf("Bienvenido(a), a continuación se le solicitará al sistema operativo memoria compartida, se le dará a conocer un Id para el mismo\n");
+	printf("                ____\n");
+	printf("              _(____)_\n");
+	printf("       ___ooO_(_o__o_)_Ooo___\n");
+	printf("Bienvenido al programa inicializador\n");
+	printf("A continuación, se generará el id para\n"); 
+	printf("los espacios compartidos\n");
 	printf("-------------------------------------------------------------------------------\n");
 	
+
 	printf(".\n");
 	printf("..\n");
 	printf("...\n");
