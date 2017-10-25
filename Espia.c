@@ -56,8 +56,7 @@ int leerIdMemoriaCompartida(char *nombreArchivo){
 	
 	}
 
-	printf("*** Id de memoria compartida cargado con éxito ***\n");
-
+	
 
 	idMemoriaCompartida = atoi(contenidoArchivo); /*Se pasa de char* a int*/
 
@@ -84,7 +83,8 @@ void verEstadoMemoria(){
 	/*Se recorren las páginas*/
 	for(int i = 0; i<tamanio; i++){
 		
-		printf("Página %i: Disponible: %i Número de proceso: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado);
+		printf("Página %i: Disponible: %i Número de proceso: %i Segmento: %i\n", paginas[i].numeroPagina, paginas[i].disponible, paginas[i].procesoOcupado, paginas[i].numeroSegmento);
+		
 		
 	}
 	printf("-----------------------------------------------------------------\n");

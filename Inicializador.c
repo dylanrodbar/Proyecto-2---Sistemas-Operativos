@@ -19,7 +19,7 @@ ProcesoGeneral *procesosBloqueados;
 ProcesoGeneral *procesosMuertos;
 ProcesoGeneral *procesosTerminados;
 char *bitacora;
-int pId;
+int *pId;
 
 
 
@@ -298,6 +298,7 @@ int solicitarMemoria(){
 	paginas[18].disponible = 0;
 	paginas[19].disponible = 0;
 	*/
+	
 
 	/*
 	paginas[2].disponible = 0;
@@ -307,17 +308,29 @@ int solicitarMemoria(){
 	paginas[14].disponible = 0;
 	paginas[17].disponible = 0;
 	*/
+	
 
 
 	
-
+	/*-----------------------------------------------------------------------------------------*/
+	
 	procesosEnMemoria = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosMemoria, NULL, 0); /*Cast*/
 	procesoPideMemoria = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesoPideMemoria, NULL, 0); /*Cast*/
 	procesosBloqueados = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosBloqueados, NULL, 0); /*Cast*/
 	procesosMuertos = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosMuertos, NULL, 0); /*Cast*/
 	procesosTerminados = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosTerminados, NULL, 0); /*Cast*/
 	bitacora = (char *) shmat(idMemoriaCompartidaBitacora, NULL, 0);
+	pId = shmat(idMemoriaCompartidaPID, NULL, 0);
+	pId[0] = getpid();
+
+
+	/*-----------------------------------------------------------------------------------------*/
 	
+	
+
+	/*-----------------------------------------------------------------------------------------*/
+	
+
 	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
 		procesosEnMemoria[i].idProceso = -1;
 		strcpy(procesosEnMemoria[i].tipoMecanismo, "n");
@@ -346,8 +359,10 @@ int solicitarMemoria(){
 		procesosTerminados[i].idThread = -1;
 	}
 
-
+	/*-----------------------------------------------------------------------------------------*/
 	
+
+	/*-----------------------------------------------------------------------------------------*/
 	guardarIdMemoriaCompartida(idMemoriaCompartida, "idMemoriaCompartida.txt");
 	guardarIdMemoriaCompartida(idMemoriaCompartidaBitacora, "idMemoriaCompartidaBitacora.txt");
 	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosMemoria, "procesosMemoria.txt");
@@ -356,6 +371,8 @@ int solicitarMemoria(){
 	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosMuertos, "procesosMuertos.txt");
 	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosTerminados, "procesosTerminados.txt");
 	guardarIdMemoriaCompartida(idMemoriaCompartidaPID, "pid.txt");
+	/*-----------------------------------------------------------------------------------------*/
+	
 
 
 

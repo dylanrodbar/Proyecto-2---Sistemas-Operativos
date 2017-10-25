@@ -56,8 +56,7 @@ int leerIdMemoriaCompartida(char *nombreArchivo){
 	
 	}
 
-	printf("*** Id de memoria compartida cargado con éxito ***\n");
-
+	
 	if(strcmp("", contenidoArchivo) == 0){
 		return 0;
 	}
@@ -217,7 +216,7 @@ void guardarBitacora(){
 		printf("** No se pudo abrir el archivo correctamente **\n");
 
 	}
-
+	printf("Contenido bitácora: %s\n", bitacora);
 	fprintf(archivo, "%s", bitacora);
 
 	
