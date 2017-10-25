@@ -317,76 +317,106 @@ void verTodo(){
 
 int main(){
 
-	char *opcion; /*Aquí se almacenará el valor de entrada de la consola*/
+
+	int idMemoriaCompartida;
+	int idMemoriaCompartidaBitacora;
+	int memoria;
+	int pide;
+	int bloqueado;
+	int muerto;
+	int terminado;
+	int idPid;
+
+	idMemoriaCompartida = leerIdMemoriaCompartida("idMemoriaCompartida.txt");
+	idMemoriaCompartidaBitacora = leerIdMemoriaCompartida("idMemoriaCompartidaBitacora.txt");
+	memoria = leerIdMemoriaCompartida("procesosMemoria.txt");
+	pide = leerIdMemoriaCompartida("procesoPideMemoria.txt");
+	bloqueado = leerIdMemoriaCompartida("procesosBloqueados.txt");
+	muerto = leerIdMemoriaCompartida("procesosMuertos.txt");
+	terminado = leerIdMemoriaCompartida("procesosTerminados.txt");
+	idPid = leerIdMemoriaCompartida("pid.txt");
 	
-	//return 0;
+	if(idMemoriaCompartida == 0 && idMemoriaCompartidaBitacora == 0 && memoria == 0 && pide == 0 && bloqueado == 0 && muerto == 0
+	 && terminado == 0 && idPid == 0){
 
-	int opcionN;  /*Aquí se almacenará el valor entero de la entrada a la consola, para el switch*/
-
-	opcion = (char*)malloc(sizeof(char*));
-	//contenidoBitacora =  (char*)malloc(sizeof(char*));
-	//contenidoEspia =  (char*)malloc(sizeof(char*));
-
-
-	printf("Bienvenido(a), este es el programa que se encargará de brindar información acerca de los procesos:\n");
-	printf("****************************\n");
-	printf("***    1-Estado de la memoria                         ***\n");
-	printf("***    2-Procesos que estén en memoria                ***\n");
-	printf("***    3-Proceso que se encuentre pidiendo memoria    ***\n");
-	printf("***    4-Procesos bloqueados                          ***\n");
-	printf("***    5-Procesos que han muerto                      ***\n");
-	printf("***    6-Procesos que ya terminaron su ejecución      ***\n");
-	printf("***    7-Ver todo                                     ***\n");
-	printf("****************************\n");
-	scanf("%s", opcion);
-
-	
-	opcionN = atoi(opcion); /*Conversión a tipo entero de la entrada en consola*/
-
-	/*Control principal de las opciones, por este medio se llamará al modelo de paginación o segmentación*/
-	switch(opcionN){
-
-		case 1:
-			printf("** Ha seleccionado ver el estado de la memoria **\n");
-			verEstadoMemoria();
-			break;
-
-		case 2:
-			printf("** Ha seleccionado ver los procesos que están en memoria **\n");
-			verProcesosEnMemoria();
-			break;
-
-		case 3:
-			printf("** Ha seleccionado ver el proceso que se encuentre pidiendo memoria **\n");
-			verProcesoPideMemoria();
-			break;
-
-		case 4:
-			printf("** Ha seleccionado ver los  procesos que se encuentran bloqueados **\n");
-			verProcesosBloqueados();
-			break;
-
-		case 5:
-			printf("** Ha seleccionado ver los procesos que han muerto **\n");
-			verProcesosMuertos();
-			break;
-
-		case 6:
-			printf("** Ha seleccionado ver los procesos que ya terminaron su ejecución **\n");
-			verProcesosTerminados();
-			break;
-
-		case 7:
-			printf("** Ha seleccionado ver toda la información acerca de los procesos **\n");
-			verTodo();
-			break;
-
-		default:
-			printf("No ha digitado una opción válida\n");	
-
+	 	printf("--- No se puede acceder a memoria compartida, puesto que no se ha habilitado aún ---");
+	 	return 1; 
 
 	}
 
+	else{
 
-	return 1;
+		char *opcion; /*Aquí se almacenará el valor de entrada de la consola*/
+		
+		//return 0;
+
+		int opcionN;  /*Aquí se almacenará el valor entero de la entrada a la consola, para el switch*/
+
+		opcion = (char*)malloc(sizeof(char*));
+		//contenidoBitacora =  (char*)malloc(sizeof(char*));
+		//contenidoEspia =  (char*)malloc(sizeof(char*));
+
+
+		printf("Bienvenido(a), este es el programa que se encargará de brindar información acerca de los procesos:\n");
+		printf("****************************\n");
+		printf("***    1-Estado de la memoria                         ***\n");
+		printf("***    2-Procesos que estén en memoria                ***\n");
+		printf("***    3-Proceso que se encuentre pidiendo memoria    ***\n");
+		printf("***    4-Procesos bloqueados                          ***\n");
+		printf("***    5-Procesos que han muerto                      ***\n");
+		printf("***    6-Procesos que ya terminaron su ejecución      ***\n");
+		printf("***    7-Ver todo                                     ***\n");
+		printf("****************************\n");
+		scanf("%s", opcion);
+
+		
+		opcionN = atoi(opcion); /*Conversión a tipo entero de la entrada en consola*/
+
+		/*Control principal de las opciones, por este medio se llamará al modelo de paginación o segmentación*/
+		switch(opcionN){
+
+			case 1:
+				printf("** Ha seleccionado ver el estado de la memoria **\n");
+				verEstadoMemoria();
+				break;
+
+			case 2:
+				printf("** Ha seleccionado ver los procesos que están en memoria **\n");
+				verProcesosEnMemoria();
+				break;
+
+			case 3:
+				printf("** Ha seleccionado ver el proceso que se encuentre pidiendo memoria **\n");
+				verProcesoPideMemoria();
+				break;
+
+			case 4:
+				printf("** Ha seleccionado ver los  procesos que se encuentran bloqueados **\n");
+				verProcesosBloqueados();
+				break;
+
+			case 5:
+				printf("** Ha seleccionado ver los procesos que han muerto **\n");
+				verProcesosMuertos();
+				break;
+
+			case 6:
+				printf("** Ha seleccionado ver los procesos que ya terminaron su ejecución **\n");
+				verProcesosTerminados();
+				break;
+
+			case 7:
+				printf("** Ha seleccionado ver toda la información acerca de los procesos **\n");
+				verTodo();
+				break;
+
+			default:
+				printf("No ha digitado una opción válida\n");	
+
+
+		}
+
+
+		return 1;
+	}
 }

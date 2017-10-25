@@ -25,6 +25,7 @@
 //kill -9 1317
 
 char *bitacora;
+int *pID;
 ProcesoGeneral *procesosEnMemoria;
 
 /*Función encargada de leer el txt que contiene el Id de la memoria compartida que se desea usar*/
@@ -57,37 +58,61 @@ int leerIdMemoriaCompartida(char *nombreArchivo){
 
 	printf("*** Id de memoria compartida cargado con éxito ***\n");
 
+	if(strcmp("", contenidoArchivo) == 0){
+		return 0;
+	}
 
-	idMemoriaCompartida = atoi(contenidoArchivo); /*Se pasa de char* a int*/
+	else{
+		idMemoriaCompartida = atoi(contenidoArchivo); /*Se pasa de char* a int*/
 
-	return idMemoriaCompartida;
+		return idMemoriaCompartida;
+	}
 
 
 
 }
 
-void liberarHilos(){
+int vaciarTxtMemoriaCompartida(char *nombreArchivo){
 
-	int idProcesosEnMemoria;
-	idProcesosEnMemoria = leerIdMemoriaCompartida("procesosMemoria.txt");
+	FILE *archivo;
+	//char *contenidoArchivo;
 
+	
+	//contenidoArchivo = (char*)malloc(sizeof(char*));
+	archivo = fopen(nombreArchivo, "w");
 
-	procesosEnMemoria = shmat(idProcesosEnMemoria, NULL, 0);
+	if(archivo == NULL){
 
-	int n;
-	for(int i = 0; i<tamanioEspiaProcesosMemoria; i++){
-
-		if(procesosEnMemoria[i].idProceso != -1){
-			printf("Voy a matar a: %lu", procesosEnMemoria[i].idThread);
-			//n = pthread_kill(procesosEnMemoria[i].idThread,SIGUSR1);
-			//if(n<0){
-			//	printf("--- No se  pudo eliminar el hilo ---\n");
-			//}
-		}
+		printf("** No se pudo abrir el archivo correctamente **\n");
 
 	}
 
-	printf("--- Se ha liberado la memoria compartida de los procesos en memoria ---\n");
+	//sprintf(contenidoArchivo,"%i",idMemoriaCompartida);
+	fprintf(archivo, "%s", "");
+
+	fclose(archivo);
+
+	return 0;
+
+
+}
+
+void liberarProductorProcesos(){
+
+	int pId;
+	pId = leerIdMemoriaCompartida("pid.txt");
+	pID = shmat(pId, NULL, 0);
+	kill(pID[0], SIGQUIT);
+
+	printf("--- Se ha matado al proceso del id: %i ---\n", pID[0]);
+
+	shmctl(pId, IPC_RMID, NULL);
+
+	vaciarTxtMemoriaCompartida("pid.txt");
+
+	printf("--- Se ha liberado la memoria compartida para el pId del productor de procesos ---\n");
+
+
 
 }
 
@@ -96,6 +121,9 @@ void liberarMemoriaCompartida(){
 	int idMemoriaCompartida;
 	idMemoriaCompartida = leerIdMemoriaCompartida("idMemoriaCompartida.txt");
 	shmctl(idMemoriaCompartida, IPC_RMID, NULL);
+
+	vaciarTxtMemoriaCompartida("idMemoriaCompartida.txt");
+
 
 	printf("--- Se ha liberado la memoria compartida ---\n");
 	//shmdt(shm_ptr);
@@ -109,6 +137,9 @@ void liberarProcesosEnMemoria(){
 
 	shmctl(idProcesosEnMemoria, IPC_RMID, NULL);
 
+	vaciarTxtMemoriaCompartida("procesosMemoria.txt");
+
+
 	printf("--- Se ha liberado la memoria compartida de los procesos en memoria ---\n");
 	
 
@@ -120,6 +151,9 @@ void liberarProcesoPideMemoria(){
 	idProcesoPideMemoria = leerIdMemoriaCompartida("procesoPideMemoria.txt");
 
 	shmctl(idProcesoPideMemoria, IPC_RMID, NULL);
+
+	vaciarTxtMemoriaCompartida("procesoPideMemoria.txt");
+
 
 	printf("--- Se ha liberado la memoria compartida del proceso que pide memoria ---\n");
 	
@@ -133,6 +167,9 @@ void liberarProcesosBloqueados(){
 
 	shmctl(idProcesosBloqueados, IPC_RMID, NULL);
 
+	vaciarTxtMemoriaCompartida("procesosBloqueados.txt");
+
+
 	printf("--- Se ha liberado la memoria compartida de los procesos bloqueados ---\n");
 	
 	
@@ -142,6 +179,8 @@ void liberarProcesosMuertos(){
 
 	int idProcesosMuertos;
 	idProcesosMuertos = leerIdMemoriaCompartida("procesosMuertos.txt");
+
+	vaciarTxtMemoriaCompartida("procesosMuertos.txt");
 
 	shmctl(idProcesosMuertos, IPC_RMID, NULL);
 
@@ -157,18 +196,31 @@ void liberarProcesosTerminados(){
 
 	shmctl(idProcesosTerminados, IPC_RMID, NULL);
 
+	vaciarTxtMemoriaCompartida("procesosTerminados.txt");
+
 	printf("--- Se ha liberado la memoria compartida de los procesos terminados ---\n");
 	
 
 }
 
+
 void guardarBitacora(){
 
 	int idBitacora;
+	FILE *archivo;
 	idBitacora = leerIdMemoriaCompartida("idMemoriaCompartidaBitacora.txt");
 	bitacora = (char *)  shmat(idBitacora, NULL, 0);
+	archivo = fopen("Bitacora.txt", "w");
 
-	printf("ContenidoBitacora: %s\n", bitacora);
+	if(archivo == NULL){
+
+		printf("** No se pudo abrir el archivo correctamente **\n");
+
+	}
+
+	fprintf(archivo, "%s", bitacora);
+
+	
 
 	//Guardar en un txt
 
@@ -185,6 +237,8 @@ void liberarBitacora(){
 
 	shmctl(idBitacora, IPC_RMID, NULL);
 
+	vaciarTxtMemoriaCompartida("idMemoriaCompartidaBitacora.txt");
+
 	printf("--- Se ha liberado la memoria compartida de la bitácora ---\n");
 	
 }
@@ -194,17 +248,50 @@ int main(){
 
 	printf("--- Bienvenido, este programa se encargará de finalizar todos los procesos, devolver la memoria compartida y guardar la bitácora ---\n");
 	
-	//liberarHilos();
-	//return 1;
-	//liberarMemoriaCompartida();
-	//liberarProcesosEnMemoria();
-	//liberarProcesoPideMemoria();
-	//liberarProcesosBloqueados();
-	//liberarProcesosMuertos();
-	//liberarProcesosTerminados();
-	guardarBitacora();
-	//liberarBitacora();
+
+	int idMemoriaCompartida;
+	int idMemoriaCompartidaBitacora;
+	int memoria;
+	int pide;
+	int bloqueado;
+	int muerto;
+	int terminado;
+	int idPid;
 
 
-	return 1;
+	idMemoriaCompartida = leerIdMemoriaCompartida("idMemoriaCompartida.txt");
+	idMemoriaCompartidaBitacora = leerIdMemoriaCompartida("idMemoriaCompartidaBitacora.txt");
+	memoria = leerIdMemoriaCompartida("procesosMemoria.txt");
+	pide = leerIdMemoriaCompartida("procesoPideMemoria.txt");
+	bloqueado = leerIdMemoriaCompartida("procesosBloqueados.txt");
+	muerto = leerIdMemoriaCompartida("procesosMuertos.txt");
+	terminado = leerIdMemoriaCompartida("procesosTerminados.txt");
+	idPid = leerIdMemoriaCompartida("pid.txt");
+
+
+	if(idMemoriaCompartida == 0 && idMemoriaCompartidaBitacora == 0 && memoria == 0 && pide == 0 && bloqueado == 0 && muerto == 0
+	 && terminado == 0 && idPid == 0){
+
+	 	printf("--- No se puede acceder a memoria compartida, puesto que no se ha habilitado aún ---");
+	 	return 1; 
+
+	}
+
+	else{
+
+		liberarProductorProcesos();
+		liberarMemoriaCompartida();
+		liberarProcesosEnMemoria();
+		liberarProcesoPideMemoria();
+		liberarProcesosBloqueados();
+		liberarProcesosMuertos();
+		liberarProcesosTerminados();
+		guardarBitacora();
+		liberarBitacora();
+
+		printf("--- ¡Se han liberado exitosamente todos los segmentos de memoria compartida! ---\n");
+
+
+		return 1;
+	}
 }

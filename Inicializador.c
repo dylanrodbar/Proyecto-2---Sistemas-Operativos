@@ -19,6 +19,7 @@ ProcesoGeneral *procesosBloqueados;
 ProcesoGeneral *procesosMuertos;
 ProcesoGeneral *procesosTerminados;
 char *bitacora;
+int pId;
 
 
 
@@ -52,6 +53,13 @@ int guardarIdMemoriaCompartida(int idMemoriaCompartida, char* nombreArchivo){
 /* Función encargada de solicitar memoria compartida al sistema operativo */
 int solicitarMemoria(){
 	
+	/*----------------------------------------------------------------------------------------------------*/
+	key_t keyPID; /*Clave que se pasa al shmget*/
+	int idMemoriaCompartidaPID;  /*Con este id se puede tener el acceso a la memoria compartida*/ 
+	int tamanioMemoriaCompartidaPID;   /*Tamaño que se le pedirá al sistema operativo para la memoria compartida*/ 
+	/*----------------------------------------------------------------------------------------------------*/
+	
+
 	/*----------------------------------------------------------------------------------------------------*/
 	key_t key; /*Clave que se pasa al shmget*/
 	int banderaMemoriaCompartida; /*Necesaria para saber bajo qué "modalidad" se crea la memoria compartida*/
@@ -98,6 +106,7 @@ int solicitarMemoria(){
 	/*----------------------------------------------------------------------------------------------------*/
 	
 	
+
 	/*----------------------------------------------------------------------------------------------------*/
 	key = 5559;
 	tamanioMemoriaCompartida = tamanio * sizeof(struct Pagina);
@@ -115,6 +124,23 @@ int solicitarMemoria(){
 	printf("--- ID para memoria compartida: %i ---\n", idMemoriaCompartida);
 	/*----------------------------------------------------------------------------------------------------*/
 	
+
+	/*----------------------------------------------------------------------------------------------------*/
+	keyPID = 5000;
+	tamanioMemoriaCompartidaPID = pid * sizeof(int*);
+	idMemoriaCompartidaPID = shmget(keyPID, tamanioMemoriaCompartidaPID, banderaMemoriaCompartida | 0666);
+
+	/*Se valida si se logra o no compartir la memoria*/
+	if(idMemoriaCompartidaPID < 0){
+		
+		printf("** Error, no se pudo asignar la memoria compartida para el PID **\n");
+		return -1;
+
+	}
+	printf("--- ID para memoria compartida PID: %i ---\n", idMemoriaCompartidaPID);	
+	/*----------------------------------------------------------------------------------------------------*/
+
+
 	/*----------------------------------------------------------------------------------------------------*/
 	keyBitacora = 5555;
 	tamanioMemoriaCompartidaBitacora = tamanioBitacora;
@@ -244,6 +270,47 @@ int solicitarMemoria(){
 
 	}
 
+	//Para enseñar en una prueba
+	
+	/*
+	paginas[0].disponible = 0;
+	paginas[1].disponible = 0;
+	paginas[6].disponible = 0;
+	paginas[10].disponible = 0;
+	paginas[11].disponible = 0;
+	paginas[12].disponible = 0;
+	paginas[13].disponible = 0;
+	paginas[14].disponible = 0;
+	paginas[15].disponible = 0;
+	paginas[16].disponible = 0;
+	paginas[17].disponible = 0;
+	paginas[18].disponible = 0;
+	paginas[19].disponible = 0;
+	*/
+
+	/*
+	paginas[5].disponible = 0;
+	paginas[9].disponible = 0;
+	paginas[14].disponible = 0;
+	paginas[15].disponible = 0;
+	paginas[16].disponible = 0;
+	paginas[17].disponible = 0;
+	paginas[18].disponible = 0;
+	paginas[19].disponible = 0;
+	*/
+
+	/*
+	paginas[2].disponible = 0;
+	paginas[5].disponible = 0;
+	paginas[8].disponible = 0;
+	paginas[11].disponible = 0;
+	paginas[14].disponible = 0;
+	paginas[17].disponible = 0;
+	*/
+
+
+	
+
 	procesosEnMemoria = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosMemoria, NULL, 0); /*Cast*/
 	procesoPideMemoria = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesoPideMemoria, NULL, 0); /*Cast*/
 	procesosBloqueados = (ProcesoGeneral *) shmat(idMemoriaCompartidaEspiaProcesosBloqueados, NULL, 0); /*Cast*/
@@ -288,6 +355,7 @@ int solicitarMemoria(){
 	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosBloqueados, "procesosBloqueados.txt");
 	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosMuertos, "procesosMuertos.txt");
 	guardarIdMemoriaCompartida(idMemoriaCompartidaEspiaProcesosTerminados, "procesosTerminados.txt");
+	guardarIdMemoriaCompartida(idMemoriaCompartidaPID, "pid.txt");
 
 
 
