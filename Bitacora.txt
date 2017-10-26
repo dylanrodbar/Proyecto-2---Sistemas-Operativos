@@ -1,10 +1,10 @@
 --- ¡Se va a generar un nuevo proceso! ---
 -------------------------------------------------
 -------------------------------------------------
-Páginas para el proceso: 10
-Segundos para el proceso: 24
+Páginas para el proceso: 1
+Segundos para el proceso: 22
 -------------------------------------------------
-Tiempo hasta el próximo proceso: 59
+Tiempo hasta el próximo proceso: 30
 -------------------------------------------------
 
 
@@ -23,7 +23,7 @@ Tiempo hasta el próximo proceso: 59
 
 ------------ Esperando para usar el semáforo ------------ 
 ------------ Entra al semaforo               ------------
------------- Páginas requeridas: 10------------
+------------ Páginas requeridas: 1------------
 
 
 -----------------------------------------------------------------------
@@ -96,15 +96,15 @@ Página: 19 Disponible: 1 Número de proceso: -1
 -----------------------------------------------------------------------
 Los que tienen -1 y 1, son espacios libres
 Página: 0 Disponible: 0 Número de proceso: 0
-Página: 1 Disponible: 0 Número de proceso: 0
-Página: 2 Disponible: 0 Número de proceso: 0
-Página: 3 Disponible: 0 Número de proceso: 0
-Página: 4 Disponible: 0 Número de proceso: 0
-Página: 5 Disponible: 0 Número de proceso: 0
-Página: 6 Disponible: 0 Número de proceso: 0
-Página: 7 Disponible: 0 Número de proceso: 0
-Página: 8 Disponible: 0 Número de proceso: 0
-Página: 9 Disponible: 0 Número de proceso: 0
+Página: 1 Disponible: 1 Número de proceso: -1
+Página: 2 Disponible: 1 Número de proceso: -1
+Página: 3 Disponible: 1 Número de proceso: -1
+Página: 4 Disponible: 1 Número de proceso: -1
+Página: 5 Disponible: 1 Número de proceso: -1
+Página: 6 Disponible: 1 Número de proceso: -1
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
 Página: 10 Disponible: 1 Número de proceso: -1
 Página: 11 Disponible: 1 Número de proceso: -1
 Página: 12 Disponible: 1 Número de proceso: -1
@@ -123,14 +123,14 @@ Página: 19 Disponible: 1 Número de proceso: -1
 ----------------------------------------------------------------------------------------------------------------------
 
 
-------------------
+-----------------
 
 
 --- ¡Se va a generar un nuevo proceso! ---
 -------------------------------------------------
 -------------------------------------------------
-Páginas para el proceso: 5
-Segundos para el proceso: 49
+Páginas para el proceso: 2
+Segundos para el proceso: 52
 -------------------------------------------------
 Tiempo hasta el próximo proceso: 40
 -------------------------------------------------
@@ -151,7 +151,7 @@ Tiempo hasta el próximo proceso: 40
 
 ------------ Esperando para usar el semáforo ------------ 
 ------------ Entra al semaforo               ------------
------------- Páginas requeridas: 5------------
+------------ Páginas requeridas: 2------------
 
 
 -----------------------------------------------------------------------
@@ -159,15 +159,272 @@ Los que tienen -1 y 1, son espacios libres
 
 
 Página: 0 Disponible: 0 Número de proceso: 0
-Página: 1 Disponible: 0 Número de proceso: 0
-Página: 2 Disponible: 0 Número de proceso: 0
-Página: 3 Disponible: 0 Número de proceso: 0
-Página: 4 Disponible: 0 Número de proceso: 0
-Página: 5 Disponible: 0 Número de proceso: 0
-Página: 6 Disponible: 0 Número de proceso: 0
-Página: 7 Disponible: 0 Número de proceso: 0
-Página: 8 Disponible: 0 Número de proceso: 0
-Página: 9 Disponible: 0 Número de proceso: 0
+Página: 1 Disponible: 1 Número de proceso: -1
+Página: 2 Disponible: 1 Número de proceso: -1
+Página: 3 Disponible: 1 Número de proceso: -1
+Página: 4 Disponible: 1 Número de proceso: -1
+Página: 5 Disponible: 1 Número de proceso: -1
+Página: 6 Disponible: 1 Número de proceso: -1
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 1 Número de proceso: -1
+Página: 11 Disponible: 1 Número de proceso: -1
+Página: 12 Disponible: 1 Número de proceso: -1
+Página: 13 Disponible: 1 Número de proceso: -1
+Página: 14 Disponible: 1 Número de proceso: -1
+Página: 15 Disponible: 1 Número de proceso: -1
+Página: 16 Disponible: 1 Número de proceso: -1
+Página: 17 Disponible: 1 Número de proceso: -1
+Página: 18 Disponible: 1 Número de proceso: -1
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 19---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+-------
+Los que tienen -�,------on espacios libres
+
+
+Página: 0 Disponible: 0 Número de proceso: 0
+Página: 1 Disponible: 1 Número de proceso: -1
+Página: 2 Disponible: 1 Número de proceso: -1
+Página: 3 Disponible: 1 Número de proceso: -1
+Página: 4 Disponible: 1 Número de proceso: -1
+Página: 5 Disponible: 1 Número de proceso: -1
+Página: 6 Disponible: 1 Número de proceso: -1
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 1 Número de proceso: -1
+Página: 11 Disponible: 1 Número de proceso: -1
+Página: 12 Disponible: 1 Número de proceso: -1
+Página: 13 Disponible: 1 Número de proceso: -1
+Página: 14 Disponible: 1 Número de proceso: -1
+Página: 15 Disponible: 1 Número de proceso: -1
+Página: 16 Disponible: 1 Número de proceso: -1
+Página: 17 Disponible: 1 Número de proceso: -1
+Página: 18 Disponible: 1 Número de proceso: -1
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 19---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+--- Se asignaron las páginas para el proceso: 1---
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+Página: 0 Disponible: 0 Número de proceso: 0
+Página: 1 Disponible: 0 Número de proceso: 1
+Página: 2 Disponible: 0 Número de proceso: 1
+Página: 3 Disponible: 1 Número de proceso: -1
+Página: 4 Disponible: 1 Número de proceso: -1
+Página: 5 Disponible: 1 Número de proceso: -1
+Página: 6 Disponible: 1 Número de proceso: -1
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 1 Número de proceso: -1
+Página: 11 Disponible: 1 Número de proceso: -1
+Página: 12 Disponible: 1 Número de proceso: -1
+Página: 13 Disponible: 1 Número de proceso: -1
+Página: 14 Disponible: 1 Número de proceso: -1
+Página: 15 Disponible: 1 Número de proceso: -1
+Página: 16 Disponible: 1 Número de proceso: -1
+Página: 17 Disponible: 1 Número de proceso: -1
+Página: 18 Disponible: 1 Número de proceso: -1
+Página: 19 Disponible: 1 Número de proceso: -1
+-----------------------------------------------------------------------
+
+
+------------------------%----- Comienza el sleep del proceso: 1-----
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------------------��Se va -----
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 7
+Segundos para el proceso: 30
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 39
+-------------------------------------------------
+
+
+--------------------- Proceso: 2--------------------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+--------------------- 
+-Iceso: 2-------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+------------ Entra al semaforo               ------------
+------------ Páginas requeridas: 7------------
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+
+
+Página: 0 Disponible: 0 Número de proceso: 0
+Página: 1 Disponible: 0 Número de proceso: 1
+Página: 2 Disponible: 0 Número de proceso: 1
+Página: 3 Disponible: 1 Número de proceso: -1
+Página: 4 Disponible: 1 Número de proceso: -1
+Página: 5 Disponible: 1 Número de proceso: -1
+Página: 6 Disponible: 1 Número de proceso: -1
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 1 Número de proceso: -1
+Página: 11 Disponible: 1 Número de proceso: -1
+Página: 12 Disponible: 1 Número de proceso: -1
+Página: 13 Disponible: 1 Número de proceso: -1
+Página: 14 Disponible: 1 Número de proceso: -1
+Página: 15 Disponible: 1 Número de proceso: -1
+Página: 16 Disponible: 1 Número de proceso: -1
+Página: 17 Disponible: 1 Número de proceso: -1
+Página: 18 Disponible: 1 Número de proceso: -1
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 17---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+-------
+Los que tienen -�,------on espacios libres
+
+
+Página: 0 Disponible: 0 Número de proceso: 0
+Página: 1 Disponible: 0 Número de proceso: 1
+Página: 2 Disponible: 0 Número de proceso: 1
+Página: 3 Disponible: 1 Número de proceso: -1
+Página: 4 Disponible: 1 Número de proceso: -1
+Página: 5 Disponible: 1 Número de proceso: -1
+Página: 6 Disponible: 1 Número de proceso: -1
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 1 Número de proceso: -1
+Página: 11 Disponible: 1 Número de proceso: -1
+Página: 12 Disponible: 1 Número de proceso: -1
+Página: 13 Disponible: 1 Número de proceso: -1
+Página: 14 Disponible: 1 Número de proceso: -1
+Página: 15 Disponible: 1 Número de proceso: -1
+Página: 16 Disponible: 1 Número de proceso: -1
+Página: 17 Disponible: 1 Número de proceso: -1
+Página: 18 Disponible: 1 Número de proceso: -1
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 17---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+--- Se asignaron las páginas para el proceso: 2---
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+Página: 0 Disponible: 0 Número de proceso: 0
+Página: 1 Disponible: 0 Número de proceso: 1
+Página: 2 Disponible: 0 Número de proceso: 1
+Página: 3 Disponible: 0 Número de proceso: 2
+Página: 4 Disponible: 0 Número de proceso: 2
+Página: 5 Disponible: 0 Número de proceso: 2
+Página: 6 Disponible: 0 Número de proceso: 2
+Página: 7 Disponible: 0 Número de proceso: 2
+Página: 8 Disponible: 0 Número de proceso: 2
+Página: 9 Disponible: 0 Número de proceso: 2
+Página: 10 Disponible: 1 Número de proceso: -1
+Página: 11 Disponible: 1 Número de proceso: -1
+Página: 12 Disponible: 1 Número de proceso: -1
+Página: 13 Disponible: 1 Número de proceso: -1
+Página: 14 Disponible: 1 Número de proceso: -1
+Página: 15 Disponible: 1 Número de proceso: -1
+Página: 16 Disponible: 1 Número de proceso: -1
+Página: 17 Disponible: 1 Número de proceso: -1
+Página: 18 Disponible: 1 Número de proceso: -1
+Página: 19 Disponible: 1 Número de proceso: -1
+-----------------------------------------------------------------------
+
+
+------------------------%----- Comienza el sleep del proceso: 2-----
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+eso: 39
+----------------A�Se va -------------------------
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 7
+Segundos para el proceso: 26
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 58
+-------------------------------------------------
+
+
+--------------------- Proceso: 3--------------------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+--------------------- 
+-Iceso: 3-------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+------------ Entra al semaforo               ------------
+------------ Páginas requeridas: 7------------
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+
+
+Página: 0 Disponible: 0 Número de proceso: 0
+Página: 1 Disponible: 0 Número de proceso: 1
+Página: 2 Disponible: 0 Número de proceso: 1
+Página: 3 Disponible: 0 Número de proceso: 2
+Página: 4 Disponible: 0 Número de proceso: 2
+Página: 5 Disponible: 0 Número de proceso: 2
+Página: 6 Disponible: 0 Número de proceso: 2
+Página: 7 Disponible: 0 Número de proceso: 2
+Página: 8 Disponible: 0 Número de proceso: 2
+Página: 9 Disponible: 0 Número de proceso: 2
 Página: 10 Disponible: 1 Número de proceso: -1
 Página: 11 Disponible: 1 Número de proceso: -1
 Página: 12 Disponible: 1 Número de proceso: -1
@@ -191,15 +448,15 @@ Los que tienen -�,------on espacios libres
 
 
 Página: 0 Disponible: 0 Número de proceso: 0
-Página: 1 Disponible: 0 Número de proceso: 0
-Página: 2 Disponible: 0 Número de proceso: 0
-Página: 3 Disponible: 0 Número de proceso: 0
-Página: 4 Disponible: 0 Número de proceso: 0
-Página: 5 Disponible: 0 Número de proceso: 0
-Página: 6 Disponible: 0 Número de proceso: 0
-Página: 7 Disponible: 0 Número de proceso: 0
-Página: 8 Disponible: 0 Número de proceso: 0
-Página: 9 Disponible: 0 Número de proceso: 0
+Página: 1 Disponible: 0 Número de proceso: 1
+Página: 2 Disponible: 0 Número de proceso: 1
+Página: 3 Disponible: 0 Número de proceso: 2
+Página: 4 Disponible: 0 Número de proceso: 2
+Página: 5 Disponible: 0 Número de proceso: 2
+Página: 6 Disponible: 0 Número de proceso: 2
+Página: 7 Disponible: 0 Número de proceso: 2
+Página: 8 Disponible: 0 Número de proceso: 2
+Página: 9 Disponible: 0 Número de proceso: 2
 Página: 10 Disponible: 1 Número de proceso: -1
 Página: 11 Disponible: 1 Número de proceso: -1
 Página: 12 Disponible: 1 Número de proceso: -1
@@ -218,53 +475,53 @@ Página: 19 Disponible: 1 Número de proceso: -1
 -----------------------------------------------------------------------
 
 
---- Se asignaron las páginas para el proceso: 1---
+--- Se asignaron las páginas para el proceso: 3---
 
 
 -----------------------------------------------------------------------
 Los que tienen -1 y 1, son espacios libres
 Página: 0 Disponible: 0 Número de proceso: 0
-Página: 1 Disponible: 0 Número de proceso: 0
-Página: 2 Disponible: 0 Número de proceso: 0
-Página: 3 Disponible: 0 Número de proceso: 0
-Página: 4 Disponible: 0 Número de proceso: 0
-Página: 5 Disponible: 0 Número de proceso: 0
-Página: 6 Disponible: 0 Número de proceso: 0
-Página: 7 Disponible: 0 Número de proceso: 0
-Página: 8 Disponible: 0 Número de proceso: 0
-Página: 9 Disponible: 0 Número de proceso: 0
-Página: 10 Disponible: 0 Número de proceso: 1
-Página: 11 Disponible: 0 Número de proceso: 1
-Página: 12 Disponible: 0 Número de proceso: 1
-Página: 13 Disponible: 0 Número de proceso: 1
-Página: 14 Disponible: 0 Número de proceso: 1
-Página: 15 Disponible: 1 Número de proceso: -1
-Página: 16 Disponible: 1 Número de proceso: -1
+Página: 1 Disponible: 0 Número de proceso: 1
+Página: 2 Disponible: 0 Número de proceso: 1
+Página: 3 Disponible: 0 Número de proceso: 2
+Página: 4 Disponible: 0 Número de proceso: 2
+Página: 5 Disponible: 0 Número de proceso: 2
+Página: 6 Disponible: 0 Número de proceso: 2
+Página: 7 Disponible: 0 Número de proceso: 2
+Página: 8 Disponible: 0 Número de proceso: 2
+Página: 9 Disponible: 0 Número de proceso: 2
+Página: 10 Disponible: 0 Número de proceso: 3
+Página: 11 Disponible: 0 Número de proceso: 3
+Página: 12 Disponible: 0 Número de proceso: 3
+Página: 13 Disponible: 0 Número de proceso: 3
+Página: 14 Disponible: 0 Número de proceso: 3
+Página: 15 Disponible: 0 Número de proceso: 3
+Página: 16 Disponible: 0 Número de proceso: 3
 Página: 17 Disponible: 1 Número de proceso: -1
 Página: 18 Disponible: 1 Número de proceso: -1
 Página: 19 Disponible: 1 Número de proceso: -1
 -----------------------------------------------------------------------
 
 
-------------------------%----- Comienza el sleep del proceso: 1-----
+------------------------%----- Comienza el sleep del proceso: 3-----
 ----------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
 
 
-------------------------���Se va------
+sta el próximo proceso:�Se va ---------------------------------------------
 
 
 --- ¡Se va a generar un nuevo proceso! ---
 -------------------------------------------------
 -------------------------------------------------
 Páginas para el proceso: 6
-Segundos para el proceso: 36
+Segundos para el proceso: 46
 -------------------------------------------------
-Tiempo hasta el próximo proceso: 33
+Tiempo hasta el próximo proceso: 51
 -------------------------------------------------
 
 
---------------------- Proceso: 2--------------------- 
+--------------------- Proceso: 4--------------------- 
 ----------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
@@ -272,7 +529,7 @@ Tiempo hasta el próximo proceso: 33
 
 ------------ Esperando para usar el semáforo ------------ 
 --------------------- 
--Iceso: 2-------------------------------------------------------------------------------------------------------------
+-Iceso: 4-------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
 
@@ -287,193 +544,27 @@ Los que tienen -1 y 1, son espacios libres
 
 
 Página: 0 Disponible: 0 Número de proceso: 0
-Página: 1 Disponible: 0 Número de proceso: 0
-Página: 2 Disponible: 0 Número de proceso: 0
-Página: 3 Disponible: 0 Número de proceso: 0
-Página: 4 Disponible: 0 Número de proceso: 0
-Página: 5 Disponible: 0 Número de proceso: 0
-Página: 6 Disponible: 0 Número de proceso: 0
-Página: 7 Disponible: 0 Número de proceso: 0
-Página: 8 Disponible: 0 Número de proceso: 0
-Página: 9 Disponible: 0 Número de proceso: 0
-Página: 10 Disponible: 0 Número de proceso: 1
-Página: 11 Disponible: 0 Número de proceso: 1
-Página: 12 Disponible: 0 Número de proceso: 1
-Página: 13 Disponible: 0 Número de proceso: 1
-Página: 14 Disponible: 0 Número de proceso: 1
-Página: 15 Disponible: 1 Número de proceso: -1
-Página: 16 Disponible: 1 Número de proceso: -1
+Página: 1 Disponible: 0 Número de proceso: 1
+Página: 2 Disponible: 0 Número de proceso: 1
+Página: 3 Disponible: 0 Número de proceso: 2
+Página: 4 Disponible: 0 Número de proceso: 2
+Página: 5 Disponible: 0 Número de proceso: 2
+Página: 6 Disponible: 0 Número de proceso: 2
+Página: 7 Disponible: 0 Número de proceso: 2
+Página: 8 Disponible: 0 Número de proceso: 2
+Página: 9 Disponible: 0 Número de proceso: 2
+Página: 10 Disponible: 0 Número de proceso: 3
+Página: 11 Disponible: 0 Número de proceso: 3
+Página: 12 Disponible: 0 Número de proceso: 3
+Página: 13 Disponible: 0 Número de proceso: 3
+Página: 14 Disponible: 0 Número de proceso: 3
+Página: 15 Disponible: 0 Número de proceso: 3
+Página: 16 Disponible: 0 Número de proceso: 3
 Página: 17 Disponible: 1 Número de proceso: -1
 Página: 18 Disponible: 1 Número de proceso: -1
 Página: 19 Disponible: 1 Número de proceso: -1
 
---- Páginas disponibles: 5---
---- ¡No hay suficientes páginas para ejecutar este proceso! :( --- 
-
-
------------------------------------------------------------------------
-
-
-------------------------%Matando al proceso: 2
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
-ceso: 33
----------------���Se va--------------------------
-
-
---- ¡Se va a generar un nuevo proceso! ---
--------------------------------------------------
--------------------------------------------------
-Páginas para el proceso: 6
-Segundos para el proceso: 25
--------------------------------------------------
-Tiempo hasta el próximo proceso: 58
--------------------------------------------------
-
-
-------------------------�,-----------
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
---------------------- Proceso: 3--------------------- 
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
------------- Esperando para usar el semáforo ------------ 
------
-------------------�,--------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
---------------------- Proceso: 3--------------------- 
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
------------- Esperando para usar el semáforo ------------ 
------------- Entra al semaforo               ------------
------------- Páginas requeridas: 6------------
-
-
------------------------------------------------------------------------
-Los que tienen -1 y 1, son espacios libres
-
-
-Página: 0 Disponible: 0 Número de proceso: 0
-Página: 1 Disponible: 0 Número de proceso: 0
-Página: 2 Disponible: 0 Número de proceso: 0
-Página: 3 Disponible: 0 Número de proceso: 0
-Página: 4 Disponible: 0 Número de proceso: 0
-Página: 5 Disponible: 0 Número de proceso: 0
-Página: 6 Disponible: 0 Número de proceso: 0
-Página: 7 Disponible: 0 Número de proceso: 0
-Página: 8 Disponible: 0 Número de proceso: 0
-Página: 9 Disponible: 0 Número de proceso: 0
-Página: 10 Disponible: 0 Número de proceso: 1
-Página: 11 Disponible: 0 Número de proceso: 1
-Página: 12 Disponible: 0 Número de proceso: 1
-Página: 13 Disponible: 0 Número de proceso: 1
-Página: 14 Disponible: 0 Número de proceso: 1
-Página: 15 Disponible: 1 Número de proceso: -1
-Página: 16 Disponible: 1 Número de proceso: -1
-Página: 17 Disponible: 1 Número de proceso: -1
-Página: 18 Disponible: 1 Número de proceso: -1
-Página: 19 Disponible: 1 Número de proceso: -1
-
---- Páginas disponibles: 5---
---- ¡No hay suficientes páginas para ejecutar este proceso! :( --- 
-
-
------------------------------------------------------------------------
-
-
-------------------------%Matando al proceso: 3
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
-------------------------���Se va ¡Se va a generar un nuevo proceso! ---
--------------------------------------------------
--------------------------------------------------
-Páginas para el proceso: 6
-Segundos para el proceso: 25
--------------------------------------------------
-Tiempo hasta el próximo proceso: 58
--------------------------------------------------
-
-
---- ¡Se va a generar un nuevo proceso! ---
--------------------------------------------------
--------------------------------------------------
-Páginas para el proceso: 10
-Segundos para el proceso: 58
--------------------------------------------------
-Tiempo hasta el próximo proceso: 30
--------------------------------------------------
-
-
-------------------------�,-----------
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
---------------------- Proceso: 4--------------------- 
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
------------- Esperando para usar el semáforo ------------ 
------
-------------------�,--------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
---------------------- Proceso: 4--------------------- 
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
------------- Esperando para usar el semáforo ------------ 
------------- Entra al semaforo               ------------
------------- Páginas requeridas: 10------------
-
-
------------------------------------------------------------------------
-Los que tienen -1 y 1, son espacios libres
-
-
-Página: 0 Disponible: 0 Número de proceso: 0
-Página: 1 Disponible: 0 Número de proceso: 0
-Página: 2 Disponible: 0 Número de proceso: 0
-Página: 3 Disponible: 0 Número de proceso: 0
-Página: 4 Disponible: 0 Número de proceso: 0
-Página: 5 Disponible: 0 Número de proceso: 0
-Página: 6 Disponible: 0 Número de proceso: 0
-Página: 7 Disponible: 0 Número de proceso: 0
-Página: 8 Disponible: 0 Número de proceso: 0
-Página: 9 Disponible: 0 Número de proceso: 0
-Página: 10 Disponible: 0 Número de proceso: 1
-Página: 11 Disponible: 0 Número de proceso: 1
-Página: 12 Disponible: 0 Número de proceso: 1
-Página: 13 Disponible: 0 Número de proceso: 1
-Página: 14 Disponible: 0 Número de proceso: 1
-Página: 15 Disponible: 1 Número de proceso: -1
-Página: 16 Disponible: 1 Número de proceso: -1
-Página: 17 Disponible: 1 Número de proceso: -1
-Página: 18 Disponible: 1 Número de proceso: -1
-Página: 19 Disponible: 1 Número de proceso: -1
-
---- Páginas disponibles: 5---
+--- Páginas disponibles: 3---
 --- ¡No hay suficientes páginas para ejecutar este proceso! :( --- 
 
 
@@ -482,6 +573,590 @@ Página: 19 Disponible: 1 Número de proceso: -1
 
 ------------------------%Matando al proceso: 4
 ----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------------------	-------------------------------------------------------------------------------------------------------------------------
+
+
+----- Termina el sleep del proceso: 0-----
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+--- Se liberarán las páginas para el proceso: 0---
+--- Se han liberado las páginas para el proceso: 0---
+----------
+Tiempo hasta ��Se va imo proceso: 51
+-------------------------------------------------
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 8
+Segundos para el proceso: 30
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 36
+-------------------------------------------------
+
+
+------------------------%--- Terminó la ejecución de este proceso: 0---
+
+
+oceso: 0---
+--------------------- Proceso: 5--------------------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+- Proceso: 5------------	-------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+------------ Entra al semaforo               ------------
+------------ Páginas requeridas: 8------------
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+
+
+Página: 0 Disponible: 1 Número de proceso: -1
+Página: 1 Disponible: 0 Número de proceso: 1
+Página: 2 Disponible: 0 Número de proceso: 1
+Página: 3 Disponible: 0 Número de proceso: 2
+Página: 4 Disponible: 0 Número de proceso: 2
+Página: 5 Disponible: 0 Número de proceso: 2
+Página: 6 Disponible: 0 Número de proceso: 2
+Página: 7 Disponible: 0 Número de proceso: 2
+Página: 8 Disponible: 0 Número de proceso: 2
+Página: 9 Disponible: 0 Número de proceso: 2
+Página: 10 Disponible: 0 Número de proceso: 3
+Página: 11 Disponible: 0 Número de proceso: 3
+Página: 12 Disponible: 0 Número de proceso: 3
+Página: 13 Disponible: 0 Número de proceso: 3
+Página: 14 Disponible: 0 Número de proceso: 3
+Página: 15 Disponible: 0 Número de proceso: 3
+Página: 16 Disponible: 0 Número de proceso: 3
+Página: 17 Disponible: 1 Número de proceso: -1
+Página: 18 Disponible: 1 Número de proceso: -1
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 4---
+--- ¡No hay suficientes páginas para ejecutar este proceso! :( --- 
+
+
+-----------------------------------------------------------------------
+
+
+- 
+---------------------%Matando al proceso: 5
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------------------	-------------------------------------------------------------------------------------------------------------------------
+
+
+----- Termina el sleep del proceso: 1-----
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+--- Se liberarán las páginas para el proceso: 1---
+--- Se han liberado las páginas para el proceso: 1---
+------------------------%--- Terminó la ejecución de este proceso: 1---
+
+
+imo proceso: 51
+--------��Se va ---------------------------------
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 8
+Segundos para el proceso: 30
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 36
+-------------------------------------------------
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 5
+Segundos para el proceso: 47
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 48
+-------------------------------------------------
+
+
+oceso: 1---
+--------------------- Proceso: 6--------------------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+- Proceso: 6------------	-------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+------------ Entra al semaforo               ------------
+------------ Páginas requeridas: 5------------
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+
+
+Página: 0 Disponible: 1 Número de proceso: -1
+Página: 1 Disponible: 1 Número de proceso: -1
+Página: 2 Disponible: 1 Número de proceso: -1
+Página: 3 Disponible: 0 Número de proceso: 2
+Página: 4 Disponible: 0 Número de proceso: 2
+Página: 5 Disponible: 0 Número de proceso: 2
+Página: 6 Disponible: 0 Número de proceso: 2
+Página: 7 Disponible: 0 Número de proceso: 2
+Página: 8 Disponible: 0 Número de proceso: 2
+Página: 9 Disponible: 0 Número de proceso: 2
+Página: 10 Disponible: 0 Número de proceso: 3
+Página: 11 Disponible: 0 Número de proceso: 3
+Página: 12 Disponible: 0 Número de proceso: 3
+Página: 13 Disponible: 0 Número de proceso: 3
+Página: 14 Disponible: 0 Número de proceso: 3
+Página: 15 Disponible: 0 Número de proceso: 3
+Página: 16 Disponible: 0 Número de proceso: 3
+Página: 17 Disponible: 1 Número de proceso: -1
+Página: 18 Disponible: 1 Número de proceso: -1
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 6---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+-------
+Los que tienen -�,------on espacios libres
+
+
+Página: 0 Disponible: 1 Número de proceso: -1
+Página: 1 Disponible: 1 Número de proceso: -1
+Página: 2 Disponible: 1 Número de proceso: -1
+Página: 3 Disponible: 0 Número de proceso: 2
+Página: 4 Disponible: 0 Número de proceso: 2
+Página: 5 Disponible: 0 Número de proceso: 2
+Página: 6 Disponible: 0 Número de proceso: 2
+Página: 7 Disponible: 0 Número de proceso: 2
+Página: 8 Disponible: 0 Número de proceso: 2
+Página: 9 Disponible: 0 Número de proceso: 2
+Página: 10 Disponible: 0 Número de proceso: 3
+Página: 11 Disponible: 0 Número de proceso: 3
+Página: 12 Disponible: 0 Número de proceso: 3
+Página: 13 Disponible: 0 Número de proceso: 3
+Página: 14 Disponible: 0 Número de proceso: 3
+Página: 15 Disponible: 0 Número de proceso: 3
+Página: 16 Disponible: 0 Número de proceso: 3
+Página: 17 Disponible: 1 Número de proceso: -1
+Página: 18 Disponible: 1 Número de proceso: -1
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 6---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+--- Se asignaron las páginas para el proceso: 6---
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+Página: 0 Disponible: 0 Número de proceso: 6
+Página: 1 Disponible: 0 Número de proceso: 6
+Página: 2 Disponible: 0 Número de proceso: 6
+Página: 3 Disponible: 0 Número de proceso: 2
+Página: 4 Disponible: 0 Número de proceso: 2
+Página: 5 Disponible: 0 Número de proceso: 2
+Página: 6 Disponible: 0 Número de proceso: 2
+Página: 7 Disponible: 0 Número de proceso: 2
+Página: 8 Disponible: 0 Número de proceso: 2
+Página: 9 Disponible: 0 Número de proceso: 2
+Página: 10 Disponible: 0 Número de proceso: 3
+Página: 11 Disponible: 0 Número de proceso: 3
+Página: 12 Disponible: 0 Número de proceso: 3
+Página: 13 Disponible: 0 Número de proceso: 3
+Página: 14 Disponible: 0 Número de proceso: 3
+Página: 15 Disponible: 0 Número de proceso: 3
+Página: 16 Disponible: 0 Número de proceso: 3
+Página: 17 Disponible: 0 Número de proceso: 6
+Página: 18 Disponible: 0 Número de proceso: 6
+Página: 19 Disponible: 1 Número de proceso: -1
+-----------------------------------------------------------------------
+
+
+- 
+---------------------%----- Comienza el sleep del proceso: 6-----
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------------------	-------------------------------------------------------------------------------------------------------------------------
+
+
+----- Termina el sleep del proceso: 2-----
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+--- Se liberarán las páginas para el proceso: 2---
+--- Se han liberado las páginas para el proceso: 2---
+------------------------%--- Terminó la ejecución de este proceso: 2---
+
+
+------------------------��Se va -
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 8
+Segundos para el proceso: 30
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 36
+-------------------------------------------------
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 5
+Segundos para el proceso: 47
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 48
+-------------------------------------------------
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 4
+Segundos para el proceso: 20
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 37
+-------------------------------------------------
+
+
+oceso: 2---
+--------------------- Proceso: 7--------------------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+- Proceso: 7------------	-------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+------------ Entra al semaforo               ------------
+------------ Páginas requeridas: 4------------
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+
+
+Página: 0 Disponible: 0 Número de proceso: 6
+Página: 1 Disponible: 0 Número de proceso: 6
+Página: 2 Disponible: 0 Número de proceso: 6
+Página: 3 Disponible: 1 Número de proceso: -1
+Página: 4 Disponible: 1 Número de proceso: -1
+Página: 5 Disponible: 1 Número de proceso: -1
+Página: 6 Disponible: 1 Número de proceso: -1
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 0 Número de proceso: 3
+Página: 11 Disponible: 0 Número de proceso: 3
+Página: 12 Disponible: 0 Número de proceso: 3
+Página: 13 Disponible: 0 Número de proceso: 3
+Página: 14 Disponible: 0 Número de proceso: 3
+Página: 15 Disponible: 0 Número de proceso: 3
+Página: 16 Disponible: 0 Número de proceso: 3
+Página: 17 Disponible: 0 Número de proceso: 6
+Página: 18 Disponible: 0 Número de proceso: 6
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 8---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+-------
+Los que tienen -�,------on espacios libres
+
+
+Página: 0 Disponible: 0 Número de proceso: 6
+Página: 1 Disponible: 0 Número de proceso: 6
+Página: 2 Disponible: 0 Número de proceso: 6
+Página: 3 Disponible: 1 Número de proceso: -1
+Página: 4 Disponible: 1 Número de proceso: -1
+Página: 5 Disponible: 1 Número de proceso: -1
+Página: 6 Disponible: 1 Número de proceso: -1
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 0 Número de proceso: 3
+Página: 11 Disponible: 0 Número de proceso: 3
+Página: 12 Disponible: 0 Número de proceso: 3
+Página: 13 Disponible: 0 Número de proceso: 3
+Página: 14 Disponible: 0 Número de proceso: 3
+Página: 15 Disponible: 0 Número de proceso: 3
+Página: 16 Disponible: 0 Número de proceso: 3
+Página: 17 Disponible: 0 Número de proceso: 6
+Página: 18 Disponible: 0 Número de proceso: 6
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 8---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+--- Se asignaron las páginas para el proceso: 7---
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+Página: 0 Disponible: 0 Número de proceso: 6
+Página: 1 Disponible: 0 Número de proceso: 6
+Página: 2 Disponible: 0 Número de proceso: 6
+Página: 3 Disponible: 0 Número de proceso: 7
+Página: 4 Disponible: 0 Número de proceso: 7
+Página: 5 Disponible: 0 Número de proceso: 7
+Página: 6 Disponible: 0 Número de proceso: 7
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 0 Número de proceso: 3
+Página: 11 Disponible: 0 Número de proceso: 3
+Página: 12 Disponible: 0 Número de proceso: 3
+Página: 13 Disponible: 0 Número de proceso: 3
+Página: 14 Disponible: 0 Número de proceso: 3
+Página: 15 Disponible: 0 Número de proceso: 3
+Página: 16 Disponible: 0 Número de proceso: 3
+Página: 17 Disponible: 0 Número de proceso: 6
+Página: 18 Disponible: 0 Número de proceso: 6
+Página: 19 Disponible: 1 Número de proceso: -1
+-----------------------------------------------------------------------
+
+
+- 
+---------------------%----- Comienza el sleep del proceso: 7-----
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------------------	-------------------------------------------------------------------------------------------------------------------------
+
+
+----- Termina el sleep del proceso: 3-----
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+-
+
+
+--- ¡Se va a generaa�Se va vo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 8
+Segundos para el proceso: 30
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 36
+-------------------------------------------------
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 5
+Segundos para el proceso: 47
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 48
+-------------------------------------------------
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 4
+Segundos para el proceso: 20
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 37
+-------------------------------------------------
+
+
+--- ¡Se va a generar un nuevo proceso! ---
+-------------------------------------------------
+-------------------------------------------------
+Páginas para el proceso: 8
+Segundos para el proceso: 33
+-------------------------------------------------
+Tiempo hasta el próximo proceso: 54
+-------------------------------------------------
+
+
+--- Se liberarán las páginas para el proceso: 3---
+--- Se han liberado las páginas para el proceso: 3---
+------------------------%--- Terminó la ejecución de este proceso: 3---
+
+
+------------------------�,-----------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+--------------------- Proceso: 8--------------------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+-----
+------------------�,--------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+--------------------- Proceso: 8--------------------- 
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+
+------------ Esperando para usar el semáforo ------------ 
+------------ Entra al semaforo               ------------
+------------ Páginas requeridas: 8------------
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+
+
+Página: 0 Disponible: 0 Número de proceso: 6
+Página: 1 Disponible: 0 Número de proceso: 6
+Página: 2 Disponible: 0 Número de proceso: 6
+Página: 3 Disponible: 0 Número de proceso: 7
+Página: 4 Disponible: 0 Número de proceso: 7
+Página: 5 Disponible: 0 Número de proceso: 7
+Página: 6 Disponible: 0 Número de proceso: 7
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 1 Número de proceso: -1
+Página: 11 Disponible: 1 Número de proceso: -1
+Página: 12 Disponible: 1 Número de proceso: -1
+Página: 13 Disponible: 1 Número de proceso: -1
+Página: 14 Disponible: 1 Número de proceso: -1
+Página: 15 Disponible: 1 Número de proceso: -1
+Página: 16 Disponible: 1 Número de proceso: -1
+Página: 17 Disponible: 0 Número de proceso: 6
+Página: 18 Disponible: 0 Número de proceso: 6
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 11---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+-------
+Los que tienen -�,------on espacios libres
+
+
+Página: 0 Disponible: 0 Número de proceso: 6
+Página: 1 Disponible: 0 Número de proceso: 6
+Página: 2 Disponible: 0 Número de proceso: 6
+Página: 3 Disponible: 0 Número de proceso: 7
+Página: 4 Disponible: 0 Número de proceso: 7
+Página: 5 Disponible: 0 Número de proceso: 7
+Página: 6 Disponible: 0 Número de proceso: 7
+Página: 7 Disponible: 1 Número de proceso: -1
+Página: 8 Disponible: 1 Número de proceso: -1
+Página: 9 Disponible: 1 Número de proceso: -1
+Página: 10 Disponible: 1 Número de proceso: -1
+Página: 11 Disponible: 1 Número de proceso: -1
+Página: 12 Disponible: 1 Número de proceso: -1
+Página: 13 Disponible: 1 Número de proceso: -1
+Página: 14 Disponible: 1 Número de proceso: -1
+Página: 15 Disponible: 1 Número de proceso: -1
+Página: 16 Disponible: 1 Número de proceso: -1
+Página: 17 Disponible: 0 Número de proceso: 6
+Página: 18 Disponible: 0 Número de proceso: 6
+Página: 19 Disponible: 1 Número de proceso: -1
+
+--- Páginas disponibles: 11---
+--- ¡Hay suficientes páginas para ejecutar este proceso! :) --- 
+
+
+-----------------------------------------------------------------------
+
+
+--- Se asignaron las páginas para el proceso: 8---
+
+
+-----------------------------------------------------------------------
+Los que tienen -1 y 1, son espacios libres
+Página: 0 Disponible: 0 Número de proceso: 6
+Página: 1 Disponible: 0 Número de proceso: 6
+Página: 2 Disponible: 0 Número de proceso: 6
+Página: 3 Disponible: 0 Número de proceso: 7
+Página: 4 Disponible: 0 Número de proceso: 7
+Página: 5 Disponible: 0 Número de proceso: 7
+Página: 6 Disponible: 0 Número de proceso: 7
+Página: 7 Disponible: 0 Número de proceso: 8
+Página: 8 Disponible: 0 Número de proceso: 8
+Página: 9 Disponible: 0 Número de proceso: 8
+Página: 10 Disponible: 0 Número de proceso: 8
+Página: 11 Disponible: 0 Número de proceso: 8
+Página: 12 Disponible: 0 Número de proceso: 8
+Página: 13 Disponible: 0 Número de proceso: 8
+Página: 14 Disponible: 0 Número de proceso: 8
+Página: 15 Disponible: 1 Número de proceso: -1
+Página: 16 Disponible: 1 Número de proceso: -1
+Página: 17 Disponible: 0 Número de proceso: 6
+Página: 18 Disponible: 0 Número de proceso: 6
+Página: 19 Disponible: 1 Número de proceso: -1
+-----------------------------------------------------------------------
+
+
+------------------------%----- Comienza el sleep del proceso: 8-----
 ----------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
 

@@ -743,6 +743,9 @@ void mecanismoPaginacion(){
 
 	semaforo=semget(IPC_PRIVATE,1,IPC_CREAT | 0700);
 
+	pID[1] = semaforo;
+	
+
 	
 	if(semaforo < 0){
 
@@ -1662,6 +1665,7 @@ void crearHiloSegmentacion(ProcesoSegmentacion *proceso){
 void mecanismoSegmentacion(){
 	
 	semaforo=semget(IPC_PRIVATE,1,IPC_CREAT | 0700);
+	pID[1] = semaforo;
 	
 	if(semaforo < 0){
 
@@ -1732,7 +1736,7 @@ void mecanismoSegmentacion(){
     	*/
 
 
-    	/*
+		/*    	
     	proceso->segmentos[0].numeroPaginas = 4;
     	proceso->segmentos[0].numeroSegmento = 0;
 
@@ -1742,6 +1746,7 @@ void mecanismoSegmentacion(){
     	proceso->segmentos[2].numeroPaginas = 5;
     	proceso->segmentos[2].numeroSegmento = 2;
     	*/
+    	
     	
     	
 

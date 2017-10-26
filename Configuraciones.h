@@ -5,4 +5,4 @@
 #define tamanioEspiaProcesosBloqueados 1000
 #define tamanioEspiaProcesosMuertos 1000
 #define tamanioEspiaProcesosTerminados 1000
-#define pid 1
+#define pid 2

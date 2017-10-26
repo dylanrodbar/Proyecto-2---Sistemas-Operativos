@@ -102,10 +102,13 @@ void liberarProductorProcesos(){
 	pId = leerIdMemoriaCompartida("pid.txt");
 	pID = shmat(pId, NULL, 0);
 	kill(pID[0], SIGQUIT);
+	semctl(pID[1], 0, IPC_RMID);
+
 
 	printf("--- Se ha matado al proceso del id: %i ---\n", pID[0]);
 
 	shmctl(pId, IPC_RMID, NULL);
+
 
 	vaciarTxtMemoriaCompartida("pid.txt");
 

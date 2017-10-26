@@ -308,6 +308,30 @@ int solicitarMemoria(){
 	paginas[14].disponible = 0;
 	paginas[17].disponible = 0;
 	*/
+
+	/*
+	paginas[0].disponible = 0;
+	paginas[1].disponible = 1;
+	paginas[2].disponible = 0;
+	paginas[3].disponible = 1;
+	paginas[4].disponible = 0;
+	paginas[5].disponible = 1;
+	paginas[6].disponible = 0;
+	paginas[7].disponible = 1;
+	paginas[8].disponible = 0;
+	paginas[9].disponible = 1;
+	paginas[10].disponible = 0;
+	paginas[11].disponible = 1;
+	paginas[12].disponible = 0;
+	paginas[13].disponible = 1;
+	paginas[14].disponible = 0;
+	paginas[15].disponible = 1;
+	paginas[16].disponible = 0;
+	paginas[17].disponible = 1;
+	paginas[18].disponible = 0;
+	paginas[19].disponible = 1;
+	*/
+	
 	
 
 
@@ -322,6 +346,7 @@ int solicitarMemoria(){
 	bitacora = (char *) shmat(idMemoriaCompartidaBitacora, NULL, 0);
 	pId = shmat(idMemoriaCompartidaPID, NULL, 0);
 	pId[0] = getpid();
+	pId[1] = getpid();
 
 
 	/*-----------------------------------------------------------------------------------------*/
