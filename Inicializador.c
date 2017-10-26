@@ -289,15 +289,16 @@ int solicitarMemoria(){
 	*/
 
 	/*
-	paginas[5].disponible = 0;
+	paginas[3].disponible = 0;
+	paginas[6].disponible = 0;
 	paginas[9].disponible = 0;
-	paginas[14].disponible = 0;
+	paginas[12].disponible = 0;
 	paginas[15].disponible = 0;
-	paginas[16].disponible = 0;
-	paginas[17].disponible = 0;
 	paginas[18].disponible = 0;
 	paginas[19].disponible = 0;
+	paginas[19].disponible = 0;
 	*/
+	
 	
 
 	/*
@@ -308,6 +309,7 @@ int solicitarMemoria(){
 	paginas[14].disponible = 0;
 	paginas[17].disponible = 0;
 	*/
+	
 
 	/*
 	paginas[0].disponible = 0;
@@ -331,6 +333,7 @@ int solicitarMemoria(){
 	paginas[18].disponible = 0;
 	paginas[19].disponible = 1;
 	*/
+	
 	
 	
 
@@ -409,6 +412,8 @@ int solicitarMemoria(){
 
 /* Desde esta función se llamará a las funciones requeridas para cumplir con la funcionalidad de este programa */
 void main(){
+
+	printf("TAMANIOOOOOO: %i", tamanio);
 
 	int idMemoriaCompartida;
 	
